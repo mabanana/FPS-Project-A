@@ -1,9 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://bgp15f5w735mi"]
+[gd_scene load_steps=6 format=3 uid="uid://bgp15f5w735mi"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_00xln"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_g707e"]
 size = Vector3(60, 2, 60)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2j4ea"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_p0iwp"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_j5s2q"]
 
 [node name="Test Scene" type="Node3D"]
 
@@ -19,3 +25,15 @@ shape = SubResource("BoxShape3D_2j4ea")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1.19249e-08, 1, 0, -1, 1.19249e-08, 0, 49, 0)
+
+[node name="Player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("1_00xln")
+
+[node name="Camera3D" type="Camera3D" parent="Player"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+shape = SubResource("CapsuleShape3D_p0iwp")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player/CollisionShape3D"]
+mesh = SubResource("CapsuleMesh_j5s2q")

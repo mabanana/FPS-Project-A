@@ -5,13 +5,13 @@ const MOUSE_SENSITIVITY = 0.001
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 const VERTICAL_LOOK_LIMIT = 89.0
+const RAY_LENGTH = 1000
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _input(event):
 	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and event is InputEventMouseMotion:
-		print(event.relative.x, event.relative.y)
 		camera.rotate_x(-event.relative.y * MOUSE_SENSITIVITY)
 		rotate_object_local(Vector3.UP, -event.relative.x * MOUSE_SENSITIVITY)
 	if event.is_action_pressed("ui_cancel"):
@@ -19,9 +19,11 @@ func _input(event):
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	elif event.is_action_pressed("left_click"):
+		var view_direction = Vector3(camera.rotation.x, rotation.y, 0)
+		handle_click_event(view_direction)
 
 func _physics_process(delta):
-	print(rotation)
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
@@ -42,3 +44,16 @@ func _physics_process(delta):
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 
 	move_and_slide()
+	
+func handle_click_event(view_direction):
+	
+	var space_state = get_world_3d().direct_space_state
+	var mousepos = get_viewport().get_mouse_position()
+	var origin = camera.project_ray_origin(mousepos)
+	var end = origin + camera.project_ray_normal(mousepos) * RAY_LENGTH
+	var query = PhysicsRayQueryParameters3D.create(origin, end)
+	query.collide_with_areas = true
+
+	var result = space_state.intersect_ray(query)
+	if result:
+		print(result.collider.name)

@@ -1,7 +1,6 @@
 extends CharacterBody3D
 
-@onready var camera_control = $CameraControl
-@onready var camera = $CameraControl/Camera3D
+@onready var camera = %Camera3D
 const MOUSE_SENSITIVITY = 0.001
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
@@ -10,9 +9,9 @@ const VERTICAL_LOOK_LIMIT = 89.0
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
-func _unhandled_input(event):
+func _input(event):
 	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and event is InputEventMouseMotion:
-		#camera_control.rotate_y(-event.relative.x * MOUSE_SENSITIVITY)
+		print(event.relative.x, event.relative.y)
 		camera.rotate_x(-event.relative.y * MOUSE_SENSITIVITY)
 		rotate_object_local(Vector3.UP, -event.relative.x * MOUSE_SENSITIVITY)
 	if event.is_action_pressed("ui_cancel"):

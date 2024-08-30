@@ -46,7 +46,6 @@ func _physics_process(delta):
 	move_and_slide()
 	
 func handle_click_event(view_direction):
-	
 	var space_state = get_world_3d().direct_space_state
 	var mousepos = get_viewport().get_mouse_position()
 	var origin = camera.project_ray_origin(mousepos)

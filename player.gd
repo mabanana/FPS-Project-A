@@ -1,11 +1,14 @@
 extends CharacterBody3D
 
 @onready var camera = %Camera3D
+@export var damage_floor: int = 1
+@export var damage_ceiling: int = 5
 const MOUSE_SENSITIVITY = 0.001
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 const VERTICAL_LOOK_LIMIT = 89.0
 const RAY_LENGTH = 1000
+
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -52,7 +55,8 @@ func handle_click_event(view_direction):
 	var end = origin + camera.project_ray_normal(mousepos) * RAY_LENGTH
 	var query = PhysicsRayQueryParameters3D.create(origin, end)
 	query.collide_with_areas = true
-
 	var result = space_state.intersect_ray(query)
 	if result:
+		if result.collider.has_method("take_damage"):
+			result.collider.take_damage(randf_range(damage_floor, damage_ceiling))
 		print(result.collider.name)

@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://ntdyygiwkdsj"]
+
+[ext_resource type="Script" path="res://DamageNumber.gd" id="1_yogaj"]
+
+[node name="DamageNumber" type="Node3D"]
+script = ExtResource("1_yogaj")
+linger_time = 1
+rand_range_x = Vector2(-1, 1)
+rand_range_y = Vector2(2, 3)
+rand_range_z = Vector2(-1, 1)
+
+[node name="Label" type="Label3D" parent="."]
+unique_name_in_owner = true
+billboard = 1

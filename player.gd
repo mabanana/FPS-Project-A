@@ -10,7 +10,7 @@ const VERTICAL_LOOK_LIMIT = 89.0
 const RAY_LENGTH = 1000
 
 var trigger : bool = false
-var ammo_count : int = 64
+var ammo_count : int = 999999
 var hp : int = 100
 
 

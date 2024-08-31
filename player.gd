@@ -2,7 +2,7 @@ extends CharacterBody3D
 
 @onready var camera = %Camera3D
 @onready var gun = %Gun
-const MOUSE_SENSITIVITY = 0.001
+@export var MOUSE_SENSITIVITY = 0.001
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 const VERTICAL_LOOK_LIMIT = 89.0

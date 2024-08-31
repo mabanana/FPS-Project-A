@@ -13,7 +13,6 @@ func set_shoot_cd():
 
 func _process(delta):
 	if shoot_cd > 0:
-		print(shoot_cd)
 		shoot_cd -= 100 * delta
 	else:
 		shoot_cd = 0

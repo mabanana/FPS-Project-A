@@ -2,8 +2,6 @@ extends CharacterBody3D
 
 @onready var camera = %Camera3D
 @onready var gun = %Gun
-@export var damage_floor: int = 1
-@export var damage_ceiling: int = 5
 const MOUSE_SENSITIVITY = 0.001
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
@@ -60,6 +58,8 @@ func _process(delta):
 			handle_gun_shot(view_direction)
 	
 func handle_gun_shot(view_direction):
+	if not gun:
+		return
 	var space_state = get_world_3d().direct_space_state
 	var mousepos = get_viewport().get_mouse_position()
 	var origin = camera.project_ray_origin(mousepos)
@@ -69,4 +69,4 @@ func handle_gun_shot(view_direction):
 	var result = space_state.intersect_ray(query)
 	if result:
 		if result.collider.has_method("take_damage"):
-			result.collider.take_damage(randf_range(damage_floor, damage_ceiling))
+			result.collider.take_damage(randf_range(gun.damage_floor, gun.damage_ceiling))

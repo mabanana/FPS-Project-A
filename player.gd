@@ -8,6 +8,7 @@ const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 const VERTICAL_LOOK_LIMIT = 89.0
 const RAY_LENGTH = 1000
+const MAX_ACCURACY = 100
 
 var trigger : bool = false
 var ammo_count : int = 999999
@@ -74,7 +75,7 @@ func handle_gun_shot(view_direction):
 	if not gun:
 		return
 	var space_state = get_world_3d().direct_space_state
-	var mousepos = get_viewport().get_mouse_position()
+	var mousepos = bullet_spread(get_viewport().get_mouse_position(), gun.gun.accuracy)
 	var origin = camera.project_ray_origin(mousepos)
 	var end = origin + camera.project_ray_normal(mousepos) * RAY_LENGTH
 	var query = PhysicsRayQueryParameters3D.create(origin, end)
@@ -86,3 +87,8 @@ func handle_gun_shot(view_direction):
 		get_parent().add_child(new_bullet_hole)
 		if result.collider.has_method("take_damage"):
 			result.collider.take_damage(randf_range(gun.gun.damage_floor, gun.gun.damage_ceiling), self, result.position)
+
+func bullet_spread(mousepos, acc): # return 
+	var spread = MAX_ACCURACY - acc
+	return Vector2(mousepos.x + randf_range(-spread,spread), mousepos.y + randf_range(-spread,spread))
+	pass

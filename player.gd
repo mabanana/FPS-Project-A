@@ -28,6 +28,8 @@ func _input(event):
 		
 	elif event.is_action_released("left_click"):
 		trigger = false
+	elif event.is_action_pressed("reload"):
+		gun.reload()
 
 func _physics_process(delta):
 	# Add the gravity.
@@ -69,4 +71,4 @@ func handle_gun_shot(view_direction):
 	var result = space_state.intersect_ray(query)
 	if result:
 		if result.collider.has_method("take_damage"):
-			result.collider.take_damage(randf_range(gun.damage_floor, gun.damage_ceiling))
+			result.collider.take_damage(randf_range(gun.gun.damage_floor, gun.gun.damage_ceiling))

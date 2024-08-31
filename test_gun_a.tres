@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="GunResource" load_steps=2 format=3 uid="uid://1dmhlugin155"]
+
+[ext_resource type="Script" path="res://gun_resource.gd" id="1_8dgu7"]
+
+[resource]
+script = ExtResource("1_8dgu7")
+oid = 1
+name = "Test Gun A"
+mag_size = 12
+damage_floor = 20
+damage_ceiling = 70
+fire_rate = 3

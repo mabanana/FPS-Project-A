@@ -76,7 +76,7 @@ shape = SubResource("BoxShape3D_roha1")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Player/CollisionShape3D"]
 mesh = SubResource("BoxMesh_d7rov")
 
-[node name="Gun" type="Node3D" parent="Player"]
+[node name="GunSlot" type="Node3D" parent="Player"]
 unique_name_in_owner = true
 script = ExtResource("4_m03wx")
 gun = ExtResource("5_eijvp")

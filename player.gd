@@ -1,7 +1,7 @@
 extends CharacterBody3D
 
 @onready var camera = %Camera3D
-@onready var gun = %Gun
+@onready var gun_slot = %GunSlot
 @onready var hud = $"../UI"
 @export var MOUSE_SENSITIVITY = 0.001
 const SPEED = 5.0
@@ -33,9 +33,9 @@ func _input(event):
 	elif event.is_action_released("left_click"):
 		trigger = false
 	elif event.is_action_pressed("reload"):
-		var new_mag = min(ammo_count, gun.gun.mag_size)
-		ammo_count -= new_mag - gun.mag_curr
-		gun.reload(new_mag)
+		var new_mag = min(ammo_count, gun_slot.gun.mag_size)
+		ammo_count -= new_mag - gun_slot.mag_curr
+		gun_slot.reload(new_mag)
 		
 
 func _physics_process(delta):
@@ -61,34 +61,34 @@ func _physics_process(delta):
 	move_and_slide()
 	
 func _process(delta):
-	hud.mag = gun.mag_curr
+	hud.mag = gun_slot.mag_curr
 	hud.ammo = ammo_count
 	hud.hp = hp
-	hud.reload = gun.reloading
+	hud.reload = gun_slot.reloading
 	hud.update()
 	if trigger:
 		var view_direction = Vector3(camera.rotation.x, rotation.y, 0)
-		if gun.shoot():
+		if gun_slot.shoot():
 			handle_gun_shot(view_direction)
 	
 func handle_gun_shot(view_direction):
-	if not gun:
+	if not gun_slot:
 		return
 	var space_state = get_world_3d().direct_space_state
-	var mousepos = bullet_spread(get_viewport().get_mouse_position(), gun.gun.accuracy)
+	var mousepos = bullet_spread(get_viewport().get_mouse_position(), gun_slot.gun.accuracy)
 	var origin = camera.project_ray_origin(mousepos)
 	var end = origin + camera.project_ray_normal(mousepos) * RAY_LENGTH
 	var query = PhysicsRayQueryParameters3D.create(origin, end)
 	query.collide_with_areas = false
 	var result = space_state.intersect_ray(query)
 	if result:
-		var new_bullet_hole = gun.bullet_hole.instantiate()
+		var new_bullet_hole = gun_slot.bullet_hole.instantiate()
 		new_bullet_hole.position = result.position
 		get_parent().add_child(new_bullet_hole)
 		if result.collider.has_method("take_damage"):
-			result.collider.take_damage(randf_range(gun.gun.damage_floor, gun.gun.damage_ceiling), self, result.position)
+			result.collider.take_damage(randf_range(gun_slot.gun.damage_floor, gun_slot.gun.damage_ceiling), self, result.position)
 
-func bullet_spread(mousepos, acc): # return 
+func bullet_spread(mousepos, acc):
 	var spread = MAX_ACCURACY - acc
 	return Vector2(mousepos.x + randf_range(-spread,spread), mousepos.y + randf_range(-spread,spread))
 	pass

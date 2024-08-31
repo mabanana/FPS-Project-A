@@ -63,6 +63,7 @@ func _process(delta):
 	hud.mag = gun.mag_curr
 	hud.ammo = ammo_count
 	hud.hp = hp
+	hud.reload = gun.reloading
 	hud.update()
 	if trigger:
 		var view_direction = Vector3(camera.rotation.x, rotation.y, 0)

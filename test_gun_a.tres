@@ -10,3 +10,4 @@ mag_size = 12
 damage_floor = 20
 damage_ceiling = 70
 fire_rate = 3
+reload_time = 3

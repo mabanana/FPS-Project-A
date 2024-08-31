@@ -63,6 +63,14 @@ offset_top = -40.0
 offset_right = 40.0
 grow_vertical = 0
 
+[node name="Status" type="HBoxContainer" parent="VBoxContainer2"]
+layout_mode = 2
+
+[node name="ReloadIndicator" type="Label" parent="VBoxContainer2/Status"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Reloading..."
+
 [node name="Ammo" type="HBoxContainer" parent="VBoxContainer2"]
 layout_mode = 2
 

@@ -2,8 +2,10 @@ extends CharacterBody3D
 class_name TargetDummy
 @onready var damage_number: PackedScene = preload("res://DamageNumber.tscn")
 
-func take_damage(damage):
+func take_damage(damage, dealer):
 	var new_damage_number = damage_number.instantiate()
 	new_damage_number.damage_number = damage
-	new_damage_number.position = Vector3.UP*1.5
+	var direction_to_dealer = position.direction_to(dealer.position)
+	print(direction_to_dealer)
+	new_damage_number.position += direction_to_dealer*1.5
 	add_child(new_damage_number)

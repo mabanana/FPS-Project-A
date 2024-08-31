@@ -32,7 +32,10 @@ func _input(event):
 	elif event.is_action_released("left_click"):
 		trigger = false
 	elif event.is_action_pressed("reload"):
-		gun.reload()
+		var new_mag = min(ammo_count, gun.gun.mag_size)
+		ammo_count -= new_mag - gun.mag_curr
+		gun.reload(new_mag)
+		
 
 func _physics_process(delta):
 	# Add the gravity.

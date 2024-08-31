@@ -25,5 +25,5 @@ func shoot():
 	else:
 		return false
 
-func reload():
-	mag_curr = gun.mag_size
+func reload(new_mag):
+	mag_curr = new_mag

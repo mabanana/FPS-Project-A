@@ -6,6 +6,5 @@ func take_damage(damage, dealer):
 	var new_damage_number = damage_number.instantiate()
 	new_damage_number.damage_number = damage
 	var direction_to_dealer = position.direction_to(dealer.position)
-	print(direction_to_dealer)
 	new_damage_number.position += direction_to_dealer*1.5
 	add_child(new_damage_number)

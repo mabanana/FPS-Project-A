@@ -78,7 +78,7 @@ func handle_gun_shot(view_direction):
 	var origin = camera.project_ray_origin(mousepos)
 	var end = origin + camera.project_ray_normal(mousepos) * RAY_LENGTH
 	var query = PhysicsRayQueryParameters3D.create(origin, end)
-	query.collide_with_areas = true
+	query.collide_with_areas = false
 	var result = space_state.intersect_ray(query)
 	if result:
 		if result.collider.has_method("take_damage"):

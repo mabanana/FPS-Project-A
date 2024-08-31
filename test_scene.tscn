@@ -1,9 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://bgp15f5w735mi"]
+[gd_scene load_steps=13 format=3 uid="uid://bgp15f5w735mi"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_00xln"]
 [ext_resource type="Texture2D" uid="uid://brje054dv2kjn" path="res://icon.svg" id="1_fv1bh"]
 [ext_resource type="PackedScene" uid="uid://cix1j6ynfe7pn" path="res://hud.tscn" id="1_j5fux"]
 [ext_resource type="Script" path="res://target_dummy.gd" id="3_j23id"]
+[ext_resource type="Script" path="res://gun.gd" id="4_m03wx"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nbs7j"]
 albedo_texture = ExtResource("1_fv1bh")
@@ -59,6 +60,14 @@ shape = SubResource("BoxShape3D_roha1")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Player/CollisionShape3D"]
 mesh = SubResource("BoxMesh_d7rov")
+
+[node name="Gun" type="Node3D" parent="Player"]
+unique_name_in_owner = true
+script = ExtResource("4_m03wx")
+mag_size = 10
+damage_floor = 2
+damage_ceiling = 5
+fire_rate = 10
 
 [node name="Target Dummy" type="CharacterBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1.5, 0)

@@ -1,6 +1,7 @@
 extends CharacterBody3D
 
 @onready var camera = %Camera3D
+@onready var gun = %Gun
 @export var damage_floor: int = 1
 @export var damage_ceiling: int = 5
 const MOUSE_SENSITIVITY = 0.001
@@ -8,6 +9,8 @@ const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 const VERTICAL_LOOK_LIMIT = 89.0
 const RAY_LENGTH = 1000
+
+var trigger : bool = false
 
 
 func _ready():
@@ -23,8 +26,10 @@ func _input(event):
 		else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	elif event.is_action_pressed("left_click"):
-		var view_direction = Vector3(camera.rotation.x, rotation.y, 0)
-		handle_click_event(view_direction)
+		trigger = true
+		
+	elif event.is_action_released("left_click"):
+		trigger = false
 
 func _physics_process(delta):
 	# Add the gravity.
@@ -48,7 +53,13 @@ func _physics_process(delta):
 
 	move_and_slide()
 	
-func handle_click_event(view_direction):
+func _process(delta):
+	if trigger:
+		var view_direction = Vector3(camera.rotation.x, rotation.y, 0)
+		if gun.shoot():
+			handle_gun_shot(view_direction)
+	
+func handle_gun_shot(view_direction):
 	var space_state = get_world_3d().direct_space_state
 	var mousepos = get_viewport().get_mouse_position()
 	var origin = camera.project_ray_origin(mousepos)
@@ -59,4 +70,3 @@ func handle_click_event(view_direction):
 	if result:
 		if result.collider.has_method("take_damage"):
 			result.collider.take_damage(randf_range(damage_floor, damage_ceiling))
-		print(result.collider.name)

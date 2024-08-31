@@ -18,5 +18,4 @@ func _ready():
 func _process(delta):
 	var tween = get_tree().create_tween()
 	tween.tween_property(self, "position", rand_position, 2)
-	tween.tween_property(self, "scale", Vector2(), 2)
 	tween.tween_callback(queue_free)

@@ -2,6 +2,7 @@ extends CharacterBody3D
 
 @onready var camera = %Camera3D
 @onready var gun = %Gun
+@onready var hud = $"../UI"
 @export var MOUSE_SENSITIVITY = 0.001
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
@@ -9,6 +10,8 @@ const VERTICAL_LOOK_LIMIT = 89.0
 const RAY_LENGTH = 1000
 
 var trigger : bool = false
+var ammo_count : int = 64
+var hp : int = 100
 
 
 func _ready():
@@ -54,6 +57,10 @@ func _physics_process(delta):
 	move_and_slide()
 	
 func _process(delta):
+	hud.mag = gun.mag_curr
+	hud.ammo = ammo_count
+	hud.hp = hp
+	hud.update()
 	if trigger:
 		var view_direction = Vector3(camera.rotation.x, rotation.y, 0)
 		if gun.shoot():

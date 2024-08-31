@@ -1,6 +1,7 @@
 extends Node3D
 class_name Gun
 
+@onready var bullet_hole: PackedScene = preload("res://bullet_hole.tscn")
 @export var gun: GunResource
 var shoot_cd : int
 var mag_curr : int

@@ -81,5 +81,8 @@ func handle_gun_shot(view_direction):
 	query.collide_with_areas = false
 	var result = space_state.intersect_ray(query)
 	if result:
+		var new_bullet_hole = gun.bullet_hole.instantiate()
+		new_bullet_hole.position = result.position
+		get_parent().add_child(new_bullet_hole)
 		if result.collider.has_method("take_damage"):
 			result.collider.take_damage(randf_range(gun.gun.damage_floor, gun.gun.damage_ceiling), self, result.position)

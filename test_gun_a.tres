@@ -6,6 +6,7 @@
 script = ExtResource("1_8dgu7")
 oid = 1
 name = "Test Gun A"
+mag_curr = 100
 mag_size = 100
 damage_floor = 3
 damage_ceiling = 50

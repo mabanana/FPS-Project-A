@@ -34,7 +34,7 @@ func _input(event):
 		trigger = false
 	elif event.is_action_pressed("reload"):
 		var new_mag = min(ammo_count, gun_slot.gun.mag_size)
-		ammo_count -= new_mag - gun_slot.mag_curr
+		ammo_count -= new_mag - gun_slot.gun.mag_curr
 		gun_slot.reload(new_mag)
 		
 
@@ -61,7 +61,7 @@ func _physics_process(delta):
 	move_and_slide()
 	
 func _process(delta):
-	hud.mag = gun_slot.mag_curr
+	hud.mag = gun_slot.gun.mag_curr
 	hud.ammo = ammo_count
 	hud.hp = hp
 	hud.reload = gun_slot.reloading

@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="GunResource" load_steps=2 format=3 uid="uid://1dmhlugin155"]
+[gd_resource type="Resource" script_class="GunResource" load_steps=3 format=3 uid="uid://1dmhlugin155"]
 
 [ext_resource type="Script" path="res://gun_resource.gd" id="1_8dgu7"]
+[ext_resource type="PackedScene" uid="uid://bksgupr5irgc6" path="res://bullet_hole.tscn" id="1_t876s"]
 
 [resource]
 script = ExtResource("1_8dgu7")
@@ -13,3 +14,4 @@ damage_ceiling = 50
 fire_rate = 12
 reload_time = 1
 accuracy = 90
+bullet_hole = ExtResource("1_t876s")

@@ -10,3 +10,4 @@ class_name	GunResource
 @export var fire_rate: int
 @export var reload_time: int
 @export var accuracy: int
+@export var bullet_hole: PackedScene

@@ -1,16 +1,16 @@
 extends Node3D
 class_name DamageNumber
-@onready var label : Label3D = %Label
+@onready var label: Label3D = %Label
 @export var linger_time: int
-@export var rand_range_x : Vector2
-@export var rand_range_y : Vector2
-@export var rand_range_z : Vector2
-@export var font_size : int
-@export var outline_proportion : float
+@export var rand_range_x: Vector2
+@export var rand_range_y: Vector2
+@export var rand_range_z: Vector2
+@export var font_size: int
+@export var outline_proportion: float
 @export var pixel_size: float
 @export var log_scaling: int
 @export var modulate: Color
-var rand_position : Vector3
+var rand_position: Vector3
 var damage_number: int
 
 func stringify(number):

@@ -60,5 +60,3 @@ func _process(delta):
 	hud.hp = hp
 	hud.reload = gun_slot.reloading
 	hud.update()
-	
-	

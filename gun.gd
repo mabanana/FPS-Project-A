@@ -6,12 +6,12 @@ const RAY_LENGTH = 1000
 const MAX_ACCURACY = 100
 
 @export var gun: GunResource
-var shoot_cd : int
-var reload_cd : int
+var shoot_cd: int
+var reload_cd: int
 var reloading: bool
 var new_mag: int
-var trigger : bool = false
-var ammo_count : int = 999999
+var trigger: bool = false
+var ammo_count: int = 999999
 var character: CharacterBody3D
 
 func _ready():

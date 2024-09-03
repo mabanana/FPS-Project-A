@@ -7,6 +7,7 @@ extends CharacterBody3D
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 const VERTICAL_LOOK_LIMIT = 89.0
+const RAY_LENGTH = 1000
 
 var hp : int = 100
 
@@ -60,3 +61,14 @@ func _process(delta):
 	hud.hp = hp
 	hud.reload = gun_slot.reloading
 	hud.update()
+	var object_in_view = get_object_in_view()
+
+func get_object_in_view():
+	var space_state = get_world_3d().direct_space_state
+	var mousepos = get_viewport().get_mouse_position()
+	var origin = camera.project_ray_origin(mousepos)
+	var end = origin + camera.project_ray_normal(mousepos) * RAY_LENGTH
+	var query = PhysicsRayQueryParameters3D.create(origin, end)
+	var result = space_state.intersect_ray(query)
+	if result:
+		return result["collider"].name

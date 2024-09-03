@@ -100,7 +100,7 @@ func drop_gun():
 
 
 func pickup_and_equip_gun(new_gun: Gun):
-	new_gun.reparent(character)
+	new_gun.reparent(character.inventory)
 	gun = new_gun
 	print("Gun Slot: ", gun.name, " has been equipped.")
 

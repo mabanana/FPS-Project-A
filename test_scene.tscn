@@ -81,13 +81,9 @@ mesh = SubResource("BoxMesh_d7rov")
 [node name="GunSlot" type="Node3D" parent="Player" node_paths=PackedStringArray("gun", "scene_entities")]
 unique_name_in_owner = true
 script = ExtResource("4_m03wx")
-gun = NodePath("../Gun")
+gun = NodePath("../../Inventory/Gun")
 dropped_gun = ExtResource("7_6nd1y")
 scene_entities = NodePath("../../SceneEntities")
-
-[node name="Gun" type="Node" parent="Player"]
-script = ExtResource("7_mdo1i")
-gun_resource = ExtResource("5_eijvp")
 
 [node name="Target Dummy" type="CharacterBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1.5, 0)
@@ -112,3 +108,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 51, 0)
 shape = SubResource("ConcavePolygonShape3D_pwr4p")
 
 [node name="SceneEntities" type="Node3D" parent="."]
+
+[node name="Inventory" type="Node" parent="."]
+unique_name_in_owner = true
+
+[node name="Gun" type="Node" parent="Inventory"]
+script = ExtResource("7_mdo1i")
+gun_resource = ExtResource("5_eijvp")

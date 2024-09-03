@@ -3,6 +3,7 @@ extends CharacterBody3D
 @onready var camera = %Camera3D
 @onready var gun_slot = %GunSlot
 @onready var hud = $"../UI"
+@onready var inventory = %Inventory
 @export var MOUSE_SENSITIVITY = 0.001
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5

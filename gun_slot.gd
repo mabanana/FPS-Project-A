@@ -87,8 +87,9 @@ func drop_gun():
 	var new_dropped_gun: Interactable = dropped_gun.instantiate()
 	gun.reparent(new_dropped_gun)
 	new_dropped_gun.resource_node = gun
-	new_dropped_gun.position = character.position
-	var throw_vector = get_vector_points_towards_camera_direction(get_viewport().get_mouse_position(),THROW_FORCE)["end"]
+	var throw_vector_dict = get_vector_points_towards_camera_direction(get_viewport().get_mouse_position(),THROW_FORCE)
+	var throw_vector = throw_vector_dict["end"] - throw_vector_dict["origin"]
+	new_dropped_gun.position = character.position + throw_vector.normalized()
 	new_dropped_gun.apply_central_impulse(throw_vector)
 	print("Gun Slot: ", gun.name, " has been dropped.")
 	gun = null

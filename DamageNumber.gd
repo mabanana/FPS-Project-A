@@ -23,6 +23,7 @@ func stringify(number):
 	else: 
 		return str(number)
 		
+# TODO: change number font scaling to be proportional to the gun's base damage
 func calculate_damage_scale(damage):
 	var damage_scale = log(damage)/log(log_scaling)
 	if damage_scale < 1:

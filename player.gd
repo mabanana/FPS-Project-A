@@ -29,9 +29,10 @@ func _input(event):
 		
 	elif event.is_action_released("left_click"):
 		gun_slot.trigger = false
-	elif event.is_action_pressed("reload"):
+	if event.is_action_pressed("reload"):
 		gun_slot.reload()
-		
+	if event.is_action_pressed("drop_equip"):
+		gun_slot.drop_gun()
 
 func _physics_process(delta):
 	# Add the gravity.
@@ -56,12 +57,20 @@ func _physics_process(delta):
 	move_and_slide()
 	
 func _process(delta):
-	hud.mag = gun_slot.gun.mag_curr
+	if gun_slot.gun:
+		hud.mag = gun_slot.gun.mag_curr
+	else:
+		hud.mag = 0
 	hud.ammo = gun_slot.ammo_count
 	hud.hp = hp
 	hud.reload = gun_slot.reloading
 	hud.update()
 	var object_in_view = get_object_in_view()
+	# debug
+	var gun_node = object_in_view.get_node_or_null("Gun")
+	if gun_node:
+		gun_slot.pickup_and_equip_gun(gun_node)
+		object_in_view.queue_free()
 
 func get_object_in_view():
 	var space_state = get_world_3d().direct_space_state
@@ -71,4 +80,4 @@ func get_object_in_view():
 	var query = PhysicsRayQueryParameters3D.create(origin, end)
 	var result = space_state.intersect_ray(query)
 	if result:
-		return result["collider"].name
+		return result["collider"]

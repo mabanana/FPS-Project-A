@@ -4,9 +4,11 @@ class_name GunSlot
 const UNIT = 100
 const RAY_LENGTH = 1000
 const MAX_ACCURACY = 100
+const THROW_FORCE = 10
 
 @export var gun: Gun
 @export var dropped_gun: PackedScene
+@export var scene_entities: Node3D
 var shoot_cd: int
 var reload_cd: int
 var reloading: bool
@@ -63,16 +65,15 @@ func handle_gun_shot(view_direction):
 	gun.mag_curr -= 1
 	var space_state = get_world_3d().direct_space_state
 	var mousepos = bullet_spread(get_viewport().get_mouse_position(), gun.gun_resource.accuracy)
-	var origin = character.camera.project_ray_origin(mousepos)
-	var end = origin + character.camera.project_ray_normal(mousepos) * RAY_LENGTH
-	var query = PhysicsRayQueryParameters3D.create(origin, end)
+	var query_vector = get_vector_points_towards_camera_direction(mousepos, RAY_LENGTH)
+	var query = PhysicsRayQueryParameters3D.create(query_vector["origin"], query_vector["end"])
 	query.collide_with_areas = false
 	var result = space_state.intersect_ray(query)
 	if result:
 		var new_bullet_hole = gun.gun_resource.bullet_hole.instantiate()
 		new_bullet_hole.position = result.position
 		# TODO: create node for decals like bullet hole instances to spawn in.
-		character.get_parent().add_child(new_bullet_hole)
+		scene_entities.add_child(new_bullet_hole)
 		if result.collider.has_method("take_damage"):
 			result.collider.take_damage(randf_range(gun.gun_resource.damage_floor, gun.gun_resource.damage_ceiling), self, result.position)
 
@@ -83,12 +84,15 @@ func bullet_spread(mousepos, acc):
 func drop_gun():
 	if not gun:
 		return
-	var new_dropped_gun = dropped_gun.instantiate()
+	var new_dropped_gun: Interactable = dropped_gun.instantiate()
 	gun.reparent(new_dropped_gun)
 	new_dropped_gun.resource_node = gun
+	new_dropped_gun.position = character.position
+	var throw_vector = get_vector_points_towards_camera_direction(get_viewport().get_mouse_position(),THROW_FORCE)["end"]
+	new_dropped_gun.apply_central_impulse(throw_vector)
 	print("Gun Slot: ", gun.name, " has been dropped.")
 	gun = null
-	character.get_parent().add_child(new_dropped_gun)
+	scene_entities.add_child(new_dropped_gun)
 	reloading = false
 	shoot_cd = false
 	trigger = false
@@ -98,3 +102,9 @@ func pickup_and_equip_gun(new_gun: Gun):
 	new_gun.reparent(character)
 	gun = new_gun
 	print("Gun Slot: ", gun.name, " has been equipped.")
+
+func get_vector_points_towards_camera_direction(dir: Vector2, magnitude: int) -> Dictionary:
+	var output = {}
+	output["origin"] = character.camera.project_ray_origin(dir)
+	output["end"] = output["origin"] + character.camera.project_ray_normal(dir) * magnitude
+	return output

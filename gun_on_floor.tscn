@@ -1,4 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://d1bclad3l8lov"]
+[gd_scene load_steps=4 format=3 uid="uid://d1bclad3l8lov"]
+
+[ext_resource type="Script" path="res://Interactable.gd" id="1_p76j6"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_e4gtt"]
 
@@ -6,6 +8,7 @@
 
 [node name="GunOnFloor" type="RigidBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.19853, 0.71666, 0)
+script = ExtResource("1_p76j6")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_e4gtt")

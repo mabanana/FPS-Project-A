@@ -85,6 +85,7 @@ func drop_gun():
 		return
 	var new_dropped_gun = dropped_gun.instantiate()
 	gun.reparent(new_dropped_gun)
+	new_dropped_gun.resource_node = gun
 	print("Gun Slot: ", gun.name, " has been dropped.")
 	gun = null
 	character.get_parent().add_child(new_dropped_gun)

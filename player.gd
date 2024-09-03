@@ -9,6 +9,7 @@ const JUMP_VELOCITY = 4.5
 const VERTICAL_LOOK_LIMIT = 89.0
 const RAY_LENGTH = 1000
 
+var object_in_view
 var hp : int = 100
 
 
@@ -33,6 +34,9 @@ func _input(event):
 		gun_slot.reload()
 	if event.is_action_pressed("drop_equip"):
 		gun_slot.drop_gun()
+	if event.is_action_pressed("interact"):
+		if object_in_view.has_method("on_interact"):
+			gun_slot.pickup_and_equip_gun(object_in_view.on_interact())
 
 func _physics_process(delta):
 	# Add the gravity.
@@ -65,12 +69,7 @@ func _process(delta):
 	hud.hp = hp
 	hud.reload = gun_slot.reloading
 	hud.update()
-	var object_in_view = get_object_in_view()
-	# debug
-	var gun_node = object_in_view.get_node_or_null("Gun")
-	if gun_node:
-		gun_slot.pickup_and_equip_gun(gun_node)
-		object_in_view.queue_free()
+	object_in_view = get_object_in_view()
 
 func get_object_in_view():
 	var space_state = get_world_3d().direct_space_state

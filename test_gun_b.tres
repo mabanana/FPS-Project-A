@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GunResource" load_steps=3 format=3 uid="uid://wlhjvbpum22p"]
+
+[ext_resource type="PackedScene" uid="uid://bksgupr5irgc6" path="res://bullet_hole.tscn" id="1_0sdhq"]
+[ext_resource type="Script" path="res://gun_resource.gd" id="1_xdabd"]
+
+[resource]
+script = ExtResource("1_xdabd")
+oid = 2
+name = "Test Gun B"
+mag_size = 12
+damage_floor = 70
+damage_ceiling = 200
+fire_rate = 2
+reload_time = 5
+accuracy = 90
+bullet_hole = ExtResource("1_0sdhq")

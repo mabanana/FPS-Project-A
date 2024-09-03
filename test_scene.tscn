@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://bgp15f5w735mi"]
+[gd_scene load_steps=19 format=3 uid="uid://bgp15f5w735mi"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_00xln"]
 [ext_resource type="Texture2D" uid="uid://brje054dv2kjn" path="res://icon.svg" id="1_fv1bh"]
@@ -37,6 +37,10 @@ size = Vector3(60, 100, 60)
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_pwr4p"]
 data = PackedVector3Array(30, 50, 30, -30, 50, 30, -30, -50, 30, 30, -50, 30, 30, 50, 30, -30, -50, 30, -30, 50, -30, 30, 50, -30, 30, -50, -30, -30, -50, -30, -30, 50, -30, 30, -50, -30, 30, 50, -30, 30, 50, 30, 30, -50, 30, 30, -50, -30, 30, 50, -30, 30, -50, 30, -30, 50, 30, -30, 50, -30, -30, -50, -30, -30, -50, 30, -30, 50, 30, -30, -50, -30, -30, 50, 30, 30, 50, 30, 30, 50, -30, -30, 50, -30, -30, 50, 30, 30, 50, -30, 30, -50, 30, -30, -50, 30, -30, -50, -30, 30, -50, -30, 30, -50, 30, -30, -50, -30)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_e4gtt"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0wicj"]
 
 [node name="Test Scene" type="Node3D"]
 
@@ -102,3 +106,12 @@ skeleton = NodePath("")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 51, 0)
 shape = SubResource("ConcavePolygonShape3D_pwr4p")
+
+[node name="GunOnFloor" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.19853, 0.71666, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GunOnFloor"]
+mesh = SubResource("CapsuleMesh_e4gtt")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GunOnFloor"]
+shape = SubResource("CapsuleShape3D_0wicj")

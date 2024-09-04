@@ -1,11 +1,11 @@
 extends RigidBody3D
 class_name Interactable
 
-var resource_node: Node
+var gun_model: GunModel
 
 func on_interact():
 	queue_free()
-	return get_resource_node()
+	return get_gun_model()
 
 func _init():
 	set_collision_layer_value(1,false)
@@ -13,8 +13,8 @@ func _init():
 	set_collision_mask_value(2,true)
 
 func _ready():
-	if not resource_node:
+	if not gun_model:
 		queue_free()
 
-func get_resource_node():
-	return resource_node
+func get_gun_model():
+	return gun_model

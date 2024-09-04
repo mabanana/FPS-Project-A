@@ -1,13 +1,13 @@
 [gd_scene load_steps=19 format=3 uid="uid://bgp15f5w735mi"]
 
+[ext_resource type="Script" path="res://test_scene.gd" id="1_00gik"]
 [ext_resource type="Script" path="res://player.gd" id="1_00xln"]
 [ext_resource type="Texture2D" uid="uid://brje054dv2kjn" path="res://icon.svg" id="1_fv1bh"]
 [ext_resource type="PackedScene" uid="uid://cix1j6ynfe7pn" path="res://hud.tscn" id="1_j5fux"]
 [ext_resource type="Script" path="res://target_dummy.gd" id="3_j23id"]
 [ext_resource type="Script" path="res://gun_slot.gd" id="4_m03wx"]
-[ext_resource type="Resource" uid="uid://1dmhlugin155" path="res://test_gun_a.tres" id="5_eijvp"]
+[ext_resource type="PackedScene" uid="uid://bksgupr5irgc6" path="res://bullet_hole.tscn" id="6_lt6d0"]
 [ext_resource type="PackedScene" uid="uid://d1bclad3l8lov" path="res://gun_on_floor.tscn" id="7_6nd1y"]
-[ext_resource type="Script" path="res://gun.gd" id="7_mdo1i"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nbs7j"]
 albedo_texture = ExtResource("1_fv1bh")
@@ -41,6 +41,7 @@ size = Vector3(60, 100, 60)
 data = PackedVector3Array(30, 50, 30, -30, 50, 30, -30, -50, 30, 30, -50, 30, 30, 50, 30, -30, -50, 30, -30, 50, -30, 30, 50, -30, 30, -50, -30, -30, -50, -30, -30, 50, -30, 30, -50, -30, 30, 50, -30, 30, 50, 30, 30, -50, 30, 30, -50, -30, 30, 50, -30, 30, -50, 30, -30, 50, 30, -30, 50, -30, -30, -50, -30, -30, -50, 30, -30, 50, 30, -30, -50, -30, -30, 50, 30, 30, 50, 30, 30, 50, -30, -30, 50, -30, -30, 50, 30, 30, 50, -30, 30, -50, 30, -30, -50, 30, -30, -50, -30, 30, -50, -30, 30, -50, 30, -30, -50, -30)
 
 [node name="Test Scene" type="Node3D"]
+script = ExtResource("1_00gik")
 
 [node name="UI" parent="." instance=ExtResource("1_j5fux")]
 
@@ -61,6 +62,7 @@ skeleton = NodePath("../CollisionShape3D")
 shape = SubResource("BoxShape3D_2j4ea")
 
 [node name="Player" type="CharacterBody3D" parent="."]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 script = ExtResource("1_00xln")
 
@@ -78,10 +80,10 @@ shape = SubResource("BoxShape3D_roha1")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Player/CollisionShape3D"]
 mesh = SubResource("BoxMesh_d7rov")
 
-[node name="GunSlot" type="Node3D" parent="Player" node_paths=PackedStringArray("gun", "scene_entities")]
+[node name="GunSlot" type="Node3D" parent="Player" node_paths=PackedStringArray("scene_entities")]
 unique_name_in_owner = true
 script = ExtResource("4_m03wx")
-gun = NodePath("../../Inventory/Gun")
+bullet_hole = ExtResource("6_lt6d0")
 dropped_gun = ExtResource("7_6nd1y")
 scene_entities = NodePath("../../SceneEntities")
 
@@ -108,10 +110,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 51, 0)
 shape = SubResource("ConcavePolygonShape3D_pwr4p")
 
 [node name="SceneEntities" type="Node3D" parent="."]
-
-[node name="Inventory" type="Node" parent="."]
-unique_name_in_owner = true
-
-[node name="Gun" type="Node" parent="Inventory"]
-script = ExtResource("7_mdo1i")
-gun_resource = ExtResource("5_eijvp")

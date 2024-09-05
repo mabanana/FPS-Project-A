@@ -29,19 +29,26 @@ func _input(event):
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	elif event.is_action_pressed("left_click"):
-		gun_slot.trigger = true
-		
-	elif event.is_action_released("left_click"):
-		gun_slot.trigger = false
-	if event.is_action_pressed("reload"):
+	elif event.is_action_pressed("reload"):
 		gun_slot.reload()
-	if event.is_action_pressed("drop_equip"):
+	elif event.is_action_pressed("drop_equip"):
 		gun_slot.drop_gun()
-	if event.is_action_pressed("interact"):
+	elif event.is_action_pressed("interact"):
 		if object_in_view.has_method("on_interact"):
 			core.inventory.guns.append(object_in_view.on_interact())
-			core_changed.emit()
+			core_changed.emit()	
+	elif event.is_action_pressed("cycle_inventory"):
+		if core.inventory.active_gun_index == len(core.inventory.guns) - 1:
+			core.inventory.active_gun_index = 0
+		else:
+			core.inventory.active_gun_index += 1
+		core_changed.emit()
+
+	if event.is_action_pressed("left_click"):
+		gun_slot.trigger = true
+	elif event.is_action_released("left_click"):
+		gun_slot.trigger = false
+	
 
 func _physics_process(delta):
 	# Add the gravity.

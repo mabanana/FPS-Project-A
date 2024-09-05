@@ -18,6 +18,8 @@ func _ready() -> void:
 	core_changed.connect(_on_core_changed)
 	# Set up initial state
 	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunModel.GunType.TEST_GUN_A))
+	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunModel.GunType.TEST_GUN_A))
+	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunModel.GunType.TEST_GUN_B))
 	initialize_test_scene_map()
 	# Emit initial state to all observers
 	core_changed.emit()

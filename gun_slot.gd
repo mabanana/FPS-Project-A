@@ -5,7 +5,7 @@ const UNIT = 100
 const RAY_LENGTH = 1000
 const MAX_ACCURACY = 100
 const ACCURACY_FLOOR = 25
-const THROW_FORCE = 50
+const THROW_FORCE = 10
 const THROW_ACCURACY = 69
 
 @export var bullet_hole: PackedScene

@@ -13,6 +13,8 @@ const RAY_LENGTH = 1000
 var object_in_view
 var hp : int = 100
 
+var core: CoreModel
+var core_changed: Signal
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -62,10 +64,6 @@ func _physics_process(delta):
 	move_and_slide()
 	
 func _process(delta):
-	if gun_slot.gun:
-		hud.mag = gun_slot.gun.mag_curr
-	else:
-		hud.mag = 0
 	hud.ammo = gun_slot.ammo_count
 	hud.hp = hp
 	hud.reload = gun_slot.reloading
@@ -81,3 +79,18 @@ func get_object_in_view():
 	var result = space_state.intersect_ray(query)
 	if result:
 		return result["collider"]
+
+# MARK: - Bindings
+
+func bind(core: CoreModel, core_changed: Signal):
+	self.core = core
+	self.core_changed = core_changed
+
+	core_changed.connect(_on_core_changed)
+	gun_slot.bind(core, core_changed)
+
+func _on_core_changed():
+	if core.inventory.active_gun:
+		hud.mag = core.inventory.active_gun.ammo_count
+	else:
+		hud.mag = 0

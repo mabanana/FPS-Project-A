@@ -9,7 +9,7 @@ var accuracy: int
 var ammo_capacity: int
 
 # NOTE: Store these as immutable singletons to improve performance
-static var TEST_GUN_A := GunMetadataModel.new("Test Gun A", 3, 50, 12, 1, 90, 100)
+static var TEST_GUN_A := GunMetadataModel.new("Test Gun A", 3, 50, 12, 1, 75, 100)
 static var TEST_GUN_B := GunMetadataModel.new("Test Gun B", 70, 200, 2, 5, 90, 12)
 
 func _init(

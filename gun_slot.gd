@@ -4,7 +4,9 @@ class_name GunSlot
 const UNIT = 100
 const RAY_LENGTH = 1000
 const MAX_ACCURACY = 100
-const THROW_FORCE = 10
+const ACCURACY_FLOOR = 25
+const THROW_FORCE = 50
+const THROW_ACCURACY = 69
 
 @export var bullet_hole: PackedScene
 @export var dropped_gun: PackedScene
@@ -66,23 +68,18 @@ func handle_gun_shot(view_direction):
 	if not (core.inventory.active_gun and shoot()):
 		return
 	_update_ammo(core.inventory.active_gun.ammo_count - 1)
-	var space_state = get_world_3d().direct_space_state
-	var mousepos = bullet_spread(get_viewport().get_mouse_position(), core.inventory.active_gun.metadata.accuracy)
-	var query_vector = get_vector_points_towards_camera_direction(mousepos, RAY_LENGTH)
-	var query = PhysicsRayQueryParameters3D.create(query_vector["origin"], query_vector["end"])
-	query.collide_with_areas = false
-	var result = space_state.intersect_ray(query)
+	var query = cast_ray_towards_mouse(core.inventory.active_gun.metadata.accuracy)
+	var result = get_world_3d().direct_space_state.intersect_ray(query)
 	if result:
 		var new_bullet_hole = bullet_hole.instantiate()
 		new_bullet_hole.position = result.position
-		# TODO: create node for decals like bullet hole instances to spawn in.
 		scene_entities.add_child(new_bullet_hole)
 		if result.collider.has_method("take_damage"):
-			result.collider.take_damage(randf_range(core.inventory.active_gun.metadata.damage_floor, core.inventory.active_gun.metadata.damage_ceiling), self, result.position)
+			result.collider.take_damage(randf_range(core.inventory.active_gun.metadata.damage_floor, core.inventory.active_gun.metadata.damage_ceiling), character, result.position)
 
-func bullet_spread(mousepos, acc):
-	var spread = MAX_ACCURACY - acc
-	return Vector2(mousepos.x + randf_range(-spread,spread), mousepos.y + randf_range(-spread,spread))
+func inaccuratize_vector(vector, acc):
+	var rot = deg_to_rad(ACCURACY_FLOOR * (MAX_ACCURACY - acc) / 100)
+	return vector.rotated(Vector3.UP, randf_range(-rot,rot)).rotated(Vector3.BACK, randf_range(-rot,rot)).rotated(Vector3.RIGHT, randf_range(-rot,rot)) 
 
 func drop_gun():
 	if not core.inventory.active_gun:
@@ -90,20 +87,20 @@ func drop_gun():
 	var new_dropped_gun: Interactable = dropped_gun.instantiate()
 	new_dropped_gun.gun_model = core.inventory.active_gun
 	_remove_active_gun()
-	var throw_vector_dict = get_vector_points_towards_camera_direction(get_viewport().get_mouse_position(),THROW_FORCE)
-	var throw_vector = throw_vector_dict["end"] - throw_vector_dict["origin"]
-	new_dropped_gun.position = character.position + throw_vector.normalized()
-	new_dropped_gun.apply_central_impulse(throw_vector)
+	var throw_vector = inaccuratize_vector(-character.camera.get_global_transform().basis.z.normalized(), THROW_ACCURACY)
+	new_dropped_gun.position = character.position + throw_vector
+	new_dropped_gun.apply_central_impulse(throw_vector * THROW_FORCE)
 	scene_entities.add_child(new_dropped_gun)
 	reloading = false
 	shoot_cd = false
 	trigger = false
 
-func get_vector_points_towards_camera_direction(dir: Vector2, magnitude: int) -> Dictionary:
-	var output = {}
-	output["origin"] = character.camera.project_ray_origin(dir)
-	output["end"] = output["origin"] + character.camera.project_ray_normal(dir) * magnitude
-	return output
+func cast_ray_towards_mouse(accuracy: int = MAX_ACCURACY, ray_length: int = RAY_LENGTH):
+	var mousepos = get_viewport().get_mouse_position()
+	var origin = character.camera.project_ray_origin(mousepos)
+	var cast_vector = character.camera.project_ray_normal(mousepos) * RAY_LENGTH
+	var end = origin + inaccuratize_vector(cast_vector, accuracy)
+	return PhysicsRayQueryParameters3D.create(origin, end)
 
 # MARK: - Bindings
 

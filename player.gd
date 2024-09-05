@@ -1,15 +1,16 @@
 extends CharacterBody3D
+class_name PlayerEntity
 
 @onready var camera = %Camera3D
 @onready var gun_slot = %GunSlot
-@onready var hud = $"../UI"
+@onready var hud = %UI
 @onready var inventory = %Inventory
 @export var MOUSE_SENSITIVITY = 0.001
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 const VERTICAL_LOOK_LIMIT = 89.0
 const RAY_LENGTH = 1000
-
+var id: int
 var object_in_view
 var hp : int = 100
 

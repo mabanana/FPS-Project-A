@@ -10,7 +10,7 @@ const THROW_ACCURACY = 69
 
 @export var bullet_hole: PackedScene
 @export var dropped_gun: PackedScene
-@export var scene_entities: Node3D
+@onready var scene_entities: Node3D = %SceneEntities
 var shoot_cd: int
 var reload_cd: int
 var reloading: bool
@@ -63,7 +63,7 @@ func shoot():
 	if result:
 		var new_bullet_hole = bullet_hole.instantiate()
 		new_bullet_hole.position = result.position
-		scene_entities.add_child(new_bullet_hole)
+		%UntrackedEntities.add_child(new_bullet_hole)
 		if result.collider.has_method("take_damage"):
 			var damage_rand = randf_range(core.inventory.active_gun.metadata.damage_floor, core.inventory.active_gun.metadata.damage_ceiling)
 			result.collider.take_damage(damage_rand, character, result.position)

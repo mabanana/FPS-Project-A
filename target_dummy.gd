@@ -1,7 +1,9 @@
 extends CharacterBody3D
-class_name TargetDummy
+class_name EnemyEntity
+
 @onready var damage_number: PackedScene = preload("res://damage_number.tscn")
 const POSITION_FORESHORTEN = 1
+var id: int
 
 func take_damage(damage, dealer, damage_position):
 	var new_damage_number = damage_number.instantiate()

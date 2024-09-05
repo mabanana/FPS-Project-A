@@ -1,7 +1,8 @@
 extends RigidBody3D
-class_name Interactable
+class_name InteractableEntity
 
 var gun_model: GunModel
+var id: int
 
 func on_interact():
 	queue_free()

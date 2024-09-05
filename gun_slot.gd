@@ -65,8 +65,7 @@ func shoot():
 		new_bullet_hole.position = result.position
 		%UntrackedEntities.add_child(new_bullet_hole)
 		if result.collider.has_method("take_damage"):
-			var damage_rand = randf_range(core.inventory.active_gun.metadata.damage_floor, core.inventory.active_gun.metadata.damage_ceiling)
-			result.collider.take_damage(damage_rand, character, result.position)
+			result.collider.take_damage(core.inventory.active_gun.metadata.damage_floor, core.inventory.active_gun.metadata.damage_ceiling, character, result.position)
 
 func drop_gun():
 	if not core.inventory.active_gun:

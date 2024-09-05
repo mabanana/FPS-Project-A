@@ -8,10 +8,10 @@ class_name DamageNumber
 @export var font_size: int
 @export var outline_proportion: float
 @export var pixel_size: float
-@export var log_scaling: int
 @export var modulate: Color
 var rand_position: Vector3
 var damage_number: int
+var damage_scale: float
 
 func stringify(number):
 	if number >= 10000000000:
@@ -22,25 +22,16 @@ func stringify(number):
 		return str(number/1000) + "K"
 	else: 
 		return str(number)
-		
-# TODO: change number font scaling to be proportional to the gun's base damage
-func calculate_damage_scale(damage):
-	var damage_scale = log(damage)/log(log_scaling)
-	if damage_scale < 1:
-		return 1
-	else:
-		return damage_scale
 
 func _ready():
 	if not damage_number:
 		damage_number = 0
-	var damage_scale = calculate_damage_scale(damage_number)
 	label.text = stringify(damage_number)
-	label.set_modulate(modulate.lerp(Color.CRIMSON, damage_scale/(damage_scale+1)))
+	label.set_modulate(modulate.lerp(Color.CRIMSON, damage_scale*damage_scale))
 	label.set_billboard_mode(1)
 	label.fixed_size = true
 	label.double_sided = false
-	label.font_size = font_size * damage_scale
+	label.font_size += font_size * damage_scale
 	label.pixel_size = pixel_size
 	label.outline_render_priority = 0
 	label.outline_size = label.font_size * outline_proportion

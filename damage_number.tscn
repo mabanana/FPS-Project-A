@@ -8,10 +8,9 @@ linger_time = 1
 rand_range_x = Vector2(-1, 1)
 rand_range_y = Vector2(2, 3)
 rand_range_z = Vector2(-1, 1)
-font_size = 24
-outline_proportion = 0.1
+font_size = 10
+outline_proportion = 0.05
 pixel_size = 0.002
-log_scaling = 20
 modulate = Color(1, 1, 1, 1)
 
 [node name="Label" type="Label3D" parent="."]

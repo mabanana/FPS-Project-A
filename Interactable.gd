@@ -11,6 +11,8 @@ func _init():
 	set_collision_layer_value(1,false)
 	set_collision_layer_value(2,true)
 	set_collision_mask_value(2,true)
+	mass = 3
+	gravity_scale = 2.5
 
 func _ready():
 	if not gun_model:

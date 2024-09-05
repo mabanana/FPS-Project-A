@@ -47,7 +47,7 @@ func finish_reload():
 	_update_ammo(new_mag)
 
 func reload():
-	if not core.inventory.active_gun:
+	if not core.inventory.active_gun or core.inventory.active_gun.metadata.ammo_capacity == core.inventory.active_gun.ammo_count:
 		return
 	reloading = true
 	reload_cd = UNIT * core.inventory.active_gun.metadata.reload_time

@@ -5,7 +5,7 @@ var gun_model: GunModel
 
 func on_interact():
 	queue_free()
-	return get_gun_model()
+	return gun_model
 
 func _init():
 	set_collision_layer_value(1,false)
@@ -15,6 +15,3 @@ func _init():
 func _ready():
 	if not gun_model:
 		queue_free()
-
-func get_gun_model():
-	return gun_model

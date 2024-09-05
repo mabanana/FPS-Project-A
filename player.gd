@@ -37,9 +37,10 @@ func _input(event):
 		gun_slot.reload()
 	if event.is_action_pressed("drop_equip"):
 		gun_slot.drop_gun()
-	if event.is_action_pressed("interact"):
+	if event.is_action_released("interact"):
 		if object_in_view.has_method("on_interact"):
-			gun_slot.pickup_and_equip_gun(object_in_view.on_interact())
+			core.inventory.guns.append(object_in_view.on_interact())
+			core_changed.emit()
 
 func _physics_process(delta):
 	# Add the gravity.

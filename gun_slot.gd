@@ -99,9 +99,6 @@ func drop_gun():
 	shoot_cd = false
 	trigger = false
 
-func pickup_and_equip_gun(new_gun: GunModel):
-	_add_active_gun(new_gun)
-
 func get_vector_points_towards_camera_direction(dir: Vector2, magnitude: int) -> Dictionary:
 	var output = {}
 	output["origin"] = character.camera.project_ray_origin(dir)

@@ -6,6 +6,7 @@ class_name DamageNumber
 @export var rand_range_y: Vector2
 @export var rand_range_z: Vector2
 @export var font_size: int
+@export var font_size_increase: int
 @export var outline_proportion: float
 @export var pixel_size: float
 @export var modulate: Color
@@ -27,11 +28,11 @@ func _ready():
 	if not damage_number:
 		damage_number = 0
 	label.text = stringify(damage_number)
-	label.set_modulate(modulate.lerp(Color.CRIMSON, damage_scale*damage_scale))
+	label.set_modulate(modulate.lerp(Color.CRIMSON, damage_scale))
 	label.set_billboard_mode(1)
 	label.fixed_size = true
 	label.double_sided = false
-	label.font_size += font_size * damage_scale
+	label.font_size += font_size_increase * damage_scale
 	label.pixel_size = pixel_size
 	label.outline_render_priority = 0
 	label.outline_size = label.font_size * outline_proportion

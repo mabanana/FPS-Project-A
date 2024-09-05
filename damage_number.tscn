@@ -8,8 +8,8 @@ linger_time = 1
 rand_range_x = Vector2(-1, 1)
 rand_range_y = Vector2(2, 3)
 rand_range_z = Vector2(-1, 1)
-font_size = 10
-outline_proportion = 0.05
+font_size = 8
+font_size_increase = 10
 pixel_size = 0.002
 modulate = Color(1, 1, 1, 1)
 

@@ -18,4 +18,4 @@ func _init(name: String, position: Vector3, entity_type: EntityType) -> void:
 	self.name = name
 
 func _to_string():
-	return str(name) + str(entity_type)
+	return str(name)

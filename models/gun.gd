@@ -20,3 +20,6 @@ static func new_with_full_ammo(id: int, type: GunType) -> GunModel:
 var metadata: GunMetadataModel:
 	get:
 		return GunMetadataModel.from(type)
+		
+func _to_string():
+	return metadata.name

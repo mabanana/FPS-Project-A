@@ -3,7 +3,6 @@ class_name PlayerEntity
 
 @onready var camera = %Camera3D
 @onready var gun_slot = %GunSlot
-@onready var hud = %UI
 @onready var inventory = %Inventory
 @export var MOUSE_SENSITIVITY = 0.001
 const SPEED = 5.0
@@ -38,7 +37,8 @@ func _input(event):
 			core.inventory.guns.append(object_in_view.on_interact())
 			core_changed.emit()	
 	elif event.is_action_pressed("cycle_inventory"):
-		if core.inventory.active_gun_index == len(core.inventory.guns) - 1:
+		# TODO: fix bug when cycle at 1 gun and then pick up, and then move logic to gun_slot
+		if core.inventory.active_gun_index >= len(core.inventory.guns) - 1:
 			core.inventory.active_gun_index = 0
 		else:
 			core.inventory.active_gun_index += 1
@@ -73,10 +73,6 @@ func _physics_process(delta):
 	move_and_slide()
 	
 func _process(delta):
-	hud.ammo = gun_slot.ammo_count
-	hud.hp = hp
-	hud.reload = gun_slot.reloading
-	hud.update()
 	object_in_view = get_object_in_view()
 
 func get_object_in_view():
@@ -99,7 +95,4 @@ func bind(core: CoreModel, core_changed: Signal):
 	gun_slot.bind(core, core_changed)
 
 func _on_core_changed():
-	if core.inventory.active_gun:
-		hud.mag = core.inventory.active_gun.ammo_count
-	else:
-		hud.mag = 0
+	pass

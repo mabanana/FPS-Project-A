@@ -1,18 +1,23 @@
 extends Control
 class_name hud_controller
 
-var ammo: int = 100
-var mag: int = 12
-var hp: int = 100
-var reload: bool = false
-
-@onready var ammo_label = %Total
-@onready var mag_label = %Magazine
-@onready var hp_label = %HpValue
-@onready var reload_label = %ReloadIndicator
+var core: CoreModel
+var core_changed: Signal
 
 func update():
-	ammo_label.text = str(ammo)
-	mag_label.text = str(mag)
-	hp_label.text = str(hp)
-	reload_label.visible = reload
+	%GunName.text = str(core.inventory.active_gun.metadata.name) if core.inventory.active_gun else ""
+	%Total.text = str(core.inventory.ammo)
+	%Magazine.text = str(core.inventory.active_gun.mag_curr) if core.inventory.active_gun else "0"
+	%HpValue.text = str(core.player.hp)
+	%ReloadIndicator.modulate.a = int(core.player.reloading)
+	%ProgressBar.max_value = core.inventory.active_gun.metadata.mag_size if core.inventory.active_gun else 0
+	%ProgressBar.value = core.inventory.active_gun.mag_curr if core.inventory.active_gun else 0
+	
+func bind(core: CoreModel, core_changed: Signal):
+	self.core = core
+	self.core_changed = core_changed
+	
+	core_changed.connect(_on_core_changed)
+
+func _on_core_changed():
+	update()

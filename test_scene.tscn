@@ -43,7 +43,7 @@ size = Vector3(60, 2, 60)
 [node name="Test Scene" type="Node3D"]
 script = ExtResource("1_00gik")
 
-[node name="UI" parent="." instance=ExtResource("1_j5fux")]
+[node name="Hud" parent="." instance=ExtResource("1_j5fux")]
 unique_name_in_owner = true
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]

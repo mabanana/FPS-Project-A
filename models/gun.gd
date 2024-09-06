@@ -7,15 +7,15 @@ enum GunType {
 
 var id: int
 var type: GunType
-var ammo_count: int
+var mag_curr: int
 
-func _init(id: int, type: GunType, ammo_count: int) -> void:
+func _init(id: int, type: GunType, mag_curr: int) -> void:
 	self.id = id
 	self.type = type
-	self.ammo_count = ammo_count
+	self.mag_curr = mag_curr
 
 static func new_with_full_ammo(id: int, type: GunType) -> GunModel:
-	return GunModel.new(id, type, GunMetadataModel.from(type).ammo_capacity)
+	return GunModel.new(id, type, GunMetadataModel.from(type).mag_size)
 
 var metadata: GunMetadataModel:
 	get:

@@ -13,6 +13,7 @@ func _ready() -> void:
 	core = CoreModel.new()
 	# Add bindings to all relevant observers
 	%Player.bind(core, core_changed)
+	%Hud.bind(core, core_changed)
 	scene_entities.child_entered_tree.connect(_on_new_entity_entered)
 	scene_entities.child_exiting_tree.connect(_on_entity_exiting)
 	core_changed.connect(_on_core_changed)
@@ -67,5 +68,3 @@ func _on_core_changed():
 			enemy_count += 1
 		elif core.map.entities[key].entity_type == EntityModel.EntityType.interactable:
 			gun_count += 1
-	if gun_count > 0:
-		prints("There are", gun_count, "guns on the floor.")

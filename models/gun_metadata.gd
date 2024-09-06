@@ -6,7 +6,7 @@ var damage_ceiling: int
 var fire_rate: int
 var reload_time: int
 var accuracy: int
-var ammo_capacity: int
+var mag_size: int
 
 # NOTE: Store these as immutable singletons to improve performance
 static var TEST_GUN_A := GunMetadataModel.new("Test Gun A", 3, 50, 12, 1, 75, 100)
@@ -19,7 +19,7 @@ func _init(
 	fire_rate: int,
 	reload_time: int,
 	accuracy: int,
-	ammo_capacity: int,
+	mag_size: int,
 ) -> void:
 	self.name = name
 	self.damage_floor = damage_floor
@@ -27,7 +27,7 @@ func _init(
 	self.fire_rate = fire_rate
 	self.reload_time = reload_time
 	self.accuracy = accuracy
-	self.ammo_capacity = ammo_capacity
+	self.mag_size = mag_size
 
 static func from(gun_type: GunModel.GunType) -> GunMetadataModel:
 	match gun_type:

@@ -15,7 +15,6 @@ var shoot_cd: int
 var reload_cd: int
 var reloading: bool
 var trigger: bool = false
-var ammo_count: int = 999999
 var character: CharacterBody3D
 
 var core: CoreModel
@@ -36,28 +35,28 @@ func _process(delta):
 		if reload_cd > 0:
 			reload_cd -= UNIT * delta
 		else:
-			reloading = false
 			finish_reload()
 	if trigger:
 		shoot()
 
 func finish_reload():
-	var new_mag = min(ammo_count, core.inventory.active_gun.metadata.ammo_capacity)
-	ammo_count -= new_mag - core.inventory.active_gun.ammo_count
+	var new_mag = min(core.inventory.ammo, core.inventory.active_gun.metadata.mag_size)
+	set_ammo(core.inventory.ammo - new_mag + core.inventory.active_gun.mag_curr)
+	set_reload(false)
 	_update_ammo(new_mag)
 
 func reload():
-	if not core.inventory.active_gun or core.inventory.active_gun.metadata.ammo_capacity == core.inventory.active_gun.ammo_count:
+	if not core.inventory.active_gun or core.inventory.active_gun.metadata.mag_size == core.inventory.active_gun.mag_curr:
 		return
-	reloading = true
+	set_reload(true)
 	reload_cd = UNIT * core.inventory.active_gun.metadata.reload_time
 
 func shoot():
-	if shoot_cd <= 0 and core.inventory.active_gun.ammo_count > 0 and not reloading:
+	if shoot_cd <= 0 and core.inventory.active_gun.mag_curr > 0 and not reloading:
 		shoot_cd = 100/core.inventory.active_gun.metadata.fire_rate
 	else:
 		return
-	_update_ammo(core.inventory.active_gun.ammo_count - 1)
+	_update_ammo(core.inventory.active_gun.mag_curr - 1)
 	var query = cast_ray_towards_mouse(core.inventory.active_gun.metadata.accuracy)
 	var result = get_world_3d().direct_space_state.intersect_ray(query)
 	if result:
@@ -78,7 +77,7 @@ func drop_gun():
 	new_dropped_gun.linear_velocity = throw_vector * THROW_FORCE / new_dropped_gun.mass
 	new_dropped_gun.angular_velocity = throw_vector.cross(Vector3.UP) * THROW_FORCE / new_dropped_gun.mass
 	scene_entities.add_child(new_dropped_gun)
-	reloading = false
+	set_reload(false)
 	shoot_cd = false
 	trigger = false
 
@@ -102,9 +101,7 @@ func bind(core: CoreModel, core_changed: Signal):
 	core_changed.connect(_on_core_changed)
 
 func _on_core_changed():
-	if core.inventory.active_gun:
-		print("Ammo is currently at: ", core.inventory.active_gun.ammo_count)
-	else:
+	if not core.inventory.active_gun:
 		print("No gun equipped")
 
 # MARK: - Actions
@@ -115,8 +112,19 @@ func _add_active_gun(gun_model: GunModel) -> void:
 
 func _remove_active_gun() -> void:
 	core.inventory.guns.remove_at(0)
+	while core.inventory.active_gun_index > len(core.inventory.guns) - 1:
+		core.inventory.active_gun_index -= 1
 	core_changed.emit()
 
-func _update_ammo(ammo_count: int) -> void:
-	core.inventory.active_gun.ammo_count = ammo_count
+func _update_ammo(mag_curr: int) -> void:
+	core.inventory.active_gun.mag_curr = mag_curr
+	core_changed.emit()
+
+func set_reload(boo: bool = true):
+	reloading = boo
+	core.player.reloading = boo
+	core_changed.emit()
+
+func set_ammo(new_ammo: int):
+	core.inventory.ammo = new_ammo
 	core_changed.emit()

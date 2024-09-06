@@ -41,14 +41,14 @@ func _process(delta):
 
 func finish_reload():
 	var new_mag = min(core.inventory.ammo, core.inventory.active_gun.metadata.mag_size)
-	set_ammo(core.inventory.ammo - new_mag + core.inventory.active_gun.mag_curr)
-	set_reload(false)
+	_set_ammo(core.inventory.ammo - new_mag + core.inventory.active_gun.mag_curr)
+	_set_reload(false)
 	_update_ammo(new_mag)
 
 func reload():
 	if not core.inventory.active_gun or core.inventory.active_gun.metadata.mag_size == core.inventory.active_gun.mag_curr:
 		return
-	set_reload(true)
+	_set_reload(true)
 	reload_cd = UNIT * core.inventory.active_gun.metadata.reload_time
 
 func shoot():
@@ -66,18 +66,25 @@ func shoot():
 		if result.collider.has_method("take_damage"):
 			result.collider.take_damage(core.inventory.active_gun.metadata.damage_floor, core.inventory.active_gun.metadata.damage_ceiling, character, result.position)
 
+func pickup_gun(gun):
+	_add_to_guns(gun)
+
 func drop_gun():
 	if not core.inventory.active_gun:
 		return
 	var new_dropped_gun = dropped_gun.instantiate()
 	new_dropped_gun.gun_model = core.inventory.active_gun
 	_remove_active_gun()
+	cycle_next_active_gun()
 	var throw_vector = inaccuratize_vector(-character.camera.get_global_transform().basis.z.normalized(), THROW_ACCURACY)
 	new_dropped_gun.position = character.position + throw_vector
 	new_dropped_gun.linear_velocity = throw_vector * THROW_FORCE / new_dropped_gun.mass
 	new_dropped_gun.angular_velocity = throw_vector.cross(Vector3.UP) * THROW_FORCE / new_dropped_gun.mass
 	scene_entities.add_child(new_dropped_gun)
-	set_reload(false)
+	
+func cycle_next_active_gun():
+	_set_active_gun(core.inventory.active_gun_index + 1)
+	_set_reload(false)
 	shoot_cd = false
 	trigger = false
 
@@ -106,13 +113,13 @@ func _on_core_changed():
 
 # MARK: - Actions
 
-func _add_active_gun(gun_model: GunModel) -> void:
-	core.inventory.guns.insert(0, gun_model)
+func _add_to_guns(gun_model: GunModel) -> void:
+	core.inventory.guns.append(gun_model)
 	core_changed.emit()
 
 func _remove_active_gun() -> void:
-	core.inventory.guns.remove_at(0)
-	while core.inventory.active_gun_index > len(core.inventory.guns) - 1:
+	core.inventory.guns.remove_at(core.inventory.active_gun_index)
+	while core.inventory.active_gun_index > len(core.inventory.guns) - 1 and core.inventory.active_gun_index > 0:
 		core.inventory.active_gun_index -= 1
 	core_changed.emit()
 
@@ -120,11 +127,15 @@ func _update_ammo(mag_curr: int) -> void:
 	core.inventory.active_gun.mag_curr = mag_curr
 	core_changed.emit()
 
-func set_reload(boo: bool = true):
+func _set_reload(boo: bool = true):
 	reloading = boo
 	core.player.reloading = boo
 	core_changed.emit()
 
-func set_ammo(new_ammo: int):
+func _set_ammo(new_ammo: int):
 	core.inventory.ammo = new_ammo
+	core_changed.emit()
+
+func _set_active_gun(index: int):
+	core.inventory.active_gun_index = index if index <= len(core.inventory.guns) - 1 and index >= 0 else 0
 	core_changed.emit()

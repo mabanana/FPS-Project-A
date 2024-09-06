@@ -34,21 +34,13 @@ func _input(event):
 		gun_slot.drop_gun()
 	elif event.is_action_pressed("interact"):
 		if object_in_view.has_method("on_interact"):
-			core.inventory.guns.append(object_in_view.on_interact())
-			core_changed.emit()	
+			gun_slot.pickup_gun(object_in_view.on_interact())
 	elif event.is_action_pressed("cycle_inventory"):
-		# TODO: fix bug when cycle at 1 gun and then pick up, and then move logic to gun_slot
-		if core.inventory.active_gun_index >= len(core.inventory.guns) - 1:
-			core.inventory.active_gun_index = 0
-		else:
-			core.inventory.active_gun_index += 1
-		core_changed.emit()
-
+		gun_slot.cycle_next_active_gun()
 	if event.is_action_pressed("left_click"):
 		gun_slot.trigger = true
 	elif event.is_action_released("left_click"):
 		gun_slot.trigger = false
-	
 
 func _physics_process(delta):
 	# Add the gravity.

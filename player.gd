@@ -5,6 +5,7 @@ class_name PlayerEntity
 @onready var gun_slot = %GunSlot
 @onready var inventory = %Inventory
 @export var MOUSE_SENSITIVITY = 0.001
+# TODO: change these constants to variables that can be affected by character stats
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 const VERTICAL_LOOK_LIMIT = 89.0
@@ -19,15 +20,20 @@ var core_changed: Signal
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
+# TODO: Create input handler class not coupled with player entity
 func _input(event):
+	# Camera Controls via mouse
 	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and event is InputEventMouseMotion:
 		camera.rotate_x(-event.relative.y * MOUSE_SENSITIVITY)
 		rotate_object_local(Vector3.UP, -event.relative.x * MOUSE_SENSITIVITY)
+		
+	# TODO: implement pause functionality
 	if event.is_action_pressed("ui_cancel"):
 		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	# Button Inputs
 	elif event.is_action_pressed("reload"):
 		gun_slot.reload()
 	elif event.is_action_pressed("drop_equip"):
@@ -42,6 +48,7 @@ func _input(event):
 	elif event.is_action_released("left_click"):
 		gun_slot.trigger = false
 
+# Default Godot Template movement
 func _physics_process(delta):
 	# Add the gravity.
 	if not is_on_floor():
@@ -63,7 +70,8 @@ func _physics_process(delta):
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 
 	move_and_slide()
-	
+
+# Avoid putting state logic into _process
 func _process(delta):
 	object_in_view = get_object_in_view()
 

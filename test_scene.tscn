@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://player.gd" id="1_00xln"]
 [ext_resource type="Texture2D" uid="uid://brje054dv2kjn" path="res://icon.svg" id="1_fv1bh"]
 [ext_resource type="PackedScene" uid="uid://cix1j6ynfe7pn" path="res://hud.tscn" id="1_j5fux"]
-[ext_resource type="Script" path="res://target_dummy.gd" id="3_j23id"]
+[ext_resource type="Script" path="res://enemy_entity.gd" id="3_j23id"]
 [ext_resource type="Script" path="res://gun_slot.gd" id="4_m03wx"]
 [ext_resource type="PackedScene" uid="uid://bksgupr5irgc6" path="res://bullet_hole.tscn" id="6_lt6d0"]
 [ext_resource type="PackedScene" uid="uid://d1bclad3l8lov" path="res://gun_on_floor.tscn" id="7_6nd1y"]

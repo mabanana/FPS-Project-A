@@ -1,6 +1,7 @@
 extends Node3D
-class_name GunSlot
+class_name GunSlotController
 
+# TODO: Move constants to singleton
 const UNIT = 100
 const RAY_LENGTH = 1000
 const MAX_ACCURACY = 100
@@ -8,6 +9,7 @@ const ACCURACY_FLOOR = 25
 const THROW_FORCE = 50
 const THROW_ACCURACY = 69
 
+# TODO: Move packed scene dependencies somewhere else
 @export var bullet_hole: PackedScene
 @export var dropped_gun: PackedScene
 @onready var scene_entities: Node3D = %SceneEntities
@@ -67,7 +69,7 @@ func shoot():
 			result.collider.take_damage(core.inventory.active_gun.metadata.damage_floor, core.inventory.active_gun.metadata.damage_ceiling, character, result.position)
 
 func pickup_gun(gun_model: GunModel, gun_id: int):
-	_add_to_guns(gun_model)
+	_add_gun_to_inventory(gun_model)
 	_pickup_gun_from_map(gun_id)
 
 func drop_gun():
@@ -83,7 +85,6 @@ func drop_gun():
 	_drop_gun_on_map(core.inventory.active_gun, signal_payload)
 	_remove_active_gun()
 	cycle_next_active_gun()
-	
 	
 func cycle_next_active_gun():
 	_set_active_gun(core.inventory.active_gun_index + 1)
@@ -102,7 +103,7 @@ func cast_ray_towards_mouse(accuracy: int = MAX_ACCURACY, ray_length: int = RAY_
 	var end = origin + inaccuratize_vector(cast_vector, accuracy)
 	return PhysicsRayQueryParameters3D.create(origin, end)
 
-# MARK: - Bindings
+# Bindings
 
 func bind(core: CoreModel, core_changed: Signal):
 	self.core = core
@@ -114,9 +115,9 @@ func _on_core_changed(context, payload):
 	if not core.inventory.active_gun:
 		print("No gun equipped")
 
-# MARK: - Actions
+# Actions
 
-func _add_to_guns(gun_model: GunModel) -> void:
+func _add_gun_to_inventory(gun_model: GunModel) -> void:
 	core.inventory.guns.append(gun_model)
 	core_changed.emit(core.services.Context.none, null)
 
@@ -124,19 +125,6 @@ func _remove_active_gun() -> void:
 	core.inventory.guns.remove_at(core.inventory.active_gun_index)
 	while core.inventory.active_gun_index > len(core.inventory.guns) - 1 and core.inventory.active_gun_index > 0:
 		core.inventory.active_gun_index -= 1
-	core_changed.emit(core.services.Context.none, null)
-
-func _update_ammo(mag_curr: int) -> void:
-	core.inventory.active_gun.mag_curr = mag_curr
-	core_changed.emit(core.services.Context.none, null)
-
-func _set_reload(boo: bool = true):
-	reloading = boo
-	core.player.reloading = boo
-	core_changed.emit(core.services.Context.none, null)
-
-func _set_ammo(new_ammo: int) -> void:
-	core.inventory.ammo = new_ammo
 	core_changed.emit(core.services.Context.none, null)
 
 func _set_active_gun(index: int) -> void:
@@ -150,3 +138,16 @@ func _drop_gun_on_map(active_gun: GunModel, payload: Dictionary) -> void:
 
 func _pickup_gun_from_map(gun_id: int) -> void:
 	core_changed.emit(core.services.Context.gun_picked_up, {"id": gun_id})
+
+func _update_ammo(mag_curr: int) -> void:
+	core.inventory.active_gun.mag_curr = mag_curr
+	core_changed.emit(core.services.Context.none, null)
+
+func _set_reload(boo: bool = true):
+	reloading = boo
+	core.player.reloading = boo
+	core_changed.emit(core.services.Context.none, null)
+
+func _set_ammo(new_ammo: int) -> void:
+	core.inventory.ammo = new_ammo
+	core_changed.emit(core.services.Context.none, null)

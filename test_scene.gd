@@ -1,70 +1,59 @@
 extends Node3D
+class_name TestScene
+
 
 var core: CoreModel
-signal core_changed
-var id_counter: int
+signal core_changed(context, payload)
+# TODO compartmentalize responsibilities into helper classes e.g. entity spawner
 @onready var scene_entities: Node3D = %SceneEntities
+@onready var dropped_gun: PackedScene = preload("res://gun_on_floor.tscn")
+
+var entity_hash: Dictionary
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	# Starts ID generator
-	id_counter = 0
 	# Instantiate core
 	core = CoreModel.new()
 	# Add bindings to all relevant observers
 	%Player.bind(core, core_changed)
 	%Hud.bind(core, core_changed)
-	scene_entities.child_entered_tree.connect(_on_new_entity_entered)
-	scene_entities.child_exiting_tree.connect(_on_entity_exiting)
 	core_changed.connect(_on_core_changed)
 	# Set up initial state
+	entity_hash = {}
+	initialize_test_scene_map()
+	# Emit initial state to all observers
+	core_changed.emit(core.services.Context.none, null)
+
+func initialize_test_scene_map() -> void:
+	# Initialize Inventory Model
 	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunModel.GunType.TEST_GUN_A))
 	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunModel.GunType.TEST_GUN_A))
 	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunModel.GunType.TEST_GUN_B))
-	initialize_test_scene_map()
-	# Emit initial state to all observers
-	core_changed.emit()
-
-func initialize_test_scene_map() -> void:
+	# Initialize Map Model
 	for child in scene_entities.get_children():
-		_on_new_entity_entered(child)
-
-func _add_entity_to_map(id:int, entity:EntityModel) -> void:
-	core.map.entities[id] = entity
-	core_changed.emit()
-
-func _remove_entity_from_map(id) -> void:
-	core.map.entities.erase(id)
-	core_changed.emit()
-
-func generate_id() -> int:
-	var new_id = id_counter
-	id_counter += 1
-	return new_id
-
-func _on_new_entity_entered(node):
-	var type: EntityModel.EntityType
-	var new_id = generate_id()
-	if node is PlayerEntity:
-		type = EntityModel.EntityType.player
-	elif node is InteractableEntity:
-		type = EntityModel.EntityType.interactable
-	elif node is EnemyEntity:
-		type = EntityModel.EntityType.enemy
-	_add_entity_to_map(new_id, EntityModel.new(node.name, node.position, type))
-	node.id = new_id
-
-func _on_entity_exiting(node):
-	_remove_entity_from_map(node.id)
-
-func _on_core_changed():
-	var player_count = 0
-	var enemy_count = 0
-	var gun_count = 0
-	for key in core.map.entities.keys():
-		if core.map.entities[key].entity_type == EntityModel.EntityType.player:
-			player_count += 1
-		elif core.map.entities[key].entity_type == EntityModel.EntityType.enemy:
-			enemy_count += 1
-		elif core.map.entities[key].entity_type == EntityModel.EntityType.interactable:
-			gun_count += 1
+		child.id = core.services.generate_id()
+		var type: EntityModel.EntityType
+		if child is PlayerEntity:
+			type = EntityModel.EntityType.player
+		elif child is InteractableEntity:
+			type = EntityModel.EntityType.interactable
+		elif child is EnemyEntity:
+			type = EntityModel.EntityType.enemy
+		core.map.entities[child.id] = EntityModel.new(child.name, child.position, type)
+		entity_hash[child.id] = child
+		
+func _on_core_changed(context, payload):
+	if context == core.services.Context.gun_dropped:
+		print("Gun Node Dropped!")
+		var new_dropped_gun = dropped_gun.instantiate()
+		new_dropped_gun.position = payload["position"]
+		new_dropped_gun.linear_velocity = payload["linear_velocity"]
+		new_dropped_gun.angular_velocity = payload["angular_velocity"]
+		new_dropped_gun.gun_model = payload["gun_model"]
+		new_dropped_gun.id = payload["id"]
+		scene_entities.add_child(new_dropped_gun)
+		entity_hash[payload["id"]] = new_dropped_gun
+	if context == core.services.Context.gun_picked_up:
+		# TODO: improve behavior for despawning node from scene
+		entity_hash[payload["id"]].queue_free()
+		entity_hash.erase(payload["id"])

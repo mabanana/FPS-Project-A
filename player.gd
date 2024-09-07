@@ -34,7 +34,7 @@ func _input(event):
 		gun_slot.drop_gun()
 	elif event.is_action_pressed("interact"):
 		if object_in_view.has_method("on_interact"):
-			gun_slot.pickup_gun(object_in_view.on_interact())
+			gun_slot.pickup_gun(object_in_view.on_interact(), object_in_view.id)
 	elif event.is_action_pressed("cycle_inventory"):
 		gun_slot.cycle_next_active_gun()
 	if event.is_action_pressed("left_click"):
@@ -82,5 +82,5 @@ func bind(core: CoreModel, core_changed: Signal):
 	core_changed.connect(_on_core_changed)
 	gun_slot.bind(core, core_changed)
 
-func _on_core_changed():
+func _on_core_changed(context, payload):
 	pass

@@ -19,5 +19,5 @@ func bind(core: CoreModel, core_changed: Signal):
 	
 	core_changed.connect(_on_core_changed)
 
-func _on_core_changed():
+func _on_core_changed(context, payload):
 	update()

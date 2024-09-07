@@ -5,7 +5,6 @@ var gun_model: GunModel
 var id: int
 
 func on_interact():
-	queue_free()
 	return gun_model
 
 func _init():
@@ -17,4 +16,5 @@ func _init():
 
 func _ready():
 	if not gun_model:
+		print("gun_model not found, freeing...")
 		queue_free()

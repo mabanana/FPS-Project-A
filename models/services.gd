@@ -1,4 +1,4 @@
-class_name global
+class_name CoreServices
 
 var id_counter
 
@@ -8,7 +8,7 @@ enum Context {
 	gun_picked_up
 }
 
-func _ready() -> void:
+func _init() -> void:
 	# Starts ID generator
 	id_counter = 0
 

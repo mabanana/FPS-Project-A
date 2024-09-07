@@ -4,13 +4,12 @@ class_name TestScene
 
 var core: CoreModel
 signal core_changed(context, payload)
-# TODO compartmentalize responsibilities into helper classes e.g. entity spawner
+# TODO Compartmentalize responsibilities into helper classes e.g. entity spawner
 @onready var scene_entities: Node3D = %SceneEntities
 @onready var dropped_gun: PackedScene = preload("res://gun_on_floor.tscn")
 
 var entity_hash: Dictionary
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# Instantiate core
 	core = CoreModel.new()
@@ -25,7 +24,7 @@ func _ready() -> void:
 	# Emit initial state to all observers
 	core_changed.emit(core.services.Context.none, null)
 
-#Temporary function that initializes the hard coded nodes into test scene.
+# Temporary function that initializes the hard coded nodes into test scene.
 func initialize_test_scene_map() -> void:
 	# Initialize Inventory Model
 	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunModel.GunType.TEST_GUN_A))

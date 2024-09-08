@@ -11,7 +11,6 @@ const THROW_ACCURACY = 69
 
 # TODO: Move packed scene dependencies somewhere else
 @export var bullet_hole: PackedScene
-@export var dropped_gun: PackedScene
 @onready var scene_entities: Node3D = %SceneEntities
 var shoot_cd: int
 var reload_cd: int

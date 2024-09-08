@@ -23,7 +23,6 @@ func _ready():
 # TODO: Create input handler class not coupled with player entity
 func _input(event):
 	# Camera Controls via mouse
-	# TODO: remove redundant CameraControl Node
 	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and event is InputEventMouseMotion:
 		camera.rotate_x(-event.relative.y * MOUSE_SENSITIVITY)
 		rotate_object_local(Vector3.UP, -event.relative.x * MOUSE_SENSITIVITY)

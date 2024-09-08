@@ -9,37 +9,36 @@ const MAX_ACCURACY = 100
 const ACCURACY_FLOOR = 25
 const THROW_FORCE = 50
 const THROW_ACCURACY = 69
+const DEFAULT_CAMERA_ZOOM = 75
 
 # TODO: Move packed scene dependencies somewhere else
 @export var bullet_hole: PackedScene
 @onready var scene_entities: Node3D = %SceneEntities
 var shoot_cd: int
 var reload_cd: int
-var reloading: bool
-var trigger: bool
-var ads: bool
 var character: CharacterBody3D
 
 var core: CoreModel
 var core_changed: Signal
 
 func _ready():
-	_reset_gun_slot()
 	character = get_parent()
+	shoot_cd = 0
+	reload_cd = 0
 
 func _process(delta):
 	if not core.inventory.active_gun:
 		return
 	if shoot_cd > 0:
 		shoot_cd -= UNIT * delta
-	if reloading:
+	if core.player.reloading:
 		if reload_cd > 0:
 			reload_cd -= UNIT * delta
 		else:
 			finish_reload()
-	if trigger:
+	if core.player.trigger:
 		shoot()
-	if ads:
+	if core.player.ads:
 		set_camera_zoom(core.inventory.active_gun.metadata.zoom,true)
 	else:
 		set_camera_zoom(0,false)
@@ -57,7 +56,7 @@ func reload():
 	reload_cd = UNIT * core.inventory.active_gun.metadata.reload_time
 
 func shoot():
-	if shoot_cd <= 0 and core.inventory.active_gun.mag_curr > 0 and not reloading:
+	if shoot_cd <= 0 and core.inventory.active_gun.mag_curr > 0 and not core.player.reloading:
 		shoot_cd = 100/core.inventory.active_gun.metadata.fire_rate
 	else:
 		# Move this to on_core_changed
@@ -92,8 +91,8 @@ func drop_gun():
 	_remove_active_gun()
 	
 func cycle_next_active_gun():
-	_set_active_gun(core.inventory.active_gun_index + 1)
 	_reset_gun_slot()
+	_set_active_gun(core.inventory.active_gun_index + 1)
 
 func inaccuratize_vector(vector, acc):
 	var rot = deg_to_rad(ACCURACY_FLOOR * (MAX_ACCURACY - acc) / 100)
@@ -108,17 +107,9 @@ func cast_ray_towards_mouse(accuracy: int = MAX_ACCURACY, ray_length: int = RAY_
 
 func set_camera_zoom(gun_zoom: float, boo: bool):
 	if boo:
-		character.camera.fov = 75 / gun_zoom
+		character.camera.fov = DEFAULT_CAMERA_ZOOM / gun_zoom
 	else:
-		character.camera.fov = 75
-
-# TODO: move these to core.player
-func _reset_gun_slot():
-	reloading = false
-	ads = false
-	trigger = false
-	shoot_cd = 0
-	reload_cd = 0
+		character.camera.fov = DEFAULT_CAMERA_ZOOM
 
 # Bindings
 
@@ -147,7 +138,10 @@ func _remove_active_gun() -> void:
 	core_changed.emit(core.services.Context.none, null)
 
 func _set_active_gun(index: int) -> void:
-	core.inventory.active_gun_index = index if index <= len(core.inventory.guns) - 1 and index >= 0 else 0
+	var new_index = index if index <= len(core.inventory.guns) - 1 and index >= 0 else 0
+	if new_index == core.inventory.active_gun_index:
+		return
+	core.inventory.active_gun_index = new_index
 	core_changed.emit(core.services.Context.none, null)
 	
 func _drop_gun_on_map(active_gun: GunModel, payload: Dictionary) -> void:
@@ -163,10 +157,37 @@ func _update_ammo(mag_curr: int) -> void:
 	core_changed.emit(core.services.Context.gun_shot, null)
 
 func _set_reload(boo: bool = true):
-	reloading = boo
+	if core.player.reloading == boo:
+		return
 	core.player.reloading = boo
+	core.player.trigger = false
+	core.player.ads = false
+	core_changed.emit(core.services.Context.none, null)
+
+func _set_trigger(boo: bool = true):
+	if core.player.trigger == boo:
+		return
+	core.player.trigger = boo
+	core.player.reloading = false
+	core_changed.emit(core.services.Context.none, null)
+
+func _set_ads(boo: bool = true):
+	if core.player.ads == boo:
+		return
+	core.player.ads = boo
+	core.player.reloading = false
+	core_changed.emit(core.services.Context.none, null)
+
+func _reset_gun_slot():
+	core.player.reloading = false
+	core.player.ads = false
+	core.player.trigger = false
+	shoot_cd = 0
+	reload_cd = 0
 	core_changed.emit(core.services.Context.none, null)
 
 func _set_ammo(new_ammo: int) -> void:
+	if core.inventory.ammo == new_ammo:
+		return
 	core.inventory.ammo = new_ammo
 	core_changed.emit(core.services.Context.none, null)

@@ -46,13 +46,13 @@ func _input(event):
 		gun_slot.cycle_next_active_gun()
 	
 	if event.is_action_pressed("left_click"):
-		gun_slot.trigger = true
+		gun_slot._set_trigger()
 	elif event.is_action_released("left_click"):
-		gun_slot.trigger = false
+		gun_slot._set_trigger(false)
 	if event.is_action_pressed("right_click"):
-		gun_slot.ads = true
+		gun_slot._set_ads()
 	elif event.is_action_released("right_click"):
-		gun_slot.ads = false
+		gun_slot._set_ads(false)
 
 # Default Godot Template movement
 func _physics_process(delta):

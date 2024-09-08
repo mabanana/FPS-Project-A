@@ -3,7 +3,8 @@ class_name GunModel
 enum GunType {
 	TEST_GUN_A,
 	TEST_GUN_B,
-	TEST_GUN_C
+	TEST_GUN_C,
+	TEST_GUN_D
 }
 
 var id: int

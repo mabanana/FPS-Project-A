@@ -1,6 +1,5 @@
 class_name GunMetadataModel
 
-# TODO: Add gun mass, pellet count
 var name: String
 var damage_floor: int
 var damage_ceiling: int

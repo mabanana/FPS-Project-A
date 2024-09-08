@@ -9,7 +9,7 @@ var untracked_entities: Node3D
 # TODO: change these constants to variables that can be affected by character stats
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
-const VERTICAL_LOOK_LIMIT = 89.0
+const VERTICAL_LOOK_LIMIT = deg_to_rad(90)
 const RAY_LENGTH = 1000
 var id: int
 var object_in_view
@@ -29,6 +29,7 @@ func _input(event):
 	# Camera Controls via mouse
 	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and event is InputEventMouseMotion:
 		camera.rotate_x(-event.relative.y * MOUSE_SENSITIVITY)
+		camera.rotation.x = clampf(camera.rotation.x, -VERTICAL_LOOK_LIMIT, VERTICAL_LOOK_LIMIT)
 		rotate_object_local(Vector3.UP, -event.relative.x * MOUSE_SENSITIVITY)
 		
 	# TODO: implement pause functionality

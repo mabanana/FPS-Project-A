@@ -5,7 +5,8 @@ var id_counter
 enum Context {
 	none,
 	gun_dropped,
-	gun_picked_up
+	gun_picked_up,
+	gun_shot
 }
 
 func _init() -> void:

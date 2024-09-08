@@ -55,6 +55,9 @@ func reload():
 func shoot():
 	if shoot_cd <= 0 and core.inventory.active_gun.mag_curr > 0 and not reloading:
 		shoot_cd = 100/core.inventory.active_gun.metadata.fire_rate
+	elif core.inventory.active_gun.mag_curr == 0:
+		reload()
+		return
 	else:
 		return
 	_update_ammo(core.inventory.active_gun.mag_curr - 1)
@@ -111,8 +114,10 @@ func bind(core: CoreModel, core_changed: Signal):
 	core_changed.connect(_on_core_changed)
 
 func _on_core_changed(context, payload):
-	if not core.inventory.active_gun:
+	if context == core.services.Context.gun_dropped and not core.inventory.active_gun:
 		print("No gun equipped")
+	if context == core.services.Context.gun_shot and core.inventory.active_gun.mag_curr == 0:
+		print("Need to reload")
 
 # Actions
 
@@ -140,7 +145,7 @@ func _pickup_gun_from_map(gun_id: int) -> void:
 
 func _update_ammo(mag_curr: int) -> void:
 	core.inventory.active_gun.mag_curr = mag_curr
-	core_changed.emit(core.services.Context.none, null)
+	core_changed.emit(core.services.Context.gun_shot, null)
 
 func _set_reload(boo: bool = true):
 	reloading = boo

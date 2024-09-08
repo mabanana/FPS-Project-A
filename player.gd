@@ -1,9 +1,10 @@
 extends CharacterBody3D
 class_name PlayerEntity
 
-@onready var camera = %Camera3D
-@onready var gun_slot = %GunSlot
-@onready var inventory = %Inventory
+var camera: Camera3D
+var gun_slot: GunSlotController
+var untracked_entities: Node3D
+
 @export var MOUSE_SENSITIVITY = 0.001
 # TODO: change these constants to variables that can be affected by character stats
 const SPEED = 5.0
@@ -18,6 +19,9 @@ var core: CoreModel
 var core_changed: Signal
 
 func _ready():
+	camera = %Camera3D
+	gun_slot = %GunSlot
+	untracked_entities = %UntrackedEntities
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 # TODO: Create input handler class not coupled with player entity

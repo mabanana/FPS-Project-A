@@ -12,11 +12,10 @@ const THROW_ACCURACY = 69
 const DEFAULT_CAMERA_ZOOM = 75
 
 # TODO: Move packed scene dependencies somewhere else
-@export var bullet_hole: PackedScene
-@onready var scene_entities: Node3D = %SceneEntities
+var bullet_hole: PackedScene
 var shoot_cd: int
 var reload_cd: int
-var character: CharacterBody3D
+var character: PlayerEntity
 
 var core: CoreModel
 var core_changed: Signal
@@ -25,6 +24,7 @@ func _ready():
 	character = get_parent()
 	shoot_cd = 0
 	reload_cd = 0
+	bullet_hole = preload("res://bullet_hole.tscn")
 
 func _process(delta):
 	if not core.inventory.active_gun:
@@ -70,7 +70,7 @@ func shoot():
 		if result:
 			var new_bullet_hole = bullet_hole.instantiate()
 			new_bullet_hole.position = result.position
-			%UntrackedEntities.add_child(new_bullet_hole)
+			character.untracked_entities.add_child(new_bullet_hole)
 			if result.collider.has_method("take_damage"):
 				result.collider.take_damage(core.inventory.active_gun.metadata.damage_floor, core.inventory.active_gun.metadata.damage_ceiling, character, result.position)
 

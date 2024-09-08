@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bgp15f5w735mi"]
+[gd_scene load_steps=17 format=3 uid="uid://bgp15f5w735mi"]
 
 [ext_resource type="Script" path="res://test_scene.gd" id="1_00gik"]
 [ext_resource type="Script" path="res://player.gd" id="1_00xln"]
@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://cix1j6ynfe7pn" path="res://hud.tscn" id="1_j5fux"]
 [ext_resource type="Script" path="res://enemy_entity.gd" id="3_j23id"]
 [ext_resource type="Script" path="res://gun_slot.gd" id="4_m03wx"]
-[ext_resource type="PackedScene" uid="uid://bksgupr5irgc6" path="res://bullet_hole.tscn" id="6_lt6d0"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_roha1"]
 
@@ -73,7 +72,6 @@ mesh = SubResource("BoxMesh_d7rov")
 [node name="GunSlot" type="Node3D" parent="SceneEntities/Player"]
 unique_name_in_owner = true
 script = ExtResource("4_m03wx")
-bullet_hole = ExtResource("6_lt6d0")
 
 [node name="Target Dummy" type="CharacterBody3D" parent="SceneEntities"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1.5, 0)

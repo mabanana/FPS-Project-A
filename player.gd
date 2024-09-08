@@ -34,6 +34,7 @@ func _input(event):
 		else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	# Button Inputs
+	# TODO: add number button weapon swap
 	elif event.is_action_pressed("reload"):
 		gun_slot.reload()
 	elif event.is_action_pressed("drop_equip"):
@@ -43,10 +44,15 @@ func _input(event):
 			gun_slot.pickup_gun(object_in_view.on_interact(), object_in_view.id)
 	elif event.is_action_pressed("cycle_inventory"):
 		gun_slot.cycle_next_active_gun()
+	
 	if event.is_action_pressed("left_click"):
 		gun_slot.trigger = true
 	elif event.is_action_released("left_click"):
 		gun_slot.trigger = false
+	if event.is_action_pressed("right_click"):
+		gun_slot.ads = true
+	elif event.is_action_released("right_click"):
+		gun_slot.ads = false
 
 # Default Godot Template movement
 func _physics_process(delta):

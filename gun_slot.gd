@@ -1,4 +1,5 @@
 extends Node3D
+# TODO: move this entire node into a instance in PlayerEntity
 class_name GunSlotController
 
 # TODO: Move constants to singleton
@@ -15,16 +16,15 @@ const THROW_ACCURACY = 69
 var shoot_cd: int
 var reload_cd: int
 var reloading: bool
-var trigger: bool = false
+var trigger: bool
+var ads: bool
 var character: CharacterBody3D
 
 var core: CoreModel
 var core_changed: Signal
 
 func _ready():
-	reload_cd = 0
-	reloading = false
-	shoot_cd = 0
+	_reset_gun_slot()
 	character = get_parent()
 
 func _process(delta):
@@ -39,6 +39,10 @@ func _process(delta):
 			finish_reload()
 	if trigger:
 		shoot()
+	if ads:
+		set_camera_zoom(core.inventory.active_gun.metadata.zoom,true)
+	else:
+		set_camera_zoom(0,false)
 
 func finish_reload():
 	var new_mag = min(core.inventory.ammo, core.inventory.active_gun.metadata.mag_size)
@@ -56,6 +60,7 @@ func shoot():
 	if shoot_cd <= 0 and core.inventory.active_gun.mag_curr > 0 and not reloading:
 		shoot_cd = 100/core.inventory.active_gun.metadata.fire_rate
 	else:
+		# Move this to on_core_changed
 		if core.inventory.active_gun.mag_curr <= 0:
 			reload()
 		return
@@ -88,9 +93,7 @@ func drop_gun():
 	
 func cycle_next_active_gun():
 	_set_active_gun(core.inventory.active_gun_index + 1)
-	_set_reload(false)
-	shoot_cd = false
-	trigger = false
+	_reset_gun_slot()
 
 func inaccuratize_vector(vector, acc):
 	var rot = deg_to_rad(ACCURACY_FLOOR * (MAX_ACCURACY - acc) / 100)
@@ -102,6 +105,20 @@ func cast_ray_towards_mouse(accuracy: int = MAX_ACCURACY, ray_length: int = RAY_
 	var cast_vector = character.camera.project_ray_normal(mousepos) * RAY_LENGTH
 	var end = origin + inaccuratize_vector(cast_vector, accuracy)
 	return PhysicsRayQueryParameters3D.create(origin, end)
+
+func set_camera_zoom(gun_zoom: float, boo: bool):
+	if boo:
+		character.camera.fov = 75 / gun_zoom
+	else:
+		character.camera.fov = 75
+
+# TODO: move these to core.player
+func _reset_gun_slot():
+	reloading = false
+	ads = false
+	trigger = false
+	shoot_cd = 0
+	reload_cd = 0
 
 # Bindings
 

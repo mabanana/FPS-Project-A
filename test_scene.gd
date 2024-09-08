@@ -28,8 +28,8 @@ func _ready() -> void:
 func initialize_test_scene_map() -> void:
 	# Initialize Inventory Model
 	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunModel.GunType.TEST_GUN_A))
-	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunModel.GunType.TEST_GUN_A))
 	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunModel.GunType.TEST_GUN_B))
+	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunModel.GunType.TEST_GUN_C))
 	# Initialize Map Model
 	for child in scene_entities.get_children():
 		child.id = core.services.generate_id()

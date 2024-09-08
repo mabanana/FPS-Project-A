@@ -55,20 +55,20 @@ func reload():
 func shoot():
 	if shoot_cd <= 0 and core.inventory.active_gun.mag_curr > 0 and not reloading:
 		shoot_cd = 100/core.inventory.active_gun.metadata.fire_rate
-	elif core.inventory.active_gun.mag_curr == 0:
-		reload()
-		return
 	else:
+		if core.inventory.active_gun.mag_curr <= 0:
+			reload()
 		return
-	_update_ammo(core.inventory.active_gun.mag_curr - 1)
-	var query = cast_ray_towards_mouse(core.inventory.active_gun.metadata.accuracy)
-	var result = get_world_3d().direct_space_state.intersect_ray(query)
-	if result:
-		var new_bullet_hole = bullet_hole.instantiate()
-		new_bullet_hole.position = result.position
-		%UntrackedEntities.add_child(new_bullet_hole)
-		if result.collider.has_method("take_damage"):
-			result.collider.take_damage(core.inventory.active_gun.metadata.damage_floor, core.inventory.active_gun.metadata.damage_ceiling, character, result.position)
+	_update_ammo(core.inventory.active_gun.mag_curr - core.inventory.active_gun.metadata.ammo_per_shot)
+	for i in range(core.inventory.active_gun.metadata.pellet_count):
+		var query = cast_ray_towards_mouse(core.inventory.active_gun.metadata.accuracy)
+		var result = get_world_3d().direct_space_state.intersect_ray(query)
+		if result:
+			var new_bullet_hole = bullet_hole.instantiate()
+			new_bullet_hole.position = result.position
+			%UntrackedEntities.add_child(new_bullet_hole)
+			if result.collider.has_method("take_damage"):
+				result.collider.take_damage(core.inventory.active_gun.metadata.damage_floor, core.inventory.active_gun.metadata.damage_ceiling, character, result.position)
 
 func pickup_gun(gun_model: GunModel, gun_id: int):
 	_add_gun_to_inventory(gun_model)
@@ -81,12 +81,10 @@ func drop_gun():
 	var throw_vector = inaccuratize_vector(-character.camera.get_global_transform().basis.z.normalized(), THROW_ACCURACY)
 	signal_payload["position"] = character.position + throw_vector
 	signal_payload["gun_model"] = core.inventory.active_gun
-	# TODO: add mass to gun metadata for velocity calculation
-	signal_payload["linear_velocity"] = throw_vector * THROW_FORCE / 3
-	signal_payload["angular_velocity"] = throw_vector.cross(Vector3.UP) * THROW_FORCE / 3
+	signal_payload["linear_velocity"] = throw_vector * THROW_FORCE / core.inventory.active_gun.metadata.mass
+	signal_payload["angular_velocity"] = throw_vector.cross(Vector3.UP) * THROW_FORCE / core.inventory.active_gun.metadata.mass
 	_drop_gun_on_map(core.inventory.active_gun, signal_payload)
 	_remove_active_gun()
-	cycle_next_active_gun()
 	
 func cycle_next_active_gun():
 	_set_active_gun(core.inventory.active_gun_index + 1)

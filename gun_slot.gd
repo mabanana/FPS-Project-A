@@ -16,6 +16,8 @@ var bullet_hole: PackedScene
 var shoot_cd: int
 var reload_cd: int
 var character: PlayerEntity
+var active_gun: GunModel
+var context
 
 var core: CoreModel
 var core_changed: Signal
@@ -25,54 +27,40 @@ func _ready():
 	shoot_cd = 0
 	reload_cd = 0
 	bullet_hole = preload("res://bullet_hole.tscn")
+	context = core.services.Context
 
 func _process(delta):
-	if not core.inventory.active_gun:
-		return
+	# Only timers
 	if shoot_cd > 0:
 		shoot_cd -= UNIT * delta
+		if shoot_cd <= 0:
+			_finish_cd()
 	if core.player.reloading:
 		if reload_cd > 0:
 			reload_cd -= UNIT * delta
 		else:
-			finish_reload()
-	if core.player.trigger:
-		shoot()
-	if core.player.ads:
-		set_camera_zoom(core.inventory.active_gun.metadata.zoom,true)
-	else:
-		set_camera_zoom(0,false)
-
-func finish_reload():
-	var new_mag = min(core.inventory.ammo, core.inventory.active_gun.metadata.mag_size)
-	_set_ammo(core.inventory.ammo - new_mag + core.inventory.active_gun.mag_curr)
-	_set_reload(false)
-	_update_ammo(new_mag)
+			_finish_cd()
 
 func reload():
-	if not core.inventory.active_gun or core.inventory.active_gun.metadata.mag_size == core.inventory.active_gun.mag_curr:
+	if not active_gun or active_gun.metadata.mag_size == active_gun.mag_curr:
 		return
+	reload_cd = UNIT * active_gun.metadata.reload_time
 	_set_reload(true)
-	reload_cd = UNIT * core.inventory.active_gun.metadata.reload_time
+	
 
 func shoot():
-	if shoot_cd <= 0 and core.inventory.active_gun.mag_curr > 0 and not core.player.reloading:
-		shoot_cd = 100/core.inventory.active_gun.metadata.fire_rate
-	else:
-		# Move this to on_core_changed
-		if core.inventory.active_gun.mag_curr <= 0:
-			reload()
-		return
-	_update_ammo(core.inventory.active_gun.mag_curr - core.inventory.active_gun.metadata.ammo_per_shot)
+	shoot_cd = 100/active_gun.metadata.fire_rate
 	for i in range(core.inventory.active_gun.metadata.pellet_count):
-		var query = cast_ray_towards_mouse(core.inventory.active_gun.metadata.accuracy)
+		var query = cast_ray_towards_mouse(active_gun.metadata.accuracy)
 		var result = get_world_3d().direct_space_state.intersect_ray(query)
 		if result:
+			# TODO: move bullet hole logic somewhere else
 			var new_bullet_hole = bullet_hole.instantiate()
 			new_bullet_hole.position = result.position
 			character.untracked_entities.add_child(new_bullet_hole)
 			if result.collider.has_method("take_damage"):
-				result.collider.take_damage(core.inventory.active_gun.metadata.damage_floor, core.inventory.active_gun.metadata.damage_ceiling, character, result.position)
+				result.collider.take_damage(active_gun.metadata.damage_floor, active_gun.metadata.damage_ceiling, character, result.position)
+	_update_mag(active_gun.mag_curr - active_gun.metadata.ammo_per_shot)
 
 func pickup_gun(gun_model: GunModel, gun_id: int):
 	_add_gun_to_inventory(gun_model)
@@ -84,10 +72,10 @@ func drop_gun():
 	var signal_payload = {}
 	var throw_vector = inaccuratize_vector(-character.camera.get_global_transform().basis.z.normalized(), THROW_ACCURACY)
 	signal_payload["position"] = character.position + throw_vector
-	signal_payload["gun_model"] = core.inventory.active_gun
-	signal_payload["linear_velocity"] = throw_vector * THROW_FORCE / core.inventory.active_gun.metadata.mass
-	signal_payload["angular_velocity"] = throw_vector.cross(Vector3.UP) * THROW_FORCE / core.inventory.active_gun.metadata.mass
-	_drop_gun_on_map(core.inventory.active_gun, signal_payload)
+	signal_payload["gun_model"] = active_gun
+	signal_payload["linear_velocity"] = throw_vector * THROW_FORCE / active_gun.metadata.mass
+	signal_payload["angular_velocity"] = throw_vector.cross(Vector3.UP) * THROW_FORCE / active_gun.metadata.mass
+	_drop_gun_on_map(active_gun, signal_payload)
 	_remove_active_gun()
 	
 func cycle_next_active_gun():
@@ -120,10 +108,27 @@ func bind(core: CoreModel, core_changed: Signal):
 	core_changed.connect(_on_core_changed)
 
 func _on_core_changed(context, payload):
+	# Actions
+	active_gun = core.inventory.active_gun
+	if core.player.ads:
+		set_camera_zoom(core.inventory.active_gun.metadata.zoom, true)
+	else:
+		set_camera_zoom(0, false)
+	if core.player.trigger and shoot_cd <= 0:
+		if core.inventory.active_gun.mag_curr > 0:
+			shoot()
+		else:
+			reload()
+	elif core.player.reloading and reload_cd <= 0:
+		_finish_reload()
+	
+	# Logs
 	if context == core.services.Context.gun_dropped and not core.inventory.active_gun:
 		print("No gun equipped")
 	if context == core.services.Context.gun_shot and core.inventory.active_gun.mag_curr == 0:
 		print("Need to reload")
+	
+
 
 # Actions
 
@@ -152,7 +157,7 @@ func _drop_gun_on_map(active_gun: GunModel, payload: Dictionary) -> void:
 func _pickup_gun_from_map(gun_id: int) -> void:
 	core_changed.emit(core.services.Context.gun_picked_up, {"id": gun_id})
 
-func _update_ammo(mag_curr: int) -> void:
+func _update_mag(mag_curr: int) -> void:
 	core.inventory.active_gun.mag_curr = mag_curr
 	core_changed.emit(core.services.Context.gun_shot, null)
 
@@ -190,4 +195,13 @@ func _set_ammo(new_ammo: int) -> void:
 	if core.inventory.ammo == new_ammo:
 		return
 	core.inventory.ammo = new_ammo
+	core_changed.emit(core.services.Context.none, null)
+
+func _finish_reload():
+	_set_reload(false)
+	var new_mag = min(core.inventory.ammo, active_gun.metadata.mag_size)
+	_set_ammo(core.inventory.ammo - new_mag + active_gun.mag_curr)
+	_update_mag(new_mag)
+
+func _finish_cd():
 	core_changed.emit(core.services.Context.none, null)

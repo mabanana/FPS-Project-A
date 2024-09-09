@@ -6,7 +6,6 @@ A looter-shooter game, built using the **Godot 4.3 game engine**, inspired by th
 - [Requirements](#requirements)
 - [Setup](#setup)
 - [Design Pattern](#design-pattern)
-- [License](#license)
 
 ## Requirements
 - **Godot Engine 4.3** (Download from [official website](https://godotengine.org/download))
@@ -33,6 +32,3 @@ FPS Project A is built using a Redux-inspired design pattern. This pattern provi
 - **State Change:** The player picks up and equips a gun from the floor and updates the inventory in `CoreModel`.
 - **Signal Emit:** A `Signal` with a data payload of the event is emitted to all listening nodes.
 - **Node Update:** The Game Scene and the UI reacts via their on_core_changed() method, removing the gun node from floor and updating the HUD to display information about the new gun.
-
-## License
-FPS Project A is licensed under the MIT License.

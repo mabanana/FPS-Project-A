@@ -10,7 +10,7 @@ func update():
 	%Total.text = str(core.inventory.ammo)
 	%Magazine.text = str(core.inventory.active_gun.mag_curr) if core.inventory.active_gun else "0"
 	%HpValue.text = str(core.player.hp)
-	%ReloadIndicator.modulate.a = int(core.player.reloading)
+	%ReloadIndicator.modulate.a = int(core.player.is_reloading)
 	%ProgressBar.max_value = core.inventory.active_gun.metadata.mag_size if core.inventory.active_gun else 0
 	%ProgressBar.value = core.inventory.active_gun.mag_curr if core.inventory.active_gun else 0
 

@@ -2,12 +2,12 @@ class_name PlayerModel
 
 var hp: int
 
-var reloading: bool
-var trigger: bool
-var ads: bool
+var is_reloading: bool
+var is_triggering: bool
+var is_ads: bool
 
 func _init(hp: int = 100) -> void:
 	self.hp = hp
-	reloading = false
-	trigger = false
-	ads = false
+	is_reloading = false
+	is_triggering = false
+	is_ads = false

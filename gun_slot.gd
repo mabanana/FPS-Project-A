@@ -35,7 +35,7 @@ func _process(delta):
 		shoot_cd -= UNIT * delta
 		if shoot_cd <= 0:
 			_finish_cd()
-	if core.player.reloading:
+	if core.player.is_reloading:
 		if reload_cd > 0:
 			reload_cd -= UNIT * delta
 		else:
@@ -46,7 +46,6 @@ func reload():
 		return
 	reload_cd = UNIT * active_gun.metadata.reload_time
 	_set_reload(true)
-	
 
 func shoot():
 	shoot_cd = 100/active_gun.metadata.fire_rate
@@ -77,9 +76,9 @@ func drop_gun():
 	signal_payload["angular_velocity"] = throw_vector.cross(Vector3.UP) * THROW_FORCE / active_gun.metadata.mass
 	_drop_gun_on_map(active_gun, signal_payload)
 	_remove_active_gun()
-	
+
 func cycle_next_active_gun():
-	_reset_gun_slot()
+	reset_gun_slot()
 	_set_active_gun(core.inventory.active_gun_index + 1)
 
 func inaccuratize_vector(vector, acc):
@@ -99,6 +98,19 @@ func set_camera_zoom(gun_zoom: float, boo: bool):
 	else:
 		character.camera.fov = DEFAULT_CAMERA_ZOOM
 
+func finish_reload():
+	_set_reload(false)
+	var new_mag = min(core.inventory.ammo, active_gun.metadata.mag_size)
+	_set_ammo(core.inventory.ammo - new_mag + active_gun.mag_curr)
+	_update_mag(new_mag)
+
+func reset_gun_slot():
+	_set_reload(false)
+	_set_ads(false)
+	_set_trigger(false)
+	shoot_cd = 0
+	reload_cd = 0
+
 # Bindings
 
 func bind(core: CoreModel, core_changed: Signal):
@@ -110,25 +122,23 @@ func bind(core: CoreModel, core_changed: Signal):
 func _on_core_changed(context, payload):
 	# Actions
 	active_gun = core.inventory.active_gun
-	if core.player.ads:
-		set_camera_zoom(core.inventory.active_gun.metadata.zoom, true)
+	if core.player.is_ads:
+		set_camera_zoom(active_gun.metadata.zoom, true)
 	else:
 		set_camera_zoom(0, false)
-	if core.player.trigger and shoot_cd <= 0:
-		if core.inventory.active_gun.mag_curr > 0:
+	if core.player.is_triggering and shoot_cd <= 0:
+		if active_gun.mag_curr > 0:
 			shoot()
-		else:
+		if active_gun.mag_curr <= 0:
 			reload()
-	elif core.player.reloading and reload_cd <= 0:
-		_finish_reload()
-	
+	elif core.player.is_reloading and reload_cd <= 0:
+		finish_reload()
+
 	# Logs
 	if context == core.services.Context.gun_dropped and not core.inventory.active_gun:
 		print("No gun equipped")
 	if context == core.services.Context.gun_shot and core.inventory.active_gun.mag_curr == 0:
 		print("Need to reload")
-	
-
 
 # Actions
 
@@ -148,7 +158,7 @@ func _set_active_gun(index: int) -> void:
 		return
 	core.inventory.active_gun_index = new_index
 	core_changed.emit(core.services.Context.none, null)
-	
+
 func _drop_gun_on_map(active_gun: GunModel, payload: Dictionary) -> void:
 	payload["id"] = core.services.generate_id()
 	core.map.entities[payload["id"]] = EntityModel.new(active_gun.metadata.name, position, EntityModel.EntityType.interactable)
@@ -162,46 +172,32 @@ func _update_mag(mag_curr: int) -> void:
 	core_changed.emit(core.services.Context.gun_shot, null)
 
 func _set_reload(boo: bool = true):
-	if core.player.reloading == boo:
+	if core.player.is_reloading == boo:
 		return
-	core.player.reloading = boo
-	core.player.trigger = false
-	core.player.ads = false
+	core.player.is_reloading = boo
+	core.player.is_triggering = false
+	core.player.is_ads = false
 	core_changed.emit(core.services.Context.none, null)
 
 func _set_trigger(boo: bool = true):
-	if core.player.trigger == boo:
+	if core.player.is_triggering == boo:
 		return
-	core.player.trigger = boo
-	core.player.reloading = false
+	core.player.is_triggering = boo
+	core.player.is_reloading = false
 	core_changed.emit(core.services.Context.none, null)
 
 func _set_ads(boo: bool = true):
-	if core.player.ads == boo:
+	if core.player.is_ads == boo:
 		return
-	core.player.ads = boo
-	core.player.reloading = false
-	core_changed.emit(core.services.Context.none, null)
-
-func _reset_gun_slot():
-	core.player.reloading = false
-	core.player.ads = false
-	core.player.trigger = false
-	shoot_cd = 0
-	reload_cd = 0
+	core.player.is_ads = boo
+	core.player.is_reloading = false
 	core_changed.emit(core.services.Context.none, null)
 
 func _set_ammo(new_ammo: int) -> void:
 	if core.inventory.ammo == new_ammo:
 		return
 	core.inventory.ammo = new_ammo
-	core_changed.emit(core.services.Context.none, null)
-
-func _finish_reload():
-	_set_reload(false)
-	var new_mag = min(core.inventory.ammo, active_gun.metadata.mag_size)
-	_set_ammo(core.inventory.ammo - new_mag + active_gun.mag_curr)
-	_update_mag(new_mag)
+	core_changed.emit(context.none, null)
 
 func _finish_cd():
-	core_changed.emit(core.services.Context.none, null)
+	core_changed.emit(context.none, null)

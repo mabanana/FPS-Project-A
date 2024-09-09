@@ -40,6 +40,7 @@ func _input(event):
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	# Button Inputs
 	# TODO: add number button weapon swap
+	# TODO: add sprint
 	elif event.is_action_pressed("reload"):
 		gun_slot.reload()
 	elif event.is_action_pressed("drop_equip"):
@@ -89,17 +90,14 @@ func _process(delta):
 func get_object_in_view():
 	var query = gun_slot.cast_ray_towards_mouse()
 	var result = get_world_3d().direct_space_state.intersect_ray(query)
-	if result:
+	if result.has("collider"):
 		return result["collider"]
 
-# MARK: - Bindings
+# Bindings
 
 func bind(core: CoreModel, core_changed: Signal):
 	self.core = core
 	self.core_changed = core_changed
 
-	core_changed.connect(_on_core_changed)
+	# core_changed.connect(_on_core_changed)
 	gun_slot.bind(core, core_changed)
-
-func _on_core_changed(context, payload):
-	pass

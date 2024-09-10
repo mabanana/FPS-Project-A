@@ -4,11 +4,17 @@ class_name TestScene
 
 var core: CoreModel
 signal core_changed(context, payload)
+var context
 # TODO Compartmentalize responsibilities into helper classes e.g. entity spawner
 @onready var scene_entities: Node3D = %SceneEntities
 @onready var dropped_gun: PackedScene = preload("res://gun_on_floor.tscn")
+@export var pos_update_interval: int
 
+const UNIT = 100
+
+# Hashmap { id : object_ref }
 var entity_hash: Dictionary
+var pos_update_cd: int
 
 func _ready() -> void:
 	# Instantiate core
@@ -18,8 +24,10 @@ func _ready() -> void:
 	%Player.bind(core, core_changed)
 	%Hud.bind(core, core_changed)
 	core_changed.connect(_on_core_changed)
+	context = core.services.Context
 	# Set up initial state
 	entity_hash = {}
+	pos_update_cd = pos_update_interval
 	initialize_test_scene_map()
 	# Emit initial state to all observers
 	core_changed.emit(core.services.Context.none, null)
@@ -43,7 +51,12 @@ func initialize_test_scene_map() -> void:
 			type = EntityModel.EntityType.enemy
 		core.map.entities[child.id] = EntityModel.new(child.name, child.position, type)
 		entity_hash[child.id] = child
-		
+
+func _process(delta):
+	pos_update_cd -= UNIT * delta
+	if pos_update_cd <= 0:
+		_pos_update()
+
 # Updates Scene to match the state of Core Model
 func _on_core_changed(context, payload):
 	# Spawns gun node on the map when signal is received
@@ -62,3 +75,11 @@ func _on_core_changed(context, payload):
 		# TODO: improve behavior for despawning node from scene
 		entity_hash[payload["id"]].queue_free()
 		entity_hash.erase(payload["id"])
+
+func _pos_update():
+	for key in entity_hash.keys():
+		var entity_model = core.map.entities[key]
+		entity_model.position = entity_hash[key].position
+	pos_update_cd = UNIT * pos_update_interval / 100
+	# print(core.map.entities)
+	core_changed.emit(context.none, null)

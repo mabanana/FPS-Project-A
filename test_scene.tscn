@@ -40,6 +40,7 @@ size = Vector3(60, 2, 60)
 
 [node name="Test Scene" type="Node3D"]
 script = ExtResource("1_00gik")
+pos_update_interval = 50
 
 [node name="Hud" parent="." instance=ExtResource("1_j5fux")]
 unique_name_in_owner = true

@@ -11,7 +11,7 @@ enum Context {
 
 func _init() -> void:
 	# Starts ID generator
-	id_counter = 0
+	id_counter = 1
 
 func generate_id() -> int:
 	var new_id = id_counter

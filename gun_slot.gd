@@ -17,7 +17,7 @@ var shoot_cd: int
 var reload_cd: int
 var character: PlayerEntity
 var active_gun: GunModel
-var context
+var contexts
 
 var core: CoreModel
 var core_changed: Signal
@@ -27,7 +27,7 @@ func _ready():
 	shoot_cd = 0
 	reload_cd = 0
 	bullet_hole = preload("res://bullet_hole.tscn")
-	context = core.services.Context
+	contexts = core.services.Context
 
 func _process(delta):
 	# Only timers
@@ -133,43 +133,44 @@ func _on_core_changed(context, payload):
 			reload()
 	elif core.player.is_reloading and reload_cd <= 0:
 		finish_reload()
-
 	# Logs
-	if context == core.services.Context.gun_dropped and not core.inventory.active_gun:
+	if context == contexts.gun_dropped and not active_gun:
 		print("No gun equipped")
-	if context == core.services.Context.gun_shot and core.inventory.active_gun.mag_curr == 0:
+	if context == contexts.gun_shot and active_gun.mag_curr == 0:
 		print("Need to reload")
+	
+
 
 # Actions
 
 func _add_gun_to_inventory(gun_model: GunModel) -> void:
 	core.inventory.guns.append(gun_model)
-	core_changed.emit(core.services.Context.none, null)
+	core_changed.emit(contexts.none, null)
 
 func _remove_active_gun() -> void:
 	core.inventory.guns.remove_at(core.inventory.active_gun_index)
 	while core.inventory.active_gun_index > len(core.inventory.guns) - 1 and core.inventory.active_gun_index > 0:
 		core.inventory.active_gun_index -= 1
-	core_changed.emit(core.services.Context.none, null)
+	core_changed.emit(contexts.none, null)
 
 func _set_active_gun(index: int) -> void:
 	var new_index = index if index <= len(core.inventory.guns) - 1 and index >= 0 else 0
 	if new_index == core.inventory.active_gun_index:
 		return
 	core.inventory.active_gun_index = new_index
-	core_changed.emit(core.services.Context.none, null)
+	core_changed.emit(contexts.none, null)
 
 func _drop_gun_on_map(active_gun: GunModel, payload: Dictionary) -> void:
 	payload["id"] = core.services.generate_id()
 	core.map.entities[payload["id"]] = EntityModel.new(active_gun.metadata.name, position, EntityModel.EntityType.interactable)
-	core_changed.emit(core.services.Context.gun_dropped, payload)
+	core_changed.emit(contexts.gun_dropped, payload)
 
 func _pickup_gun_from_map(gun_id: int) -> void:
-	core_changed.emit(core.services.Context.gun_picked_up, {"id": gun_id})
+	core_changed.emit(contexts.gun_picked_up, {"id": gun_id})
 
 func _update_mag(mag_curr: int) -> void:
 	core.inventory.active_gun.mag_curr = mag_curr
-	core_changed.emit(core.services.Context.gun_shot, null)
+	core_changed.emit(contexts.gun_shot, null)
 
 func _set_reload(boo: bool = true):
 	if core.player.is_reloading == boo:
@@ -177,27 +178,27 @@ func _set_reload(boo: bool = true):
 	core.player.is_reloading = boo
 	core.player.is_triggering = false
 	core.player.is_ads = false
-	core_changed.emit(core.services.Context.none, null)
+	core_changed.emit(contexts.none, null)
 
 func _set_trigger(boo: bool = true):
 	if core.player.is_triggering == boo:
 		return
 	core.player.is_triggering = boo
 	core.player.is_reloading = false
-	core_changed.emit(core.services.Context.none, null)
+	core_changed.emit(contexts.none, null)
 
 func _set_ads(boo: bool = true):
 	if core.player.is_ads == boo:
 		return
 	core.player.is_ads = boo
 	core.player.is_reloading = false
-	core_changed.emit(core.services.Context.none, null)
+	core_changed.emit(contexts.none, null)
 
 func _set_ammo(new_ammo: int) -> void:
 	if core.inventory.ammo == new_ammo:
 		return
 	core.inventory.ammo = new_ammo
-	core_changed.emit(context.none, null)
+	core_changed.emit(contexts.none, null)
 
 func _finish_cd():
-	core_changed.emit(context.none, null)
+	core_changed.emit(contexts.none, null)

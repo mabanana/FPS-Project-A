@@ -4,7 +4,7 @@ class_name TestScene
 
 var core: CoreModel
 signal core_changed(context, payload)
-var context
+var contexts
 # TODO Compartmentalize responsibilities into helper classes e.g. entity spawner
 @onready var scene_entities: Node3D = %SceneEntities
 @onready var dropped_gun: PackedScene = preload("res://gun_on_floor.tscn")
@@ -24,7 +24,7 @@ func _ready() -> void:
 	%Player.bind(core, core_changed)
 	%Hud.bind(core, core_changed)
 	core_changed.connect(_on_core_changed)
-	context = core.services.Context
+	contexts = core.services.Context
 	# Set up initial state
 	entity_hash = {}
 	pos_update_cd = pos_update_interval
@@ -71,7 +71,7 @@ func _on_core_changed(context, payload):
 		scene_entities.add_child(new_dropped_gun)
 		entity_hash[payload["id"]] = new_dropped_gun
 	# Removes Gun node from the map when signal is received
-	if context == core.services.Context.gun_picked_up:
+	if context == contexts.gun_picked_up:
 		# TODO: improve behavior for despawning node from scene
 		entity_hash[payload["id"]].queue_free()
 		entity_hash.erase(payload["id"])
@@ -82,4 +82,4 @@ func _pos_update():
 		entity_model.position = entity_hash[key].position
 	pos_update_cd = UNIT * pos_update_interval / 100
 	# print(core.map.entities)
-	core_changed.emit(context.none, null)
+	core_changed.emit(contexts.map_updated, null)

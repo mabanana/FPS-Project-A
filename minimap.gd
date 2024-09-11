@@ -9,12 +9,31 @@ var contexts
 var max_map_dist
 
 var enemy_color = Color.CRIMSON
+var mod_max: float = 1
+var mod_min: float = 0.4
+var fading: bool = true
+var blink_interval: float = 4
+var delta_mod_a: float
+var dot_mod: float
 
 func _ready():
+	dot_mod = mod_max
+	delta_mod_a = (mod_max - mod_min) / blink_interval * 5
 	map_size = 200
 	max_map_dist = 20
 	$Panel.custom_minimum_size = Vector2(map_size, map_size)
 	
+func _process(delta):
+	if fading:
+		dot_mod = move_toward(dot_mod, mod_min, delta_mod_a * delta)
+		if dot_mod == mod_min:
+			fading = false
+	else:
+		dot_mod = move_toward(dot_mod, mod_max, delta_mod_a * delta)
+		if dot_mod == mod_max:
+			fading = true
+	_set_dot_mod()
+
 func _update(positions):
 	for pos in positions:
 		for child in $Panel.get_children():
@@ -38,3 +57,8 @@ func bind(core: CoreModel, core_changed: Signal):
 func _on_core_changed(context, payload):
 	if context == contexts.minimap_updated:
 		_update(payload["positions"])
+
+func _set_dot_mod():
+	for child in $Panel.get_children():
+		if child != %ColorRect:
+			child.modulate.a = dot_mod

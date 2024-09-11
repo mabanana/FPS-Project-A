@@ -17,6 +17,7 @@ var hp : int = 100
 
 var core: CoreModel
 var core_changed: Signal
+var contexts
 
 func _ready():
 	camera = %Camera3D
@@ -98,6 +99,22 @@ func get_object_in_view():
 func bind(core: CoreModel, core_changed: Signal):
 	self.core = core
 	self.core_changed = core_changed
+	contexts = core.services.Context
 
-	# core_changed.connect(_on_core_changed)
+	core_changed.connect(_on_core_changed)
 	gun_slot.bind(core, core_changed)
+
+func _on_core_changed(context, payload):
+	if context == contexts.map_updated:
+		_set_minimap_values()
+
+func _set_minimap_values():
+	var entities = core.map.entities
+	var positions: Array[Vector3] = []
+	for key in entities.keys():
+		if entities[key].type == EntityModel.EntityType.enemy:
+			var relative_pos = entities[key].position -position
+			relative_pos = relative_pos.rotated(Vector3.UP, -rotation.y)
+			relative_pos.y *= -1
+			positions.append(relative_pos)
+	core_changed.emit(contexts.minimap_updated, {"positions" : positions})

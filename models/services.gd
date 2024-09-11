@@ -6,7 +6,9 @@ enum Context {
 	none,
 	gun_dropped,
 	gun_picked_up,
-	gun_shot
+	gun_shot,
+	map_updated,
+	minimap_updated
 }
 
 func _init() -> void:

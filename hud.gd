@@ -4,6 +4,8 @@ class_name HudController
 var core: CoreModel
 var core_changed: Signal
 
+@onready var minimap = %Minimap
+
 # TODO: Add Minimap
 func update():
 	%GunName.text = str(core.inventory.active_gun.metadata.name) if core.inventory.active_gun else ""
@@ -21,6 +23,8 @@ func bind(core: CoreModel, core_changed: Signal):
 	self.core_changed = core_changed
 	
 	core_changed.connect(_on_core_changed)
+	minimap.bind(core, core_changed)
+	
 
 func _on_core_changed(context, payload):
 	update()

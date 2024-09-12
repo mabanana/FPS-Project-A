@@ -55,7 +55,7 @@ func bind(core: CoreModel, core_changed: Signal):
 	core_changed.connect(_on_core_changed)
 	
 func _on_core_changed(context, payload):
-	if context == contexts.minimap_updated:
+	if context == contexts.map_updated:
 		_update(payload["positions"])
 
 func _set_dot_mod():

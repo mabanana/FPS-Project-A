@@ -162,7 +162,7 @@ func _set_active_gun(index: int) -> void:
 
 func _drop_gun_on_map(active_gun: GunModel, payload: Dictionary) -> void:
 	payload["id"] = core.services.generate_id()
-	core.map.entities[payload["id"]] = EntityModel.new(active_gun.metadata.name, position, EntityModel.EntityType.interactable)
+	core.map.entities[payload["id"]] = EntityModel.new(active_gun.metadata.name, position, rotation, EntityModel.EntityType.interactable)
 	core_changed.emit(contexts.gun_dropped, payload)
 
 func _pickup_gun_from_map(gun_id: int) -> void:

@@ -49,7 +49,7 @@ func initialize_test_scene_map() -> void:
 			type = EntityModel.EntityType.interactable
 		elif child is EnemyEntity:
 			type = EntityModel.EntityType.enemy
-		core.map.entities[child.id] = EntityModel.new(child.name, child.position, type)
+		core.map.entities[child.id] = EntityModel.new(child.name, child.position, child.rotation, type)
 		entity_hash[child.id] = child
 
 func _process(delta):
@@ -77,9 +77,23 @@ func _on_core_changed(context, payload):
 		entity_hash.erase(payload["id"])
 
 func _pos_update():
+	var player_key
 	for key in entity_hash.keys():
 		var entity_model = core.map.entities[key]
+		if entity_model.type == EntityModel.EntityType.player:
+			player_key = key
 		entity_model.position = entity_hash[key].position
+		entity_model.rotation = entity_hash[key].rotation
 	pos_update_cd = UNIT * pos_update_interval / 100
 	# print(core.map.entities)
-	core_changed.emit(contexts.map_updated, null)
+	
+	# calculate relative positions for minimap based on player
+	var entities = core.map.entities
+	var positions: Array[Vector3] = []
+	for key in entities.keys():
+		if entities[key].type == EntityModel.EntityType.enemy:
+			var relative_pos = entities[key].position - entities[player_key].position
+			relative_pos = relative_pos.rotated(Vector3.UP, -entities[player_key].rotation.y)
+			relative_pos.y *= -1
+			positions.append(relative_pos)
+	core_changed.emit(contexts.map_updated, {"positions" : positions})

@@ -34,6 +34,7 @@ func _process(delta):
 			fading = true
 	_set_dot_mod()
 
+# TODO: also render map navmesh underneath and clip contents
 func _update(positions):
 	for pos in positions:
 		for child in $Panel.get_children():

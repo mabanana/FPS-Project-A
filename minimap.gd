@@ -43,7 +43,7 @@ func _update(positions):
 		if pos_2d.length() < max_map_dist / 2:
 			var new_map_dot = map_dot.instantiate()
 			var map_scale = map_size / max_map_dist
-			new_map_dot.position = pos_2d * map_scale
+			new_map_dot.position += pos_2d * map_scale
 			new_map_dot.color = enemy_color
 			$Panel.add_child(new_map_dot)
 			

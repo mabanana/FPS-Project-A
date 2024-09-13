@@ -122,17 +122,18 @@ func bind(core: CoreModel, core_changed: Signal):
 func _on_core_changed(context, payload):
 	# Actions
 	active_gun = core.inventory.active_gun
-	if core.player.is_ads:
-		set_camera_zoom(active_gun.metadata.zoom, true)
-	else:
-		set_camera_zoom(0, false)
-	if core.player.is_triggering and shoot_cd <= 0:
-		if active_gun.mag_curr > 0:
-			shoot()
-		if active_gun.mag_curr <= 0:
-			reload()
-	elif core.player.is_reloading and reload_cd <= 0:
-		finish_reload()
+	if active_gun:
+		if core.player.is_ads:
+			set_camera_zoom(active_gun.metadata.zoom, true)
+		else:
+			set_camera_zoom(0, false)
+		if core.player.is_triggering and shoot_cd <= 0:
+			if active_gun.mag_curr > 0:
+				shoot()
+			if active_gun.mag_curr <= 0:
+				reload()
+		elif core.player.is_reloading and reload_cd <= 0:
+			finish_reload()
 	# Logs
 	if context == contexts.gun_dropped and not active_gun:
 		print("No gun equipped")

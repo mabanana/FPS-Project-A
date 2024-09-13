@@ -51,7 +51,7 @@ func _input(event):
 			gun_slot.pickup_gun(object_in_view.on_interact(), object_in_view.id)
 	elif event.is_action_pressed("cycle_inventory"):
 		gun_slot.cycle_next_active_gun()
-	
+	# TODO: modify core instead of calling gun_slot
 	if event.is_action_pressed("left_click"):
 		gun_slot._set_trigger()
 	elif event.is_action_released("left_click"):

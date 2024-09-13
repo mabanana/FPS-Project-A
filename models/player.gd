@@ -3,6 +3,8 @@ class_name PlayerModel
 var hp: int
 
 var is_ads: bool
+var is_jump: bool
+
 var action_state: ActionState
 var movement_state: MovementState
 
@@ -15,16 +17,13 @@ enum ActionState {
 enum MovementState {
 	standing,
 	walking,
-	sprinting,
-	jumping,
-	squatting,
-	sliding,
-	falling
+	sprinting
 }
 
 func _init(hp: int = 100) -> void:
 	self.hp = hp
 	is_ads = false
-	
+	is_jump = false
+
 	action_state = ActionState.idling
 	movement_state = MovementState.standing

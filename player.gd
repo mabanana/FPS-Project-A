@@ -11,6 +11,7 @@ const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 const VERTICAL_LOOK_LIMIT = deg_to_rad(90)
 const RAY_LENGTH = 1000
+const SPRINT_MULTIPLIER = 1.6
 var id: int
 var object_in_view
 var hp : int = 100
@@ -64,9 +65,10 @@ func _input(event):
 		set_action_state(PlayerModel.ActionState.idling)
 		gun_slot.cycle_next_active_gun()
 	elif event.is_action_pressed("ui_accept") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
-		set_movement_state(PlayerModel.MovementState.jumping)
-
+		set_jump(true)
+	elif event.is_action_pressed("sprint"):
+		set_movement_state(PlayerModel.MovementState.sprinting)
+	
 	if event.is_action_pressed("left_click"):
 		if core.player.action_state != PlayerModel.ActionState.reloading:
 			set_action_state(PlayerModel.ActionState.triggering)
@@ -77,14 +79,6 @@ func _input(event):
 		set_ads(true)
 	elif event.is_action_released("right_click"):
 		set_ads(false)
-	
-		
-	if input_dir == Vector2.ZERO:
-		if core.player.movement_state != PlayerModel.MovementState.standing:
-			set_movement_state(PlayerModel.MovementState.standing)
-	else:
-		if core.player.movement_state != PlayerModel.MovementState.walking:
-			set_movement_state(PlayerModel.MovementState.walking)
 
 # Default Godot Template movement
 func _physics_process(delta):
@@ -93,9 +87,15 @@ func _physics_process(delta):
 
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
+		if is_ms(PlayerModel.MovementState.sprinting):
+			velocity.x = direction.x * SPEED * SPRINT_MULTIPLIER
+			velocity.z = direction.z * SPEED * SPRINT_MULTIPLIER
+		else:
+			set_movement_state(PlayerModel.MovementState.walking)
+			velocity.x = direction.x * SPEED
+			velocity.z = direction.z * SPEED
 	else:
+		set_movement_state(PlayerModel.MovementState.standing)
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 
@@ -122,10 +122,17 @@ func bind(core: CoreModel, core_changed: Signal):
 	gun_slot.bind(core, core_changed)
 
 func _on_core_changed(context, payload):
-	pass
+	if core.player.is_jump:
+		if is_on_floor():
+			velocity.y = JUMP_VELOCITY
+		set_jump(false)
 
 func set_ads(boo: bool):
 	core.player.is_ads = boo
+	core_changed.emit(contexts.none, null)
+	
+func set_jump(boo: bool):
+	core.player.is_jump = boo
 	core_changed.emit(contexts.none, null)
 
 func set_action_state(state: PlayerModel.ActionState):
@@ -137,9 +144,17 @@ func set_action_state(state: PlayerModel.ActionState):
 		core_changed.emit(contexts.none, null)
 
 func set_movement_state(state: PlayerModel.MovementState):
+	if core.player.movement_state == state:
+		return
 	_on_movement_change(state)
 	core.player.movement_state = state
 	core_changed.emit(contexts.none, null)
+
+func is_ms(state: PlayerModel.MovementState):
+	return core.player.movement_state == state
+
+func is_as(state: PlayerModel.MovementState):
+	return core.player.action_state == state
 
 func _on_action_change(state: PlayerModel.ActionState):
 	prints("Action state changed to " + str(state))

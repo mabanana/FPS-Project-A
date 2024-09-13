@@ -30,9 +30,10 @@ func _ready():
 	label.text = stringify(damage_number)
 	label.set_modulate(modulate.lerp(Color.CRIMSON, damage_scale))
 	label.set_billboard_mode(1)
-	label.fixed_size = true
+	label.fixed_size = false
+	label.shaded = false
 	label.double_sided = false
-	label.font_size += font_size_increase * damage_scale
+	label.font_size = font_size + font_size_increase * damage_scale
 	label.pixel_size = pixel_size
 	label.outline_render_priority = 0
 	label.outline_size = label.font_size * outline_proportion

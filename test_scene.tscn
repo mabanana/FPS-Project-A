@@ -74,8 +74,8 @@ size = Vector2(600, 600)
 subdivide_width = 60
 subdivide_depth = 60
 
-[sub_resource type="BoxMesh" id="BoxMesh_p2wnv"]
-size = Vector3(600, 2, 600)
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_wku4y"]
+points = PackedVector3Array(304.762, 4.7619, 304.762, -304.762, -4.7619, -304.762, -304.762, 4.7619, -304.762, 304.762, -4.7619, -304.762, -304.762, -4.7619, 304.762, -304.762, 4.7619, 304.762, 304.762, 4.7619, -304.762, 304.762, -4.7619, 304.762)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2j4ea"]
 size = Vector3(600, 2, 600)
@@ -157,15 +157,13 @@ shape = SubResource("ConcavePolygonShape3D_pwr4p")
 [node name="Ground" type="StaticBody3D" parent="Map"]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Map/Ground"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5852, 0)
 mesh = SubResource("PlaneMesh_00lpn")
 skeleton = NodePath("../CollisionShape3D")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Map/Ground"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-visible = false
-mesh = SubResource("BoxMesh_p2wnv")
-skeleton = NodePath("../CollisionShape3D")
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Map/Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.88914, 0)
+shape = SubResource("ConvexPolygonShape3D_wku4y")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Map/Ground"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)

@@ -111,8 +111,7 @@ func _physics_process(delta):
 # Avoid putting state logic into _process
 func _process(delta):
 	object_in_view = get_object_in_view()
-	var cd = jump_cd.tick(delta)
-	if cd <= 0:
+	if jump_cd.tick(delta) <= 0:
 		set_jump(false)
 
 func get_object_in_view():

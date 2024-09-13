@@ -14,5 +14,5 @@ func tick(delta: float):
 		cd -= UNIT * delta
 	return cd
 	
-func reset_cd():
-	cd = cd_start_value
+func reset_cd(new_cd = cd_start_value):
+	cd = new_cd

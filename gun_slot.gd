@@ -13,8 +13,8 @@ const DEFAULT_CAMERA_ZOOM = 75
 
 # TODO: Move packed scene dependencies somewhere else
 var bullet_hole: PackedScene
-var shoot_cd: int
-var reload_cd: int
+var shoot_cd: Countdown
+var reload_cd: Countdown
 var character: PlayerEntity
 var active_gun: GunModel
 var contexts
@@ -24,30 +24,25 @@ var core_changed: Signal
 
 func _ready():
 	character = get_parent()
-	shoot_cd = 0
-	reload_cd = 0
+	shoot_cd = Countdown.new(0)
+	reload_cd = Countdown.new(0)
 	bullet_hole = preload("res://bullet_hole.tscn")
 	contexts = core.services.Context
 
 func _process(delta):
 	# Only timers
-	if shoot_cd > 0:
-		shoot_cd -= UNIT * delta
-		if shoot_cd <= 0:
-			_finish_cd()
-	if core.player.action_state == PlayerModel.ActionState.reloading:
-		if reload_cd > 0:
-			reload_cd -= UNIT * delta
-		else:
+	if shoot_cd.tick(delta) <= 0:
+		_finish_cd()
+	if character.is_as(PlayerModel.ActionState.reloading) and reload_cd.tick(delta) <= 0:
 			_finish_cd()
 
 func reload():
 	if not active_gun or active_gun.metadata.mag_size == active_gun.mag_curr:
 		return
-	reload_cd = UNIT * active_gun.metadata.reload_time
+	reload_cd.reset_cd(UNIT * active_gun.metadata.reload_time)
 
 func shoot():
-	shoot_cd = 100/active_gun.metadata.fire_rate
+	shoot_cd.reset_cd(UNIT / active_gun.metadata.fire_rate)
 	for i in range(core.inventory.active_gun.metadata.pellet_count):
 		var query = cast_ray_towards_mouse(active_gun.metadata.accuracy)
 		var result = get_world_3d().direct_space_state.intersect_ray(query)
@@ -105,8 +100,8 @@ func finish_reload():
 	_update_mag(new_mag)
 
 func reset_gun_slot():
-	shoot_cd = 0
-	reload_cd = 0
+	shoot_cd.reset_cd(0)
+	reload_cd.reset_cd(0)
 
 # Bindings
 
@@ -124,14 +119,14 @@ func _on_core_changed(context, payload):
 			set_camera_zoom(active_gun.metadata.zoom, true)
 		else:
 			set_camera_zoom(0, false)
-		if core.player.action_state == PlayerModel.ActionState.triggering and shoot_cd <= 0:
+		if core.player.action_state == PlayerModel.ActionState.triggering and shoot_cd.tick(0) <= 0:
 			if active_gun.mag_curr > 0:
 				shoot()
 			if active_gun.mag_curr <= 0:
 				character.set_action_state(PlayerModel.ActionState.reloading)
 		elif context == contexts.reload_start:
 			reload()
-		elif core.player.action_state == PlayerModel.ActionState.reloading and reload_cd <= 0:
+		elif core.player.action_state == PlayerModel.ActionState.reloading and reload_cd.tick(0) <= 0:
 			finish_reload()
 		
 	# Logs

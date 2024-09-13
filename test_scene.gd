@@ -14,7 +14,7 @@ const UNIT = 100
 
 # Hashmap { id : object_ref }
 var entity_hash: Dictionary
-var pos_update_cd: int
+var pos_update_cd: Countdown
 
 func _ready() -> void:
 	# Load all gun metadata
@@ -29,7 +29,7 @@ func _ready() -> void:
 	contexts = core.services.Context
 	# Set up initial state
 	entity_hash = {}
-	pos_update_cd = pos_update_interval
+	pos_update_cd = Countdown.new(pos_update_interval)
 	initialize_test_scene_map()
 	# Emit initial state to all observers
 	core_changed.emit(core.services.Context.none, null)
@@ -54,10 +54,8 @@ func initialize_test_scene_map() -> void:
 		core.map.entities[child.id] = EntityModel.new(child.name, child.position, child.rotation, type)
 		entity_hash[child.id] = child
 
-# TODO:  Create countdown class for consistent countdown functionality
 func _process(delta):
-	pos_update_cd -= UNIT * delta
-	if pos_update_cd <= 0:
+	if pos_update_cd.tick(delta) <= 0:
 		_pos_update()
 
 # Updates Scene to match the state of Core Model
@@ -87,7 +85,7 @@ func _pos_update():
 			player_key = key
 		entity_model.position = entity_hash[key].position
 		entity_model.rotation = entity_hash[key].rotation
-	pos_update_cd = UNIT * pos_update_interval / 100
+	pos_update_cd.reset_cd()
 	# print(core.map.entities)
 	
 	# calculate relative positions for minimap based on player

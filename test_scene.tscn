@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://bgp15f5w735mi"]
+[gd_scene load_steps=25 format=3 uid="uid://bgp15f5w735mi"]
 
 [ext_resource type="Script" path="res://test_scene.gd" id="1_00gik"]
 [ext_resource type="Script" path="res://player.gd" id="1_00xln"]
@@ -34,7 +34,11 @@ fog_sky_affect = 0.595
 
 [sub_resource type="BoxMesh" id="BoxMesh_d7rov"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g2o2r"]
+albedo_color = Color(0.2739, 0.83, 0.292437, 1)
+
 [sub_resource type="BoxMesh" id="BoxMesh_18jpo"]
+material = SubResource("StandardMaterial3D_g2o2r")
 size = Vector3(1, 3, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_qqwvd"]
@@ -47,19 +51,19 @@ data = PackedVector3Array(30, 50, 30, -30, 50, 30, -30, -50, 30, 30, -50, 30, 30
 colors = PackedColorArray(0.306923, 0.306923, 0.306923, 1, 1, 1, 1, 1)
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_cjkkw"]
+seamless_blend_skirt = 1.0
 color_ramp = SubResource("Gradient_sutnm")
 noise = ExtResource("8_6ga63")
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_xk6tv"]
-seamless = true
-seamless_blend_skirt = 0.686
 as_normal_map = true
+bump_strength = 12.5
 noise = ExtResource("8_6ga63")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2bwsn"]
 render_priority = 0
 shader = ExtResource("7_7oa2x")
-shader_parameter/height_scale = 0.3
+shader_parameter/height_scale = 0.5
 shader_parameter/albedo = Vector3(0.49, 0.23, 0.08)
 shader_parameter/noise = SubResource("NoiseTexture2D_cjkkw")
 shader_parameter/normalmap = SubResource("NoiseTexture2D_xk6tv")
@@ -136,7 +140,7 @@ shape = SubResource("BoxShape3D_qqwvd")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3, 0)
 
 [node name="Walls" type="StaticBody3D" parent="Map"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -22, 0)
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, -22, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Map/Walls"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 51, 0)

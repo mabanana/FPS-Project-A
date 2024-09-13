@@ -54,7 +54,7 @@ func _input(event):
 		else:
 			print("Can't reload without a gun in hand.")
 	elif event.is_action_pressed("drop_equip"):
-		set_action_state(PlayerModel.ActionState.idling)
+		set_action_state(PlayerModel.ActionState.throwing)
 		gun_slot.drop_gun()
 	elif event.is_action_pressed("interact"):
 		if object_in_view.has_method("on_interact"):
@@ -70,10 +70,10 @@ func _input(event):
 		set_movement_state(PlayerModel.MovementState.sprinting)
 	
 	if event.is_action_pressed("left_click"):
-		if core.player.action_state != PlayerModel.ActionState.reloading:
+		if !is_as(PlayerModel.ActionState.reloading) and !is_as(PlayerModel.ActionState.throwing):
 			set_action_state(PlayerModel.ActionState.triggering)
 	elif event.is_action_released("left_click"):
-		if core.player.action_state == PlayerModel.ActionState.triggering:
+		if is_as(PlayerModel.ActionState.triggering):
 			set_action_state(PlayerModel.ActionState.idling)
 	if event.is_action_pressed("right_click"):
 		set_ads(true)
@@ -126,6 +126,8 @@ func _on_core_changed(context, payload):
 		if is_on_floor():
 			velocity.y = JUMP_VELOCITY
 		set_jump(false)
+	if context == contexts.gun_dropped:
+		set_action_state(PlayerModel.ActionState.idling)
 
 func set_ads(boo: bool):
 	core.player.is_ads = boo
@@ -136,6 +138,8 @@ func set_jump(boo: bool):
 	core_changed.emit(contexts.none, null)
 
 func set_action_state(state: PlayerModel.ActionState):
+	if core.player.action_state == state:
+		return
 	_on_action_change(state)
 	core.player.action_state = state
 	if state == PlayerModel.ActionState.reloading:
@@ -153,7 +157,7 @@ func set_movement_state(state: PlayerModel.MovementState):
 func is_ms(state: PlayerModel.MovementState):
 	return core.player.movement_state == state
 
-func is_as(state: PlayerModel.MovementState):
+func is_as(state: PlayerModel.ActionState):
 	return core.player.action_state == state
 
 func _on_action_change(state: PlayerModel.ActionState):

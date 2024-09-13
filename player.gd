@@ -94,7 +94,7 @@ func _physics_process(delta):
 	
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
-		if is_ms(PlayerModel.MovementState.sprinting):
+		if is_ms(PlayerModel.MovementState.sprinting) and input_dir.y < 0:
 			velocity.x = direction.x * SPEED * SPRINT_MULTIPLIER
 			velocity.z = direction.z * SPEED * SPRINT_MULTIPLIER
 		else:

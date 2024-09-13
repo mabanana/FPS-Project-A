@@ -9,7 +9,7 @@ const MAX_ACCURACY = 100
 const ACCURACY_FLOOR = 25
 const THROW_FORCE = 50
 const THROW_ACCURACY = 69
-const DEFAULT_CAMERA_ZOOM = 75
+
 
 # TODO: Move packed scene dependencies somewhere else
 var bullet_hole: PackedScene
@@ -88,9 +88,9 @@ func cast_ray_towards_mouse(accuracy: int = MAX_ACCURACY, ray_length: int = RAY_
 
 func set_camera_zoom(gun_zoom: float, boo: bool):
 	if boo:
-		character.camera.fov = DEFAULT_CAMERA_ZOOM / gun_zoom
+		character.fov_multiplier = 1 / gun_zoom
 	else:
-		character.camera.fov = DEFAULT_CAMERA_ZOOM
+		character.fov_multiplier = 1
 
 func finish_reload():
 	reset_gun_slot()

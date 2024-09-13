@@ -13,12 +13,17 @@ const VERTICAL_LOOK_LIMIT = deg_to_rad(90)
 const RAY_LENGTH = 1000
 const SPRINT_MULTIPLIER = 1.6
 const JUMP_BUFFER = 20
+const SPRINT_FOV_CD = 100
+const DEFAULT_CAMERA_ZOOM = 75
 var id: int
 var object_in_view
 var hp : int = 100
 var input_dir
+var fov_modifier: int = 0
+var fov_multiplier: float
 
 var jump_cd: Countdown
+var sprint_cd: Countdown
 
 var core: CoreModel
 var core_changed: Signal
@@ -27,6 +32,7 @@ var contexts
 
 func _ready():
 	jump_cd = Countdown.new(JUMP_BUFFER)
+	sprint_cd = Countdown.new(SPRINT_FOV_CD)
 	camera = %Camera3D
 	gun_slot = %GunSlot
 	untracked_entities = %UntrackedEntities
@@ -51,7 +57,6 @@ func _input(event):
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	# Button Inputs
 	# TODO: add number button weapon swap
-	# TODO: add sprint
 	elif event.is_action_pressed("reload"):
 		if gun_slot.active_gun:
 			set_action_state(PlayerModel.ActionState.reloading)
@@ -113,6 +118,10 @@ func _process(delta):
 	object_in_view = get_object_in_view()
 	if jump_cd.tick(delta) <= 0:
 		set_jump(false)
+	fov_modifier = move_toward(fov_modifier, 
+	sprint_cd.tick(delta) / 10 if is_ms(PlayerModel.MovementState.sprinting) else 0,
+	1)
+	camera.fov = (DEFAULT_CAMERA_ZOOM + fov_modifier) * fov_multiplier
 
 func get_object_in_view():
 	var query = gun_slot.cast_ray_towards_mouse()
@@ -173,8 +182,14 @@ func is_as(state: PlayerModel.ActionState):
 
 func _on_action_change(state: PlayerModel.ActionState):
 	prints("Action state changed to " + str(state))
+	if state != PlayerModel.ActionState.idling:
+		set_movement_state(PlayerModel.MovementState.standing)
 	pass
 
 func _on_movement_change(state: PlayerModel.MovementState):
 	prints("Movement state changed to " + str(state))
+	if state == PlayerModel.MovementState.sprinting:
+		sprint_cd.reset_cd()
+		set_ads(false)
+		set_action_state(PlayerModel.ActionState.idling)
 	pass

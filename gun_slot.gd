@@ -35,7 +35,7 @@ func _process(delta):
 		shoot_cd -= UNIT * delta
 		if shoot_cd <= 0:
 			_finish_cd()
-	if core.player.is_reloading:
+	if core.player.action_state == PlayerModel.ActionState.reloading:
 		if reload_cd > 0:
 			reload_cd -= UNIT * delta
 		else:
@@ -45,7 +45,6 @@ func reload():
 	if not active_gun or active_gun.metadata.mag_size == active_gun.mag_curr:
 		return
 	reload_cd = UNIT * active_gun.metadata.reload_time
-	_set_reload(true)
 
 func shoot():
 	shoot_cd = 100/active_gun.metadata.fire_rate
@@ -99,15 +98,13 @@ func set_camera_zoom(gun_zoom: float, boo: bool):
 		character.camera.fov = DEFAULT_CAMERA_ZOOM
 
 func finish_reload():
-	_set_reload(false)
+	reset_gun_slot()
+	character.set_action_state(PlayerModel.ActionState.idling)
 	var new_mag = min(core.inventory.ammo, active_gun.metadata.mag_size)
 	_set_ammo(core.inventory.ammo - new_mag + active_gun.mag_curr)
 	_update_mag(new_mag)
 
 func reset_gun_slot():
-	_set_reload(false)
-	_set_ads(false)
-	_set_trigger(false)
 	shoot_cd = 0
 	reload_cd = 0
 
@@ -127,13 +124,16 @@ func _on_core_changed(context, payload):
 			set_camera_zoom(active_gun.metadata.zoom, true)
 		else:
 			set_camera_zoom(0, false)
-		if core.player.is_triggering and shoot_cd <= 0:
+		if core.player.action_state == PlayerModel.ActionState.triggering and shoot_cd <= 0:
 			if active_gun.mag_curr > 0:
 				shoot()
 			if active_gun.mag_curr <= 0:
-				reload()
-		elif core.player.is_reloading and reload_cd <= 0:
+				character.set_action_state(PlayerModel.ActionState.reloading)
+		elif context == contexts.reload_start:
+			reload()
+		elif core.player.action_state == PlayerModel.ActionState.reloading and reload_cd <= 0:
 			finish_reload()
+		
 	# Logs
 	if context == contexts.gun_dropped and not active_gun:
 		print("No gun equipped")
@@ -172,28 +172,6 @@ func _pickup_gun_from_map(gun_id: int) -> void:
 func _update_mag(mag_curr: int) -> void:
 	core.inventory.active_gun.mag_curr = mag_curr
 	core_changed.emit(contexts.gun_shot, null)
-
-func _set_reload(boo: bool = true):
-	if core.player.is_reloading == boo:
-		return
-	core.player.is_reloading = boo
-	core.player.is_triggering = false
-	core.player.is_ads = false
-	core_changed.emit(contexts.none, null)
-
-func _set_trigger(boo: bool = true):
-	if core.player.is_triggering == boo:
-		return
-	core.player.is_triggering = boo
-	core.player.is_reloading = false
-	core_changed.emit(contexts.none, null)
-
-func _set_ads(boo: bool = true):
-	if core.player.is_ads == boo:
-		return
-	core.player.is_ads = boo
-	core.player.is_reloading = false
-	core_changed.emit(contexts.none, null)
 
 func _set_ammo(new_ammo: int) -> void:
 	if core.inventory.ammo == new_ammo:

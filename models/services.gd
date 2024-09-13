@@ -8,6 +8,7 @@ enum Context {
 	gun_picked_up,
 	gun_shot,
 	map_updated,
+	reload_start
 }
 
 func _init() -> void:

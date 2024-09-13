@@ -17,6 +17,8 @@ var entity_hash: Dictionary
 var pos_update_cd: int
 
 func _ready() -> void:
+	# Load all gun metadata
+	GunMetadataModel.init_gun_metadata_map()
 	# Instantiate core
 	core = CoreModel.new()
 	# Add bindings to all relevant observers
@@ -35,10 +37,10 @@ func _ready() -> void:
 # Temporary function that initializes the hard coded nodes into test scene.
 func initialize_test_scene_map() -> void:
 	# Initialize Inventory Model
-	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunModel.GunType.TEST_GUN_A))
-	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunModel.GunType.TEST_GUN_B))
-	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunModel.GunType.TEST_GUN_C))
-	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunModel.GunType.TEST_GUN_D))
+	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunMetadataModel.GunType.TEST_GUN_A))
+	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunMetadataModel.GunType.TEST_GUN_B))
+	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunMetadataModel.GunType.TEST_GUN_C))
+	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunMetadataModel.GunType.TEST_GUN_D))
 	# Initialize Map Model
 	for child in scene_entities.get_children():
 		child.id = core.services.generate_id()
@@ -52,6 +54,7 @@ func initialize_test_scene_map() -> void:
 		core.map.entities[child.id] = EntityModel.new(child.name, child.position, child.rotation, type)
 		entity_hash[child.id] = child
 
+# TODO:  Create countdown class for consistent countdown functionality
 func _process(delta):
 	pos_update_cd -= UNIT * delta
 	if pos_update_cd <= 0:

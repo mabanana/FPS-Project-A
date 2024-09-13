@@ -1,5 +1,12 @@
 class_name GunMetadataModel
 
+enum GunType {
+	TEST_GUN_A,
+	TEST_GUN_B,
+	TEST_GUN_C,
+	TEST_GUN_D
+}
+
 var name: String
 var damage_floor: int
 var damage_ceiling: int
@@ -12,49 +19,64 @@ var pellet_count: int
 var ammo_per_shot: int
 var zoom: float
 
-# NOTE: Store these as immutable singletons to improve performance
-# When adding a new gun, update GunMetadataModel.from() and GunModel.GunType
-static var TEST_GUN_A := GunMetadataModel.new("Test SMG", 3, 50, 12, 1, 75, 100, 3, 1, 1, 2)
-static var TEST_GUN_B := GunMetadataModel.new("Test 2-Shot Pistol", 70, 200, 2, 5, 90, 12, 2, 2, 2, 1.5)
-static var TEST_GUN_C := GunMetadataModel.new("Test Shotgun", 3, 10, 1, 2, 60, 10, 5, 10, 2, 1.5)
-static var TEST_GUN_D := GunMetadataModel.new("Test Sniper", 150, 200, 1.5, 3, 95, 4, 5, 1, 2, 4)
+static var gun_metadata_map := {}
 
+static func init_gun_metadata_map():
+	for i in range(GunType.size()):
+		var gun_type = i as GunType
+		gun_metadata_map[gun_type] = GunMetadataModel.new(gun_type)
 
 func _init(
-	name: String,
-	damage_floor: int,
-	damage_ceiling: int,
-	fire_rate: float,
-	reload_time: float,
-	accuracy: float,
-	mag_size: int,
-	mass: float,
-	pellet_count: int,
-	ammo_per_shot: int,
-	zoom: float
+	gun_type: GunType
 ) -> void:
-	self.name = name
-	self.damage_floor = damage_floor
-	self.damage_ceiling = damage_ceiling
-	self.fire_rate = fire_rate
-	self.reload_time = reload_time
-	self.accuracy = accuracy
-	self.mag_size = mag_size
-	self.mass = mass
-	self.pellet_count = pellet_count
-	self.ammo_per_shot = ammo_per_shot if ammo_per_shot else pellet_count
-	self.zoom = zoom
-
-static func from(gun_type: GunModel.GunType) -> GunMetadataModel:
 	match gun_type:
-		GunModel.GunType.TEST_GUN_A:
-			return TEST_GUN_A
-		GunModel.GunType.TEST_GUN_B:
-			return TEST_GUN_B
-		GunModel.GunType.TEST_GUN_C:
-			return TEST_GUN_C
-		GunModel.GunType.TEST_GUN_D:
-			return TEST_GUN_D
+		GunType.TEST_GUN_A:
+			self.name = "Test SMG"
+			self.damage_floor = 3
+			self.damage_ceiling = 50
+			self.fire_rate = 12
+			self.reload_time = 1
+			self.accuracy = 75
+			self.mag_size = 100
+			self.mass = 3
+			self.pellet_count = 1
+			self.ammo_per_shot = 1
+			self.zoom = 2
+		GunType.TEST_GUN_B:
+			self.name = "Test 2-Shot Pistol"
+			self.damage_floor = 70
+			self.damage_ceiling = 200
+			self.fire_rate = 2
+			self.reload_time = 5
+			self.accuracy = 90
+			self.mag_size = 12
+			self.mass = 2
+			self.pellet_count = 2
+			self.ammo_per_shot = 2
+			self.zoom = 1.5
+		GunType.TEST_GUN_C:
+			self.name = "Test Shotgun"
+			self.damage_floor = 10
+			self.damage_ceiling = 30
+			self.fire_rate = 1.5
+			self.reload_time = 2
+			self.accuracy = 60
+			self.mag_size = 10
+			self.mass = 5
+			self.pellet_count = 10
+			self.ammo_per_shot = 2
+			self.zoom = 1.5
+		GunType.TEST_GUN_D:
+			self.name = "Test Sniper"
+			self.damage_floor = 150
+			self.damage_ceiling = 200
+			self.fire_rate = 1.5
+			self.reload_time = 3
+			self.accuracy = 95
+			self.mag_size = 4
+			self.mass = 5
+			self.pellet_count = 1
+			self.ammo_per_shot = 2
+			self.zoom = 4
 		_:
 			assert(false, "Unknown GunType")
-			return null

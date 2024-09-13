@@ -12,10 +12,13 @@ const JUMP_VELOCITY = 4.5
 const VERTICAL_LOOK_LIMIT = deg_to_rad(90)
 const RAY_LENGTH = 1000
 const SPRINT_MULTIPLIER = 1.6
+const JUMP_BUFFER = 20
 var id: int
 var object_in_view
 var hp : int = 100
 var input_dir
+
+var jump_cd: Countdown
 
 var core: CoreModel
 var core_changed: Signal
@@ -23,6 +26,7 @@ var core_changed: Signal
 var contexts
 
 func _ready():
+	jump_cd = Countdown.new(JUMP_BUFFER)
 	camera = %Camera3D
 	gun_slot = %GunSlot
 	untracked_entities = %UntrackedEntities
@@ -64,7 +68,7 @@ func _input(event):
 	elif event.is_action_pressed("cycle_inventory"):
 		set_action_state(PlayerModel.ActionState.idling)
 		gun_slot.cycle_next_active_gun()
-	elif event.is_action_pressed("ui_accept") and is_on_floor():
+	elif event.is_action_pressed("ui_accept"):
 		set_jump(true)
 	elif event.is_action_pressed("sprint"):
 		set_movement_state(PlayerModel.MovementState.sprinting)
@@ -84,7 +88,10 @@ func _input(event):
 func _physics_process(delta):
 	if not is_on_floor():
 		velocity += get_gravity() * delta
-
+	elif core.player.is_jump:
+		velocity.y += JUMP_VELOCITY
+		set_jump(false)
+	
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
 		if is_ms(PlayerModel.MovementState.sprinting):
@@ -104,6 +111,9 @@ func _physics_process(delta):
 # Avoid putting state logic into _process
 func _process(delta):
 	object_in_view = get_object_in_view()
+	var cd = jump_cd.tick(delta)
+	if cd <= 0:
+		set_jump(false)
 
 func get_object_in_view():
 	var query = gun_slot.cast_ray_towards_mouse()
@@ -122,19 +132,21 @@ func bind(core: CoreModel, core_changed: Signal):
 	gun_slot.bind(core, core_changed)
 
 func _on_core_changed(context, payload):
-	if core.player.is_jump:
-		if is_on_floor():
-			velocity.y = JUMP_VELOCITY
-		set_jump(false)
 	if context == contexts.gun_dropped:
 		set_action_state(PlayerModel.ActionState.idling)
 
 func set_ads(boo: bool):
+	if core.player.is_ads == boo:
+		return
 	core.player.is_ads = boo
 	core_changed.emit(contexts.none, null)
 	
 func set_jump(boo: bool):
+	if core.player.is_jump == boo:
+		return
 	core.player.is_jump = boo
+	if boo:
+		jump_cd.reset_cd()
 	core_changed.emit(contexts.none, null)
 
 func set_action_state(state: PlayerModel.ActionState):

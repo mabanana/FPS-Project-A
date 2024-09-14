@@ -60,7 +60,6 @@ func _input(event):
 		else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	# Button Inputs
-	# TODO: add number button weapon swap
 	elif event.is_action_pressed("reload"):
 		if gun_slot.active_gun:
 			set_action_state(PlayerModel.ActionState.reloading)
@@ -76,7 +75,15 @@ func _input(event):
 			print("Nothing to interact with...")
 	elif event.is_action_pressed("cycle_inventory"):
 		set_action_state(PlayerModel.ActionState.idling)
-		set_active_gun(core.inventory.active_gun_index + 1)
+		set_active_gun_index(0, true)
+	elif event.is_action_pressed("hotkey_1"): 
+		set_active_gun_index(0)
+	elif event.is_action_pressed("hotkey_2"): 
+		set_active_gun_index(1)
+	elif event.is_action_pressed("hotkey_3"): 
+		set_active_gun_index(2)
+	elif event.is_action_pressed("hotkey_4"): 
+		set_active_gun_index(3)
 	elif event.is_action_pressed("ui_accept"):
 		set_jump(true)
 	elif event.is_action_pressed("sprint"):
@@ -166,11 +173,12 @@ func set_jump(boo: bool):
 		jump_cd.reset_cd()
 	core_changed.emit(contexts.none, null)
 
-func set_active_gun(index: int):
+func set_active_gun_index(index: int, is_cycle: bool = false):
+	var prev_index = core.inventory.active_gun_index
 	if core.inventory.active_gun_index == index:
 		return
 	core.inventory.active_gun_index = index
-	core_changed.emit(contexts.gun_swap_started, null)
+	core_changed.emit(contexts.gun_swap_started, {"is_cycle": is_cycle, "prev_index" : prev_index})
 
 func set_action_state(state: PlayerModel.ActionState):
 	if core.player.action_state == state:

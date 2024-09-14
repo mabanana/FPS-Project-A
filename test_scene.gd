@@ -41,7 +41,7 @@ func initialize_test_scene_map() -> void:
 	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunMetadataModel.GunType.TEST_GUN_B))
 	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunMetadataModel.GunType.TEST_GUN_C))
 	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunMetadataModel.GunType.TEST_GUN_D))
-	core_changed.emit(contexts.gun_swap_started, null)
+	core_changed.emit(contexts.gun_swap_started, {"is_cycle": false, "prev_index" : 0})
 	# Initialize Map Model
 	for child in scene_entities.get_children():
 		child.id = core.services.generate_id()

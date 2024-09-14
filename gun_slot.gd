@@ -119,7 +119,7 @@ func _on_core_changed(context, payload):
 	# Actions
 	if len(core.inventory.guns) > 0:
 		if context == contexts.gun_swap_started:
-			_set_active_gun(core.inventory.active_gun_index)
+			_set_active_gun(core.inventory.active_gun_index, payload["is_cycle"], payload["prev_index"])
 		if core.player.is_ads:
 			set_camera_zoom(active_gun.metadata.zoom, true)
 		else:
@@ -156,13 +156,25 @@ func _remove_active_gun() -> void:
 		core.inventory.active_gun_index -= 1
 	core_changed.emit(contexts.none, null)
 
-func _set_active_gun(index: int) -> void:
-	var new_index = index if index <= len(core.inventory.guns) - 1 and index >= 0 else 0
+func _next_active_gun() -> void:
+	var new_index = core.inventory.active_gun_index + 1 
+	if new_index > len(core.inventory.guns) - 1:
+		new_index =  0
 	reset_gun_slot()
 	core.inventory.active_gun_index = new_index
 	active_gun = core.inventory.active_gun
-	print(core.inventory.active_gun_index, core.inventory.active_gun)
-	
+	core_changed.emit(contexts.none, null)
+
+func _set_active_gun(index: int, is_cycle: bool = false, prev_index: int = 0) -> void:
+	var new_index = index if index >= 0 else 0
+	if new_index > len(core.inventory.guns) - 1:
+		if is_cycle:
+			new_index = 0
+		else:
+			new_index = prev_index
+	reset_gun_slot()
+	core.inventory.active_gun_index = new_index
+	active_gun = core.inventory.active_gun
 	core_changed.emit(contexts.none, null)
 
 func _drop_gun_on_map(active_gun: GunModel, payload: Dictionary) -> void:

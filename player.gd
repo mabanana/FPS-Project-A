@@ -75,7 +75,7 @@ func _input(event):
 			print("Nothing to interact with...")
 	elif event.is_action_pressed("cycle_inventory"):
 		set_action_state(PlayerModel.ActionState.idling)
-		set_active_gun_index(0, true)
+		set_active_gun_index(core.inventory.active_gun_index + 1, true)
 	elif event.is_action_pressed("hotkey_1"): 
 		set_active_gun_index(0)
 	elif event.is_action_pressed("hotkey_2"): 

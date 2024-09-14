@@ -4,6 +4,7 @@ class_name PlayerEntity
 var camera: Camera3D
 var gun_slot: GunSlotController
 var untracked_entities: Node3D
+var anim: AnimationPlayer
 
 @export var MOUSE_SENSITIVITY = 0.001
 # TODO: change these constants to variables that can be affected by character stats
@@ -35,6 +36,7 @@ func _ready():
 	sprint_cd = Countdown.new(SPRINT_FOV_CD)
 	camera = %Camera3D
 	gun_slot = %GunSlot
+	anim = %AnimationPlayer
 	untracked_entities = %UntrackedEntities
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	input_dir = Vector2.ZERO
@@ -129,11 +131,6 @@ func _process(delta):
 	object_in_view = get_object_in_view()
 	if jump_cd.tick(delta) <= 0:
 		set_jump(false)
-	# TODO: fix stutter	
-	fov_modifier = move_toward(fov_modifier, 
-	sprint_cd.tick(delta) / 10 if is_ms(PlayerModel.MovementState.sprinting) else 0,
-	1)
-	camera.fov = (DEFAULT_CAMERA_ZOOM + fov_modifier) * fov_multiplier
 
 func get_object_in_view():
 	var query = gun_slot.cast_ray_towards_mouse()
@@ -183,7 +180,7 @@ func set_active_gun_index(index: int, is_cycle: bool = false):
 func set_action_state(state: PlayerModel.ActionState):
 	if core.player.action_state == state:
 		return
-	_on_action_change(state)
+	_on_action_change(state, core.player.action_state)
 	core.player.action_state = state
 	if state == PlayerModel.ActionState.reloading:
 		core_changed.emit(contexts.reload_started, null)
@@ -193,7 +190,7 @@ func set_action_state(state: PlayerModel.ActionState):
 func set_movement_state(state: PlayerModel.MovementState):
 	if core.player.movement_state == state:
 		return
-	_on_movement_change(state)
+	_on_movement_change(state,  core.player.movement_state)
 	core.player.movement_state = state
 	core_changed.emit(contexts.none, null)
 
@@ -203,16 +200,20 @@ func is_ms(state: PlayerModel.MovementState):
 func is_as(state: PlayerModel.ActionState):
 	return core.player.action_state == state
 
-func _on_action_change(state: PlayerModel.ActionState):
-	prints("Action state changed to " + str(state))
-	if state != PlayerModel.ActionState.idling:
+func _on_action_change(next_state: PlayerModel.ActionState, prev_state: PlayerModel.ActionState):
+	prints("Action state changed to " + str(next_state))
+	if next_state != PlayerModel.ActionState.idling:
 		set_movement_state(PlayerModel.MovementState.standing)
 	pass
 
-func _on_movement_change(state: PlayerModel.MovementState):
-	prints("Movement state changed to " + str(state))
-	if state == PlayerModel.MovementState.sprinting:
+func _on_movement_change(next_state: PlayerModel.MovementState, prev_state: PlayerModel.MovementState):
+	prints("Movement state changed to " + str(next_state))
+	if next_state == PlayerModel.MovementState.sprinting:
 		sprint_cd.reset_cd()
 		set_ads(false)
 		set_action_state(PlayerModel.ActionState.idling)
+		anim.play("sprint_fov")
+	if prev_state == PlayerModel.MovementState.sprinting:
+		# TODO: find a better implementation
+		anim.stop()
 	pass

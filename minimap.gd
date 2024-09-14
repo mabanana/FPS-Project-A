@@ -51,9 +51,13 @@ func _update(positions):
 func bind(core: CoreModel, core_changed: Signal):
 	self.core = core
 	self.core_changed = core_changed
-	contexts = core.services.Context
 	
 	core_changed.connect(_on_core_changed)
+	_on_bind()
+	
+func _on_bind():
+	contexts = core.services.Context
+
 	
 func _on_core_changed(context, payload):
 	if context == contexts.map_updated:

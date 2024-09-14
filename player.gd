@@ -40,6 +40,10 @@ func _ready():
 	input_dir = Vector2.ZERO
 
 # TODO: Create input handler class not coupled with player entity
+# TODO: Move all gun_slot logic away from input
+# TODO: track which buttons are being pressed through state changes
+	# e.g. hold trigger through reload moves state back to triggering 
+
 func _input(event):
 	# Camera Controls via mouse
 	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and event is InputEventMouseMotion:
@@ -72,7 +76,7 @@ func _input(event):
 			print("Nothing to interact with...")
 	elif event.is_action_pressed("cycle_inventory"):
 		set_action_state(PlayerModel.ActionState.idling)
-		gun_slot.cycle_next_active_gun()
+		set_active_gun(core.inventory.active_gun_index + 1)
 	elif event.is_action_pressed("ui_accept"):
 		set_jump(true)
 	elif event.is_action_pressed("sprint"):
@@ -118,6 +122,7 @@ func _process(delta):
 	object_in_view = get_object_in_view()
 	if jump_cd.tick(delta) <= 0:
 		set_jump(false)
+	# TODO: fix stutter	
 	fov_modifier = move_toward(fov_modifier, 
 	sprint_cd.tick(delta) / 10 if is_ms(PlayerModel.MovementState.sprinting) else 0,
 	1)
@@ -134,9 +139,13 @@ func get_object_in_view():
 func bind(core: CoreModel, core_changed: Signal):
 	self.core = core
 	self.core_changed = core_changed
-	contexts = core.services.Context
 
 	core_changed.connect(_on_core_changed)
+	
+	_on_bind()
+
+func _on_bind():
+	contexts = core.services.Context
 	gun_slot.bind(core, core_changed)
 
 func _on_core_changed(context, payload):
@@ -156,6 +165,12 @@ func set_jump(boo: bool):
 	if boo:
 		jump_cd.reset_cd()
 	core_changed.emit(contexts.none, null)
+
+func set_active_gun(index: int):
+	if core.inventory.active_gun_index == index:
+		return
+	core.inventory.active_gun_index = index
+	core_changed.emit(contexts.gun_swap_started, null)
 
 func set_action_state(state: PlayerModel.ActionState):
 	if core.player.action_state == state:

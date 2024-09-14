@@ -27,7 +27,7 @@ func _ready():
 	shoot_cd = Countdown.new(0)
 	reload_cd = Countdown.new(0)
 	bullet_hole = preload("res://bullet_hole.tscn")
-	contexts = core.services.Context
+
 
 func _process(delta):
 	# Only timers
@@ -70,10 +70,9 @@ func drop_gun():
 	signal_payload["angular_velocity"] = throw_vector.cross(Vector3.UP) * THROW_FORCE / active_gun.metadata.mass
 	_drop_gun_on_map(active_gun, signal_payload)
 	_remove_active_gun()
+	_set_active_gun(core.inventory.active_gun_index - 1)
 
-func cycle_next_active_gun():
-	reset_gun_slot()
-	_set_active_gun(core.inventory.active_gun_index + 1)
+# TODO: move utilities to services or player script
 
 func inaccuratize_vector(vector, acc):
 	var rot = deg_to_rad(ACCURACY_FLOOR * (MAX_ACCURACY - acc) / 100)
@@ -110,11 +109,17 @@ func bind(core: CoreModel, core_changed: Signal):
 	self.core_changed = core_changed
 
 	core_changed.connect(_on_core_changed)
+	_on_bind()
+
+func _on_bind():
+	contexts = core.services.Context
+
 
 func _on_core_changed(context, payload):
 	# Actions
-	active_gun = core.inventory.active_gun
-	if active_gun:
+	if len(core.inventory.guns) > 0:
+		if context == contexts.gun_swap_started:
+			_set_active_gun(core.inventory.active_gun_index)
 		if core.player.is_ads:
 			set_camera_zoom(active_gun.metadata.zoom, true)
 		else:
@@ -141,6 +146,8 @@ func _on_core_changed(context, payload):
 
 func _add_gun_to_inventory(gun_model: GunModel) -> void:
 	core.inventory.guns.append(gun_model)
+	if len(core.inventory.guns) == 1:
+		_set_active_gun(0)
 	core_changed.emit(contexts.none, null)
 
 func _remove_active_gun() -> void:
@@ -151,9 +158,11 @@ func _remove_active_gun() -> void:
 
 func _set_active_gun(index: int) -> void:
 	var new_index = index if index <= len(core.inventory.guns) - 1 and index >= 0 else 0
-	if new_index == core.inventory.active_gun_index:
-		return
+	reset_gun_slot()
 	core.inventory.active_gun_index = new_index
+	active_gun = core.inventory.active_gun
+	print(core.inventory.active_gun_index, core.inventory.active_gun)
+	
 	core_changed.emit(contexts.none, null)
 
 func _drop_gun_on_map(active_gun: GunModel, payload: Dictionary) -> void:

@@ -32,7 +32,7 @@ func _ready() -> void:
 	pos_update_cd = Countdown.new(pos_update_interval)
 	initialize_test_scene_map()
 	# Emit initial state to all observers
-	core_changed.emit(core.services.Context.none, null)
+	core_changed.emit(contexts.none, null)
 
 # Temporary function that initializes the hard coded nodes into test scene.
 func initialize_test_scene_map() -> void:
@@ -41,6 +41,7 @@ func initialize_test_scene_map() -> void:
 	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunMetadataModel.GunType.TEST_GUN_B))
 	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunMetadataModel.GunType.TEST_GUN_C))
 	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunMetadataModel.GunType.TEST_GUN_D))
+	core_changed.emit(contexts.gun_swap_started, null)
 	# Initialize Map Model
 	for child in scene_entities.get_children():
 		child.id = core.services.generate_id()

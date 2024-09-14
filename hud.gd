@@ -23,8 +23,10 @@ func bind(core: CoreModel, core_changed: Signal):
 	self.core_changed = core_changed
 	
 	core_changed.connect(_on_core_changed)
+	_on_bind()
+
+func _on_bind():
 	minimap.bind(core, core_changed)
-	
 
 func _on_core_changed(context, payload):
 	update()

@@ -6,8 +6,10 @@ enum Context {
 	none,
 	gun_dropped,
 	gun_picked_up,
+	gun_swap_started,
 	gun_shot,
 	map_updated,
+	# TODO: fix context tense
 	reload_start
 }
 

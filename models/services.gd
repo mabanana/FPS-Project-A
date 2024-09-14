@@ -9,8 +9,7 @@ enum Context {
 	gun_swap_started,
 	gun_shot,
 	map_updated,
-	# TODO: fix context tense
-	reload_start
+	reload_started
 }
 
 func _init() -> void:

@@ -186,7 +186,7 @@ func set_action_state(state: PlayerModel.ActionState):
 	_on_action_change(state)
 	core.player.action_state = state
 	if state == PlayerModel.ActionState.reloading:
-		core_changed.emit(contexts.reload_start, null)
+		core_changed.emit(contexts.reload_started, null)
 	else:
 		core_changed.emit(contexts.none, null)
 

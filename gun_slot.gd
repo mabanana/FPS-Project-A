@@ -129,7 +129,7 @@ func _on_core_changed(context, payload):
 				shoot()
 			if active_gun.mag_curr <= 0:
 				character.set_action_state(PlayerModel.ActionState.reloading)
-		elif context == contexts.reload_start:
+		elif context == contexts.reload_started:
 			reload()
 		elif core.player.action_state == PlayerModel.ActionState.reloading and reload_cd.tick(0) <= 0:
 			finish_reload()

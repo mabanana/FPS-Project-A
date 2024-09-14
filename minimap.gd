@@ -6,7 +6,7 @@ var core_changed
 @onready var map_dot = preload("res://map_dot.tscn")
 var map_size
 var contexts
-var max_map_dist
+@export var detect_dist: int
 
 var enemy_color = Color.CRIMSON
 var mod_max: float = 1
@@ -20,7 +20,6 @@ func _ready():
 	dot_mod = mod_max
 	delta_mod_a = (mod_max - mod_min) / blink_interval * 5
 	map_size = 200
-	max_map_dist = 20
 	$Panel.custom_minimum_size = Vector2(map_size, map_size)
 	
 func _process(delta):
@@ -41,9 +40,9 @@ func _update(positions):
 			if child != %ColorRect:
 				child.queue_free()
 		var pos_2d = Vector2(pos.x, pos.z)
-		if pos_2d.length() < max_map_dist / 2:
+		if pos_2d.length() < detect_dist / 2:
 			var new_map_dot = map_dot.instantiate()
-			var map_scale = map_size / max_map_dist
+			var map_scale = map_size / detect_dist
 			new_map_dot.position += pos_2d * map_scale
 			new_map_dot.color = enemy_color
 			$Panel.add_child(new_map_dot)

@@ -5,13 +5,18 @@ var core: CoreModel
 var core_changed: Signal
 
 func update():
-	%GunName.text = str(core.inventory.active_gun.metadata.name) if core.inventory.active_gun else ""
+	if core.inventory.active_gun_index < len(core.inventory.guns):
+		%GunName.text = str(core.inventory.active_gun.metadata.name)
+		%Magazine.text = str(core.inventory.active_gun.mag_curr)
+		%ProgressBar.max_value = core.inventory.active_gun.metadata.mag_size 
+		%ProgressBar.value = core.inventory.active_gun.mag_curr
+		$VBoxContainer2.modulate.a = 1
+	else:
+		$VBoxContainer2.modulate.a = 0
 	%Total.text = str(core.inventory.ammo)
-	%Magazine.text = str(core.inventory.active_gun.mag_curr) if core.inventory.active_gun else "0"
 	%HpValue.text = str(core.player.hp)
 	%ReloadIndicator.modulate.a = 1 if core.player.action_state == PlayerModel.ActionState.reloading else 0
-	%ProgressBar.max_value = core.inventory.active_gun.metadata.mag_size if core.inventory.active_gun else 0
-	%ProgressBar.value = core.inventory.active_gun.mag_curr if core.inventory.active_gun else 0
+	
 
 # Bindings
 

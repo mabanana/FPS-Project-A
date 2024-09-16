@@ -117,17 +117,17 @@ func _on_core_changed(context, payload):
 			reload()
 		elif context == contexts.reload_ended:
 			finish_reload()
-		
-		if core.player.is_ads:
-			set_camera_zoom(active_gun.metadata.zoom, true)
-		else:
-			set_camera_zoom(0, false)
-		print(core.player.action_state)
+			
 		if core.player.action_state == PlayerModel.ActionState.triggering and shoot_cd.tick(0) <= 0:
 			if active_gun.mag_curr > 0:
 				shoot()
 			if active_gun.mag_curr <= 0:
 				character.set_action_state(PlayerModel.ActionState.reloading)
+		
+		if core.player.is_ads:
+			set_camera_zoom(active_gun.metadata.zoom, true)
+		else:
+			set_camera_zoom(0, false)
 		
 		
 	# Logs

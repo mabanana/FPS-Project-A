@@ -38,7 +38,6 @@ func _ready():
 
 # TODO: Create input handler class not coupled with player entity
 # TODO: Move all gun_slot logic away from input
-# TODO: track which buttons are being pressed through state changes
 	# e.g. hold trigger through reload moves state back to triggering 
 
 func _input(event):

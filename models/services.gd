@@ -13,6 +13,7 @@ enum Context {
 	reload_started,
 	enemy_spawned,
 	damage_dealt,
+	player_spawned,
 }
 
 func _init() -> void:

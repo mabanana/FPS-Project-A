@@ -1,8 +1,7 @@
-[gd_scene load_steps=18 format=3 uid="uid://bgp15f5w735mi"]
+[gd_scene load_steps=17 format=3 uid="uid://bgp15f5w735mi"]
 
 [ext_resource type="Script" path="res://test_scene.gd" id="1_00gik"]
 [ext_resource type="PackedScene" uid="uid://cix1j6ynfe7pn" path="res://hud.tscn" id="1_j5fux"]
-[ext_resource type="PackedScene" uid="uid://ceu5ajrnb7o3k" path="res://player.tscn" id="4_y3gpp"]
 [ext_resource type="Shader" path="res://test_shader.gdshader" id="7_7oa2x"]
 [ext_resource type="FastNoiseLite" uid="uid://crqtqh0j2cenj" path="res://test_noise.tres" id="8_6ga63"]
 [ext_resource type="Texture2D" uid="uid://bvx06pup72xam" path="res://Stylized Sky Background (2).png" id="8_v1f1u"]
@@ -82,12 +81,6 @@ shadow_bias = 0.0
 shadow_normal_bias = 0.889
 directional_shadow_mode = 0
 sky_mode = 1
-
-[node name="SceneEntities" type="Node3D" parent="."]
-unique_name_in_owner = true
-
-[node name="Player" parent="SceneEntities" instance=ExtResource("4_y3gpp")]
-unique_name_in_owner = true
 
 [node name="Map" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3, 0)

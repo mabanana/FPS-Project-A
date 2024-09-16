@@ -43,9 +43,12 @@ _data = {
 "sprint_fov": SubResource("Animation_bts6k")
 }
 
-[node name="Player" type="CharacterBody3D"]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("camera", "gun_slot", "anim")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 script = ExtResource("1_uj47b")
+camera = NodePath("Camera3D")
+gun_slot = NodePath("GunSlot")
+anim = NodePath("AnimationPlayer")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 unique_name_in_owner = true

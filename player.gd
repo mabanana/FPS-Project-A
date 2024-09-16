@@ -1,10 +1,9 @@
 extends CharacterBody3D
 class_name PlayerEntity
 
-var camera: Camera3D
-var gun_slot: GunSlotController
-var untracked_entities: Node3D
-var anim: AnimationPlayer
+@export var camera: Camera3D
+@export var gun_slot: GunSlotController
+@export var anim: AnimationPlayer
 
 @export var MOUSE_SENSITIVITY = 0.001
 # TODO: change these constants to variables that can be affected by character stats
@@ -19,8 +18,7 @@ const DEFAULT_CAMERA_ZOOM = 75
 var rid: int
 var object_in_view
 var hp : int = 100
-var input_dir
-var fov_modifier: int = 0
+var input_dir: Vector2
 var fov_multiplier: float
 
 var jump_cd: Countdown
@@ -34,10 +32,6 @@ var contexts
 func _ready():
 	jump_cd = Countdown.new(JUMP_BUFFER)
 	sprint_cd = Countdown.new(SPRINT_FOV_CD)
-	camera = %Camera3D
-	gun_slot = %GunSlot
-	anim = %AnimationPlayer
-	untracked_entities = %UntrackedEntities
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	input_dir = Vector2.ZERO
 

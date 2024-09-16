@@ -35,7 +35,9 @@ func _on_core_changed(context: CoreServices.Context, payload):
 		_spawn_node(_get_entity_scene(payload["entity_model"]), scene, context, payload)
 	elif context == contexts.enemy_spawned:
 		_spawn_node(_get_entity_scene(payload["entity_model"]), scene, context, payload)
-	if context == contexts.damage_dealt:
+	elif context == contexts.damage_dealt:
+		_spawn_node(_get_entity_scene(payload["entity_model"]), scene, context, payload)
+	elif context == contexts.player_spawned:
 		_spawn_node(_get_entity_scene(payload["entity_model"]), scene, context, payload)
 
 func _spawn_node(node_scene, target_scene, spawn_context, payload):

@@ -1,13 +1,12 @@
 extends Node3D
 class_name TestScene
 
-
 var core: CoreModel
 signal core_changed(context, payload)
 var contexts
-var entity_spawner
-@onready var scene_entities: Node3D = %SceneEntities
-@onready var dropped_gun: PackedScene = preload("res://gun_on_floor.tscn")
+var entity_spawner: EntitySpawner
+var Hud: HudController
+
 @export var pos_update_interval: int
 
 const UNIT = 100
@@ -15,6 +14,7 @@ const UNIT = 100
 # Hashmap { rid : object_ref }
 var entity_hash: Dictionary
 var pos_update_cd: Countdown
+var player_rid: int
 
 func _ready() -> void:
 	# Load all gun metadata
@@ -24,16 +24,17 @@ func _ready() -> void:
 	core = CoreModel.new()
 	entity_spawner = EntitySpawner.new(self)
 	# Add bindings to all relevant observers
-	# TODO: bind enemies and NPCs to core and core_changed like player entity
 	entity_spawner.bind(core, core_changed)
-	%Player.bind(core, core_changed)
-	%Hud.bind(core, core_changed)
+	Hud = %Hud
+	Hud.bind(core, core_changed)
 	core_changed.connect(_on_core_changed)
 	contexts = core.services.Context
+	
 	# Set up initial state
 	entity_hash = {}
-	pos_update_cd = Countdown.new(pos_update_interval)
 	initialize_test_scene_map()
+	pos_update_cd = Countdown.new(pos_update_interval)
+	
 	
 	# Emit initial state to all observers
 	core_changed.emit(contexts.none, null)
@@ -45,12 +46,9 @@ func initialize_test_scene_map() -> void:
 	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunMetadataModel.GunType.TEST_GUN_B))
 	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunMetadataModel.GunType.TEST_GUN_C))
 	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunMetadataModel.GunType.TEST_GUN_D))
-	core_changed.emit(contexts.gun_swap_started, {"is_cycle": false, "prev_index" : 0})
+	
 	# Initialize Map Model
-	%Player.rid = core.services.generate_rid()
-	core.map.entities[%Player.rid] = EntityModel.new_entity(EntityMetadataModel.EntityType.PLAYER)
-	core.map.entities[%Player.rid].position = %Player.position
-	entity_hash[%Player.rid] = %Player
+	_add_entity_to_map(EntityMetadataModel.EntityType.PLAYER, Vector3(0,1,0))
 		
 	_add_entity_to_map(EntityMetadataModel.EntityType.TARGET_DUMMY, Vector3(-10,1,10))
 	_add_entity_to_map(EntityMetadataModel.EntityType.TARGET_DUMMY, Vector3(10,1,-10))
@@ -60,19 +58,20 @@ func initialize_test_scene_map() -> void:
 
 func _process(delta):
 	if pos_update_cd.tick(delta) <= 0:
-		_pos_update()
+		if player_rid:
+			_pos_update(player_rid)
 
 func _on_core_changed(context, payload):
 	pass
 
-func _pos_update():
-	var player_key
-	for key in entity_hash.keys():
-		var entity_model = core.map.entities[key]
-		if entity_model.type == EntityModel.EntityType.player:
-			player_key = key
-		entity_model.position = entity_hash[key].position
-		entity_model.rotation = entity_hash[key].rotation
+func _pos_update(origin_rid: ):
+	var origin_key = player_rid
+	#for key in entity_hash.keys():
+		#var entity_model = core.map.entities[key]
+		#if entity_model.type == EntityModel.EntityType.player:
+			#origin_key = key
+		#entity_model.position = entity_hash[key].position
+		#entity_model.rotation = entity_hash[key].rotation
 	pos_update_cd.reset_cd()
 	# print(core.map.entities)
 	
@@ -81,8 +80,8 @@ func _pos_update():
 	var positions: Array[Vector3] = []
 	for key in entities.keys():
 		if entities[key].type == EntityModel.EntityType.enemy:
-			var relative_pos = entities[key].position - entities[player_key].position
-			relative_pos = relative_pos.rotated(Vector3.UP, -entities[player_key].rotation.y)
+			var relative_pos = entities[key].position - entities[origin_key].position
+			relative_pos = relative_pos.rotated(Vector3.UP, -entities[origin_key].rotation.y)
 			relative_pos.y *= -1
 			positions.append(relative_pos)
 	core_changed.emit(contexts.map_updated, {"positions" : positions})
@@ -114,4 +113,6 @@ func _add_entity_to_map(entity_type: EntityMetadataModel.EntityType, position: V
 			"rid" : rid,
 			"entity_model" : core.map.entities[rid],
 		}
+		player_rid = rid
+		core_changed.emit(contexts.player_spawned, payload)
 	

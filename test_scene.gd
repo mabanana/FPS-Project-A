@@ -51,12 +51,14 @@ func initialize_test_scene_map() -> void:
 		child.id = core.services.generate_id()
 		var type: EntityModel.EntityType
 		if child is PlayerEntity:
-			type = EntityModel.EntityType.player
+			core.map.entities[child.id] = EntityModel.new_entity(EntityMetadataModel.EntityType.PLAYER)
+			core.map.entities[child.id].position = child.position
 		elif child is InteractableEntity:
-			type = EntityModel.EntityType.interactable
+			core.map.entities[child.id] = EntityModel.new_entity(EntityMetadataModel.EntityType.GUN_ON_FLOOR)
+			core.map.entities[child.id].position = child.position
 		elif child is EnemyEntity:
-			type = EntityModel.EntityType.enemy
-		core.map.entities[child.id] = EntityModel.new(child.name, child.position, child.rotation, type)
+			core.map.entities[child.id] = EntityModel.new_entity(EntityMetadataModel.EntityType.TARGET_DUMMY)
+			core.map.entities[child.id].position = child.position
 		entity_hash[child.id] = child
 
 func _process(delta):

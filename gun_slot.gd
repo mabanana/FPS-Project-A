@@ -47,10 +47,7 @@ func shoot():
 		var query = cast_ray_towards_mouse(active_gun.metadata.accuracy)
 		var result = get_world_3d().direct_space_state.intersect_ray(query)
 		if result:
-			# TODO: move bullet hole logic somewhere else
-			var new_bullet_hole = bullet_hole.instantiate()
-			new_bullet_hole.position = result.position
-			character.untracked_entities.add_child(new_bullet_hole)
+			_add_bullet_hole(result.position)
 			if result.collider.has_method("take_damage"):
 				result.collider.take_damage(active_gun.metadata.damage_floor, active_gun.metadata.damage_ceiling, character, result.position)
 	_update_mag(active_gun.mag_curr - active_gun.metadata.ammo_per_shot)
@@ -61,15 +58,10 @@ func pickup_gun(gun_model: GunModel, gun_id: int):
 
 func drop_gun():
 	if not core.inventory.active_gun:
-		return
-	var signal_payload = {}
-	var throw_vector = inaccuratize_vector(-character.camera.get_global_transform().basis.z.normalized(), THROW_ACCURACY)
-	signal_payload["position"] = character.position + throw_vector
-	signal_payload["gun_model"] = active_gun
-	signal_payload["linear_velocity"] = throw_vector * THROW_FORCE / active_gun.metadata.mass
-	signal_payload["angular_velocity"] = throw_vector.cross(Vector3.UP) * THROW_FORCE / active_gun.metadata.mass
-	signal_payload["entity_model"] = EntityModel.new_entity(EntityMetadataModel.EntityType.GUN_ON_FLOOR)
-	_drop_gun_on_map(active_gun, signal_payload)
+		return	
+	var throw_vector = -character.camera.get_global_transform().basis.z.normalized()
+	throw_vector = inaccuratize_vector(throw_vector, THROW_ACCURACY)
+	_drop_gun_on_map(active_gun, throw_vector)
 	_remove_active_gun()
 	_set_active_gun(core.inventory.active_gun_index - 1)
 
@@ -178,9 +170,16 @@ func _set_active_gun(index: int, is_cycle: bool = false, prev_index: int = 0) ->
 	active_gun = core.inventory.active_gun
 	core_changed.emit(contexts.none, null)
 
-func _drop_gun_on_map(active_gun: GunModel, payload: Dictionary) -> void:
-	payload["id"] = core.services.generate_id()
-	core.map.entities[payload["id"]] = EntityModel.new(active_gun.metadata.name, position, rotation, EntityModel.EntityType.interactable)
+func _drop_gun_on_map(active_gun: GunModel, throw_vector) -> void:
+	var payload = {
+		"id" : core.services.generate_id(),
+		"position" : character.position + throw_vector,
+		"gun_model" : active_gun,
+		"linear_velocity" : throw_vector * THROW_FORCE / active_gun.metadata.mass,
+		"angular_velocity" : throw_vector.cross(Vector3.UP) * THROW_FORCE / active_gun.metadata.mass,
+		"entity_model" : EntityModel.new_entity(EntityMetadataModel.EntityType.GUN_ON_FLOOR)
+	}
+	core.map.entities[payload["id"]] = payload["entity_model"]
 	core_changed.emit(contexts.gun_dropped, payload)
 
 func _pickup_gun_from_map(gun_id: int) -> void:
@@ -195,6 +194,15 @@ func _set_ammo(new_ammo: int) -> void:
 		return
 	core.inventory.ammo = new_ammo
 	core_changed.emit(contexts.none, null)
+
+func _add_bullet_hole(node_position: Vector3):
+	var payload = {
+		"id" : core.services.generate_id(),
+		"entity_model" : EntityModel.new_entity(EntityMetadataModel.EntityType.BULLET_HOLE),
+		"position" : node_position
+	}
+	core.map.entities[payload["id"]] = payload["entity_model"]
+	core_changed.emit(contexts.bullet_hole_added, payload)
 
 func _finish_cd():
 	core_changed.emit(contexts.none, null)

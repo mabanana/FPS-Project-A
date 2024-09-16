@@ -10,7 +10,8 @@ var contexts
 var node_scenes: Dictionary
 
 enum SpawnContext {
-	gun_dropped
+	gun_dropped,
+	bullet_hole_added
 }
 
 func _init(scene):
@@ -31,21 +32,27 @@ func _on_core_changed(context: CoreServices.Context, payload):
 		_spawn_node(_get_entity_scene(payload["entity_model"]), scene, SpawnContext.gun_dropped, payload)
 	elif context == contexts.gun_picked_up:
 		_remove_node(scene.entity_hash[payload["id"]])
+	elif context == contexts.bullet_hole_added:
+		_spawn_node(_get_entity_scene(payload["entity_model"]), scene, SpawnContext.bullet_hole_added, payload, false)
 
 func _spawn_node(node_scene, target_scene, spawn_context, payload, tracked = true):
 	var new_node: Node3D
+	new_node = node_scene.instantiate()
 	if spawn_context == SpawnContext.gun_dropped:
-		new_node = node_scene.instantiate()
 		new_node.position = payload["position"]
 		new_node.linear_velocity = payload["linear_velocity"]
 		new_node.angular_velocity = payload["angular_velocity"]
 		new_node.gun_model = payload["gun_model"]
 		new_node.id = payload["id"]
+	elif spawn_context == SpawnContext.bullet_hole_added:
+		new_node.position = payload["position"]
+	
 	scene.add_child(new_node)
+	
 	if tracked:
 		scene.entity_hash[payload["id"]] = new_node
 	else:
-		core.map.entities[payload["id"]].erase()
+		core.map.entities.erase(payload["id"])
 	core_changed.emit(contexts.none, null)
 
 # TODO: improve behavior for despawning node from scene

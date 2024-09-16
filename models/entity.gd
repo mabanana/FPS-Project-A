@@ -9,22 +9,24 @@ enum EntityType {
 }
 
 static func new_entity(entity_type:EntityMetadataModel.EntityType) -> EntityModel:
-	return EntityModel.new(EntityMetadataModel.entity_metadata_map[entity_type].name, Vector3.ZERO, Vector3.ZERO, EntityMetadataModel.entity_metadata_map[entity_type].entity_type)
+	return EntityModel.new(entity_type, EntityMetadataModel.entity_metadata_map[entity_type].name, Vector3.ZERO, Vector3.ZERO, EntityMetadataModel.entity_metadata_map[entity_type].entity_type)
 
 var metadata: EntityMetadataModel:
 	get:
-		return EntityMetadataModel.entity_metadata_map[type]
+		return EntityMetadataModel.entity_metadata_map[entity_type]
 
 var position: Vector3
 var rotation: Vector3
 var type: EntityType
 var name: String
+var entity_type: EntityMetadataModel.EntityType
 
-func _init(name: String, position: Vector3, rotation: Vector3, type: EntityType) -> void:
+func _init(entity_type: EntityMetadataModel.EntityType, name: String, position: Vector3, rotation: Vector3, type: EntityType) -> void:
 	self.position = position
 	self.rotation = rotation
 	self.type = type
 	self.name = name
+	self.entity_type = entity_type
 
 func _to_string():
 	return str(name) + ", " + str(position) + ", " + str(rotation) + ", " + str(type)

@@ -8,6 +8,7 @@ enum Context {
 	gun_picked_up,
 	gun_swap_started,
 	gun_shot,
+	bullet_hole_added,
 	map_updated,
 	reload_started
 }

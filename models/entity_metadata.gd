@@ -2,7 +2,9 @@ class_name EntityMetadataModel
 
 enum EntityType {
 	GUN_ON_FLOOR,
-	BULLET_HOLE
+	BULLET_HOLE,
+	PLAYER,
+	TARGET_DUMMY
 }
 
 var name: String
@@ -28,5 +30,13 @@ func _init(
 			self.name = "Bullet Hole"
 			self.entity_type = EntityModel.EntityType.removed
 			self.oid = 5001
+		EntityType.PLAYER:
+			self.name = "Player"
+			self.entity_type = EntityModel.EntityType.player
+			self.oid = 2001
+		EntityType.TARGET_DUMMY:
+			self.name = "Target Dummy"
+			self.entity_type = EntityModel.EntityType.enemy
+			self.oid = 3001
 		_:
 			assert(false, "Unknown EntityType")

@@ -23,4 +23,3 @@ void fragment() {
   	ROUGHNESS = 0.9;
 	NORMAL_MAP = texture(normalmap, tex_position).xyz;
 }
-

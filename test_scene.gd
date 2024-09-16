@@ -6,7 +6,6 @@ var core: CoreModel
 signal core_changed(context, payload)
 var contexts
 var entity_spawner
-# TODO Compartmentalize responsibilities into helper classes e.g. entity spawner
 @onready var scene_entities: Node3D = %SceneEntities
 @onready var dropped_gun: PackedScene = preload("res://gun_on_floor.tscn")
 @export var pos_update_interval: int
@@ -35,12 +34,10 @@ func _ready() -> void:
 	entity_hash = {}
 	pos_update_cd = Countdown.new(pos_update_interval)
 	initialize_test_scene_map()
-	_add_entity_to_map(EntityMetadataModel.EntityType.TARGET_DUMMY, Vector3(0,1,-10))
+	_add_entity_to_map(EntityMetadataModel.EntityType.TARGET_DUMMY, Vector3(-10,1,10))
 	_add_entity_to_map(EntityMetadataModel.EntityType.TARGET_DUMMY, Vector3(10,1,-10))
-	_add_entity_to_map(EntityMetadataModel.EntityType.TARGET_DUMMY, Vector3(0,1,10))
+	_add_entity_to_map(EntityMetadataModel.EntityType.TARGET_DUMMY, Vector3(10,1,10))
 	_add_entity_to_map(EntityMetadataModel.EntityType.TARGET_DUMMY, Vector3(-10,1,-10))
-	print(core.map.entities)
-	print(entity_hash)
 	# Emit initial state to all observers
 	core_changed.emit(contexts.none, null)
 

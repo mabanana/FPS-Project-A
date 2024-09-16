@@ -11,8 +11,6 @@ const THROW_FORCE = 50
 const THROW_ACCURACY = 69
 
 
-# TODO: Move packed scene dependencies somewhere else
-var bullet_hole: PackedScene
 var shoot_cd: Countdown
 var reload_cd: Countdown
 var character: PlayerEntity
@@ -26,8 +24,6 @@ func _ready():
 	character = get_parent()
 	shoot_cd = Countdown.new(0)
 	reload_cd = Countdown.new(0)
-	bullet_hole = preload("res://bullet_hole.tscn")
-
 
 func _process(delta):
 	# Only timers

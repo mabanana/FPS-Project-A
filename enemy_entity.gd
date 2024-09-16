@@ -5,7 +5,7 @@ class_name EnemyEntity
 const POSITION_FORESHORTEN = 1
 var rid: int
 
-# TODO: add children to untracked entities
+# TODO: Connect to core and add damage numbers to map.entities
 func take_damage(damage_floor, damage_ceiling, dealer, damage_position):
 	var new_damage_number = damage_number.instantiate()
 	new_damage_number.damage_number = randf_range(damage_floor, damage_ceiling)

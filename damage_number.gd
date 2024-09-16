@@ -39,7 +39,7 @@ func _ready():
 	label.outline_size = label.font_size * outline_proportion
 	rand_position = Vector3(randf_range(rand_range_x.x,rand_range_x.y),
 	randf_range(rand_range_y.x,rand_range_y.y),
-	randf_range(rand_range_z.x,rand_range_z.y))
+	randf_range(rand_range_z.x,rand_range_z.y)) + position
 
 func _process(delta):
 	var tween = get_tree().create_tween()

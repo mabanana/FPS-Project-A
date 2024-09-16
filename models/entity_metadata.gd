@@ -4,7 +4,8 @@ enum EntityType {
 	GUN_ON_FLOOR,
 	BULLET_HOLE,
 	PLAYER,
-	TARGET_DUMMY
+	TARGET_DUMMY,
+	DAMAGE_NUMBER,
 }
 
 var name: String
@@ -38,5 +39,9 @@ func _init(
 			self.name = "Target Dummy"
 			self.entity_type = EntityModel.EntityType.enemy
 			self.oid = 3001
+		EntityType.DAMAGE_NUMBER:
+			self.name = "Damage Number"
+			self.entity_type = EntityModel.EntityType.removed
+			self.oid = 5002
 		_:
 			assert(false, "Unknown EntityType")

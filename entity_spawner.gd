@@ -13,12 +13,14 @@ enum SpawnContext {
 	gun_dropped,
 	bullet_hole_added,
 	enemy_spawned,
+	damage_dealt,
 }
 
 func _init(scene):
 	self.scene = scene
 	node_scenes = {1001: preload("res://gun_on_floor.tscn"),
 	5001: preload("res://bullet_hole.tscn"),
+	5002: preload("res://damage_number.tscn"),
 	2001: preload("res://player.tscn"),
 	3001: preload("res://target_dummy.tscn"),
 	}
@@ -40,6 +42,8 @@ func _on_core_changed(context: CoreServices.Context, payload):
 		_spawn_node(_get_entity_scene(payload["entity_model"]), scene, SpawnContext.bullet_hole_added, payload, false)
 	elif context == contexts.enemy_spawned:
 		_spawn_node(_get_entity_scene(payload["entity_model"]), scene, SpawnContext.enemy_spawned, payload)
+	if context == contexts.damage_dealt:
+		_spawn_node(_get_entity_scene(payload["entity_model"]), scene, SpawnContext.damage_dealt, payload, false)
 
 func _spawn_node(node_scene, target_scene, spawn_context, payload, tracked = true):
 	var new_node: Node3D
@@ -55,6 +59,11 @@ func _spawn_node(node_scene, target_scene, spawn_context, payload, tracked = tru
 	elif spawn_context == SpawnContext.enemy_spawned:
 		new_node.position = payload["position"]
 		new_node.rid = payload["rid"]
+		new_node.bind(core, core_changed)
+	elif spawn_context == SpawnContext.damage_dealt:
+		new_node.position = payload["position"]
+		new_node.damage_number = payload["damage_number"]
+		new_node.damage_scale = payload["damage_scale"]
 	
 	scene.add_child(new_node)
 	
@@ -70,4 +79,5 @@ func _remove_node(node):
 	node.queue_free()
 
 func _get_entity_scene(entity: EntityModel):
+	prints("scene for", entity.metadata.name, "found")
 	return node_scenes[entity.metadata.oid]

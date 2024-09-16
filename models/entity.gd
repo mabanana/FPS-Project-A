@@ -8,6 +8,7 @@ enum EntityType {
 	removed
 }
 
+# TODO: Move rid assignment to new_entity
 static func new_entity(entity_type:EntityMetadataModel.EntityType) -> EntityModel:
 	return EntityModel.new(entity_type, EntityMetadataModel.entity_metadata_map[entity_type].name, Vector3.ZERO, Vector3.ZERO, EntityMetadataModel.entity_metadata_map[entity_type].entity_type)
 
@@ -18,7 +19,9 @@ var metadata: EntityMetadataModel:
 var position: Vector3
 var rotation: Vector3
 var type: EntityType
-var name: String
+var name: :
+	get:
+		return EntityMetadataModel.entity_metadata_map[entity_type].name
 var entity_type: EntityMetadataModel.EntityType
 
 func _init(entity_type: EntityMetadataModel.EntityType, name: String, position: Vector3, rotation: Vector3, type: EntityType) -> void:

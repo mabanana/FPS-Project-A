@@ -54,7 +54,6 @@ func initialize_test_scene_map() -> void:
 		var type: EntityModel.EntityType
 		if child is PlayerEntity:
 			child.rid = core.services.generate_rid()
-			print("player id is " + str(child.rid))
 			core.map.entities[child.rid] = EntityModel.new_entity(EntityMetadataModel.EntityType.PLAYER)
 			core.map.entities[child.rid].position = child.position
 			entity_hash[child.rid] = child

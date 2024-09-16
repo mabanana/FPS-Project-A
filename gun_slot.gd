@@ -45,7 +45,9 @@ func shoot():
 		if result:
 			_add_bullet_hole(result.position)
 			if result.collider.has_method("take_damage"):
-				result.collider.take_damage(active_gun.metadata.damage_floor, active_gun.metadata.damage_ceiling, character, result.position)
+				var damage_number = randf_range(active_gun.metadata.damage_floor, active_gun.metadata.damage_ceiling)
+				var damage_scale = float(damage_number - active_gun.metadata.damage_floor) / (active_gun.metadata.damage_ceiling - active_gun.metadata.damage_floor)
+				result.collider.take_damage(damage_number, damage_scale, character, result.position)
 	_update_mag(active_gun.mag_curr - active_gun.metadata.ammo_per_shot)
 
 func pickup_gun(gun_model: GunModel, gun_id: int):

@@ -66,14 +66,12 @@ func _on_core_changed(context, payload):
 
 func _pos_update(origin_rid: ):
 	var origin_key = player_rid
-	#for key in entity_hash.keys():
-		#var entity_model = core.map.entities[key]
-		#if entity_model.type == EntityModel.EntityType.player:
-			#origin_key = key
-		#entity_model.position = entity_hash[key].position
-		#entity_model.rotation = entity_hash[key].rotation
+	# Update player location
+	core.map.entities[player_rid].position = entity_hash[player_rid].position
+	core.map.entities[player_rid].rotation = entity_hash[player_rid].rotation
+			
+	
 	pos_update_cd.reset_cd()
-	# print(core.map.entities)
 	
 	# calculate relative positions for minimap based on player
 	var entities = core.map.entities
@@ -84,6 +82,7 @@ func _pos_update(origin_rid: ):
 			relative_pos = relative_pos.rotated(Vector3.UP, -entities[origin_key].rotation.y)
 			relative_pos.y *= -1
 			positions.append(relative_pos)
+	print(positions)
 	core_changed.emit(contexts.map_updated, {"positions" : positions})
 
 func _add_entity_to_map(entity_type: EntityMetadataModel.EntityType, position: Vector3):

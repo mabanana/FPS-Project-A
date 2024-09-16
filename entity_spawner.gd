@@ -14,6 +14,7 @@ func _init(scene):
 	node_scenes = {1001: preload("res://gun_on_floor.tscn"),
 	5001: preload("res://bullet_hole.tscn"),
 	5002: preload("res://damage_number.tscn"),
+	5003: preload("res://bullet_particle.tscn"),
 	2001: preload("res://player.tscn"),
 	3001: preload("res://target_dummy.tscn"),
 	}
@@ -27,18 +28,21 @@ func bind(core, core_changed):
 
 # Does not make edits to core directly, and only edits Scene on core_changed
 func _on_core_changed(context: CoreServices.Context, payload):
-	if context == contexts.gun_dropped:
+	if context in [
+		contexts.gun_dropped,
+		contexts.gun_picked_up,
+		contexts.bullet_hole_added,
+		contexts.enemy_spawned,
+		contexts.damage_dealt,
+		contexts.player_spawned,
+		contexts.bullet_particle_added,
+		]:
 		_spawn_node(_get_entity_scene(payload["entity_model"]), scene, context, payload)
-	elif context == contexts.gun_picked_up:
+	elif context in [
+		contexts.gun_picked_up, 
+		contexts.entity_died
+		]:
 		_remove_node(scene.entity_hash[payload["rid"]])
-	elif context == contexts.bullet_hole_added:
-		_spawn_node(_get_entity_scene(payload["entity_model"]), scene, context, payload)
-	elif context == contexts.enemy_spawned:
-		_spawn_node(_get_entity_scene(payload["entity_model"]), scene, context, payload)
-	elif context == contexts.damage_dealt:
-		_spawn_node(_get_entity_scene(payload["entity_model"]), scene, context, payload)
-	elif context == contexts.player_spawned:
-		_spawn_node(_get_entity_scene(payload["entity_model"]), scene, context, payload)
 
 func _spawn_node(node_scene, target_scene, spawn_context, payload):
 	var new_node: Node3D
@@ -49,17 +53,19 @@ func _spawn_node(node_scene, target_scene, spawn_context, payload):
 		new_node.angular_velocity = payload["angular_velocity"]
 		new_node.gun_model = payload["gun_model"]
 	elif spawn_context == contexts.enemy_spawned:
-		new_node.position = payload["position"]
 		new_node.rid = payload["rid"]
 		new_node.bind(core, core_changed)
 	elif spawn_context == contexts.player_spawned:
-		new_node.position = payload["position"]
 		new_node.rid = payload["rid"]
 		new_node.bind(core, core_changed)
 	elif spawn_context == contexts.damage_dealt:
 		new_node.damage_number = payload["damage_number"]
 		new_node.damage_scale = payload["damage_scale"]
-	
+	elif spawn_context == contexts.bullet_particle_added:
+		new_node.rotation = payload["facing"]
+		new_node.emitting = true
+		new_node.one_shot = true
+	print(payload["entity_model"].metadata.name)
 	target_scene.add_child(new_node)
 	
 	if payload["entity_model"].type == EntityModel.EntityType.removed:

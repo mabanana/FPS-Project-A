@@ -47,11 +47,13 @@ func shoot():
 		var query = cast_ray_towards_mouse(acc)
 		var result = get_world_3d().direct_space_state.intersect_ray(query)
 		if result:
-			_add_bullet_hole(result.position)
 			if result.collider.has_method("take_damage"):
 				var damage_number = randf_range(active_gun.metadata.damage_floor, active_gun.metadata.damage_ceiling)
 				var damage_scale = float(damage_number - active_gun.metadata.damage_floor) / (active_gun.metadata.damage_ceiling - active_gun.metadata.damage_floor)
 				result.collider.take_damage(damage_number, damage_scale, character, result.position)
+				_add_bullet_particle(result.position, -character.camera.get_global_transform().basis.z.normalized())
+			else:
+				_add_bullet_hole(result.position)
 	_update_mag(active_gun.mag_curr - active_gun.metadata.ammo_per_shot)
 
 
@@ -203,6 +205,16 @@ func _add_bullet_hole(node_position: Vector3):
 	}
 	core.map.entities[payload["rid"]] = payload["entity_model"]
 	core_changed.emit(contexts.bullet_hole_added, payload)
+
+func _add_bullet_particle(node_position, facing):
+	var payload = {
+		"rid" : core.services.generate_rid(),
+		"entity_model" : EntityModel.new_entity(EntityMetadataModel.EntityType.BULLET_PARTICLE),
+		"position" : node_position,
+		"facing" : facing,
+	}
+	core.map.entities[payload["rid"]] = payload["entity_model"]
+	core_changed.emit(contexts.bullet_particle_added, payload)
 
 func _finish_cd(context = contexts.none):
 	core_changed.emit(context, null)

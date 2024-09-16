@@ -126,6 +126,10 @@ func _physics_process(delta):
 # Avoid putting state logic into _process
 func _process(delta):
 	object_in_view = get_object_in_view()
+	if object_in_view.has_method("take_damage"):
+		_set_target(object_in_view.rid)
+	else:
+		_set_target(-1)
 	if jump_cd.tick(delta) <= 0:
 		set_jump(false)
 	camera.fov = move_toward(camera.fov, DEFAULT_CAMERA_ZOOM * fov_multiplier, 10 / fov_multiplier)
@@ -170,6 +174,10 @@ func set_jump(boo: bool):
 	core.player.is_jump = boo
 	if boo:
 		jump_cd.reset_cd()
+	core_changed.emit(contexts.none, null)
+
+func _set_target(rid):
+	core.player.target_rid = rid
 	core_changed.emit(contexts.none, null)
 
 func set_active_gun_index(index: int, is_cycle: bool = false):

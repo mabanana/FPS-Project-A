@@ -9,12 +9,16 @@ enum Context {
 	gun_swap_started,
 	gun_shot,
 	bullet_hole_added,
+	bullet_particle_added,
 	map_updated,
 	reload_started,
 	reload_ended,
 	enemy_spawned,
 	damage_dealt,
 	player_spawned,
+	entity_died,
+	hp_changed,
+	
 }
 
 func _init() -> void:

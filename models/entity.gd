@@ -10,7 +10,7 @@ enum EntityType {
 
 # TODO: Move rid assignment to new_entity
 static func new_entity(entity_type:EntityMetadataModel.EntityType) -> EntityModel:
-	return EntityModel.new(entity_type, EntityMetadataModel.entity_metadata_map[entity_type].name, Vector3.ZERO, Vector3.ZERO, EntityMetadataModel.entity_metadata_map[entity_type].entity_type)
+	return EntityModel.new(entity_type, EntityMetadataModel.entity_metadata_map[entity_type].name, Vector3.ZERO, Vector3.ZERO, EntityMetadataModel.entity_metadata_map[entity_type].entity_type,  EntityMetadataModel.entity_metadata_map[entity_type].hp)
 
 var metadata: EntityMetadataModel:
 	get:
@@ -19,17 +19,19 @@ var metadata: EntityMetadataModel:
 var position: Vector3
 var rotation: Vector3
 var type: EntityType
-var name: :
+var name:
 	get:
 		return EntityMetadataModel.entity_metadata_map[entity_type].name
 var entity_type: EntityMetadataModel.EntityType
+var hp
 
-func _init(entity_type: EntityMetadataModel.EntityType, name: String, position: Vector3, rotation: Vector3, type: EntityType) -> void:
+func _init(entity_type: EntityMetadataModel.EntityType, name: String, position: Vector3, rotation: Vector3, type: EntityType, hp: int) -> void:
 	self.position = position
 	self.rotation = rotation
 	self.type = type
 	self.name = name
 	self.entity_type = entity_type
+	self.hp = hp
 
 func _to_string():
 	return str(name) + ", " + str(position) + ", " + str(rotation) + ", " + str(type)

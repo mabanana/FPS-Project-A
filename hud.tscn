@@ -44,27 +44,28 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("PlaceholderTexture2D_bawmo")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="StatusDisplay" type="VBoxContainer" parent="."]
 layout_mode = 1
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="HP" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HP" type="HBoxContainer" parent="StatusDisplay"]
 layout_mode = 2
 
-[node name="HpLabel" type="Label" parent="VBoxContainer/HP"]
+[node name="HpLabel" type="Label" parent="StatusDisplay/HP"]
 layout_mode = 2
 text = "Health"
 
-[node name="VSeparator" type="VSeparator" parent="VBoxContainer/HP"]
+[node name="VSeparator" type="VSeparator" parent="StatusDisplay/HP"]
 layout_mode = 2
 
-[node name="HpValue" type="Label" parent="VBoxContainer/HP"]
+[node name="HpValue" type="Label" parent="StatusDisplay/HP"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "100"
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="."]
+[node name="WeaponDisplay" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -73,36 +74,36 @@ offset_top = -40.0
 offset_right = 40.0
 grow_vertical = 0
 
-[node name="Status" type="HBoxContainer" parent="VBoxContainer2"]
+[node name="Status" type="HBoxContainer" parent="WeaponDisplay"]
 layout_mode = 2
 
-[node name="GunName" type="Label" parent="VBoxContainer2/Status"]
+[node name="GunName" type="Label" parent="WeaponDisplay/Status"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Test Gun A"
 
-[node name="ReloadIndicator" type="Label" parent="VBoxContainer2/Status"]
+[node name="ReloadIndicator" type="Label" parent="WeaponDisplay/Status"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Reloading..."
 
-[node name="Ammo" type="HBoxContainer" parent="VBoxContainer2"]
+[node name="Ammo" type="HBoxContainer" parent="WeaponDisplay"]
 layout_mode = 2
 
-[node name="Magazine" type="Label" parent="VBoxContainer2/Ammo"]
+[node name="Magazine" type="Label" parent="WeaponDisplay/Ammo"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "12"
 
-[node name="VSeparator" type="VSeparator" parent="VBoxContainer2/Ammo"]
+[node name="VSeparator" type="VSeparator" parent="WeaponDisplay/Ammo"]
 layout_mode = 2
 
-[node name="Total" type="Label" parent="VBoxContainer2/Ammo"]
+[node name="Total" type="Label" parent="WeaponDisplay/Ammo"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "64"
 
-[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer2"]
+[node name="ProgressBar" type="ProgressBar" parent="WeaponDisplay"]
 unique_name_in_owner = true
 layout_mode = 2
 value = 20.0
@@ -145,3 +146,23 @@ offset_bottom = 5.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.2618, 0.77, 0.39732, 1)
+
+[node name="TargetDisplay" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -152.5
+offset_right = 152.5
+offset_bottom = 54.0
+grow_horizontal = 2
+
+[node name="TargetHp" type="ProgressBar" parent="TargetDisplay"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="TargetLabel" type="Label" parent="TargetDisplay"]
+unique_name_in_owner = true
+layout_mode = 2

@@ -1,5 +1,6 @@
 class_name PlayerModel
 
+var target_rid : int
 var hp: int
 
 var is_ads: bool

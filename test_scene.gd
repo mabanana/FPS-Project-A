@@ -34,10 +34,7 @@ func _ready() -> void:
 	entity_hash = {}
 	pos_update_cd = Countdown.new(pos_update_interval)
 	initialize_test_scene_map()
-	_add_entity_to_map(EntityMetadataModel.EntityType.TARGET_DUMMY, Vector3(-10,1,10))
-	_add_entity_to_map(EntityMetadataModel.EntityType.TARGET_DUMMY, Vector3(10,1,-10))
-	_add_entity_to_map(EntityMetadataModel.EntityType.TARGET_DUMMY, Vector3(10,1,10))
-	_add_entity_to_map(EntityMetadataModel.EntityType.TARGET_DUMMY, Vector3(-10,1,-10))
+	
 	# Emit initial state to all observers
 	core_changed.emit(contexts.none, null)
 
@@ -50,18 +47,16 @@ func initialize_test_scene_map() -> void:
 	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunMetadataModel.GunType.TEST_GUN_D))
 	core_changed.emit(contexts.gun_swap_started, {"is_cycle": false, "prev_index" : 0})
 	# Initialize Map Model
-	for child in scene_entities.get_children():
-		var type: EntityModel.EntityType
-		if child is PlayerEntity:
-			child.rid = core.services.generate_rid()
-			core.map.entities[child.rid] = EntityModel.new_entity(EntityMetadataModel.EntityType.PLAYER)
-			core.map.entities[child.rid].position = child.position
-			entity_hash[child.rid] = child
-		elif child is InteractableEntity:
-			_add_entity_to_map(EntityMetadataModel.EntityType.GUN_ON_FLOOR, child.position)
-		elif child is EnemyEntity:
-			_add_entity_to_map(EntityMetadataModel.EntityType.TARGET_DUMMY, child.position)
+	%Player.rid = core.services.generate_rid()
+	core.map.entities[%Player.rid] = EntityModel.new_entity(EntityMetadataModel.EntityType.PLAYER)
+	core.map.entities[%Player.rid].position = %Player.position
+	entity_hash[%Player.rid] = %Player
 		
+	_add_entity_to_map(EntityMetadataModel.EntityType.TARGET_DUMMY, Vector3(-10,1,10))
+	_add_entity_to_map(EntityMetadataModel.EntityType.TARGET_DUMMY, Vector3(10,1,-10))
+	_add_entity_to_map(EntityMetadataModel.EntityType.TARGET_DUMMY, Vector3(10,1,10))
+	_add_entity_to_map(EntityMetadataModel.EntityType.TARGET_DUMMY, Vector3(-10,1,-10))
+			
 
 func _process(delta):
 	if pos_update_cd.tick(delta) <= 0:

@@ -121,6 +121,3 @@ shape = SubResource("ConvexPolygonShape3D_wku4y")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Map/Ground"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_2j4ea")
-
-[node name="UntrackedEntities" type="Node3D" parent="."]
-unique_name_in_owner = true

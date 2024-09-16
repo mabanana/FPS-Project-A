@@ -48,29 +48,26 @@ func _on_core_changed(context: CoreServices.Context, payload):
 func _spawn_node(node_scene, target_scene, spawn_context, payload, tracked = true):
 	var new_node: Node3D
 	new_node = node_scene.instantiate()
+	new_node.position = payload["position"]
 	if spawn_context == SpawnContext.gun_dropped:
-		new_node.position = payload["position"]
 		new_node.linear_velocity = payload["linear_velocity"]
 		new_node.angular_velocity = payload["angular_velocity"]
 		new_node.gun_model = payload["gun_model"]
-		new_node.rid = payload["rid"]
-	elif spawn_context == SpawnContext.bullet_hole_added:
-		new_node.position = payload["position"]
 	elif spawn_context == SpawnContext.enemy_spawned:
 		new_node.position = payload["position"]
 		new_node.rid = payload["rid"]
 		new_node.bind(core, core_changed)
 	elif spawn_context == SpawnContext.damage_dealt:
-		new_node.position = payload["position"]
 		new_node.damage_number = payload["damage_number"]
 		new_node.damage_scale = payload["damage_scale"]
 	
 	scene.add_child(new_node)
 	
-	if tracked:
-		scene.entity_hash[payload["rid"]] = new_node
-	else:
+	if payload["entity_model"].type == EntityModel.EntityType.removed:
 		core.map.entities.erase(payload["rid"])
+	else:
+		new_node.rid = payload["rid"]
+		scene.entity_hash[payload["rid"]] = new_node
 	core_changed.emit(contexts.none, null)
 
 # TODO: improve behavior for despawning node from scene

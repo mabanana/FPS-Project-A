@@ -65,7 +65,6 @@ func _spawn_node(node_scene, target_scene, spawn_context, payload):
 		new_node.rotation = payload["facing"]
 		new_node.emitting = true
 		new_node.one_shot = true
-	print(payload["entity_model"].metadata.name)
 	target_scene.add_child(new_node)
 	
 	if payload["entity_model"].type == EntityModel.EntityType.removed:

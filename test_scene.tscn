@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://bgp15f5w735mi"]
+[gd_scene load_steps=20 format=3 uid="uid://bgp15f5w735mi"]
 
 [ext_resource type="Script" path="res://test_scene.gd" id="1_00gik"]
 [ext_resource type="PackedScene" uid="uid://cix1j6ynfe7pn" path="res://hud.tscn" id="1_j5fux"]
@@ -63,6 +63,16 @@ points = PackedVector3Array(304.762, 4.7619, 304.762, -304.762, -4.7619, -304.76
 [sub_resource type="BoxShape3D" id="BoxShape3D_2j4ea"]
 size = Vector3(600, 2, 600)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nni6t"]
+albedo_color = Color(0.088, 0.1408, 0.44, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_looji"]
+material = SubResource("StandardMaterial3D_nni6t")
+size = Vector3(1, 10, 10)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_rccku"]
+data = PackedVector3Array(-0.5, 5, 5, 0.5, 5, 5, -0.5, -5, 5, 0.5, 5, 5, 0.5, -5, 5, -0.5, -5, 5, 0.5, 5, -5, -0.5, 5, -5, 0.5, -5, -5, -0.5, 5, -5, -0.5, -5, -5, 0.5, -5, -5, 0.5, 5, 5, 0.5, 5, -5, 0.5, -5, 5, 0.5, 5, -5, 0.5, -5, -5, 0.5, -5, 5, -0.5, 5, -5, -0.5, 5, 5, -0.5, -5, -5, -0.5, 5, 5, -0.5, -5, 5, -0.5, -5, -5, 0.5, 5, 5, -0.5, 5, 5, 0.5, 5, -5, -0.5, 5, 5, -0.5, 5, -5, 0.5, 5, -5, -0.5, -5, 5, 0.5, -5, 5, -0.5, -5, -5, 0.5, -5, 5, 0.5, -5, -5, -0.5, -5, -5)
+
 [node name="Test Scene" type="Node3D"]
 script = ExtResource("1_00gik")
 pos_update_interval = 15
@@ -114,3 +124,13 @@ shape = SubResource("ConvexPolygonShape3D_wku4y")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Map/Ground"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_2j4ea")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.4727, 8, 0)
+mesh = SubResource("BoxMesh_looji")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Map/MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/MeshInstance3D/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_rccku")

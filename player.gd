@@ -89,7 +89,8 @@ func _input(event):
 	elif event.is_action_pressed("ui_accept"):
 		set_jump(true)
 	elif event.is_action_pressed("sprint"):
-		set_movement_state(PlayerModel.MovementState.sprinting)
+		if !core.player.is_ads:
+			set_movement_state(PlayerModel.MovementState.sprinting)
 	
 	if event.is_action_pressed("left_click"):
 		if !is_as(PlayerModel.ActionState.reloading) and !is_as(PlayerModel.ActionState.throwing):
@@ -131,6 +132,7 @@ func _process(delta):
 	object_in_view = get_object_in_view()
 	if jump_cd.tick(delta) <= 0:
 		set_jump(false)
+	camera.fov = move_toward(camera.fov, DEFAULT_CAMERA_ZOOM * fov_multiplier, 10 / fov_multiplier)
 
 func get_object_in_view():
 	var query = gun_slot.cast_ray_towards_mouse()
@@ -159,6 +161,7 @@ func _on_core_changed(context, payload):
 func set_ads(boo: bool):
 	if core.player.is_ads == boo:
 		return
+	print("Aiming down sights set to " + ("true" if boo else "false"))
 	core.player.is_ads = boo
 	core_changed.emit(contexts.none, null)
 	

@@ -31,7 +31,7 @@ func _process(delta):
 	if shoot_cd.tick(delta) <= 0:
 		_finish_cd()
 	if character.is_as(PlayerModel.ActionState.reloading) and reload_cd.tick(delta) <= 0:
-			_finish_cd()
+		_finish_cd(contexts.reload_ended)
 
 func reload():
 	if not active_gun or active_gun.metadata.mag_size == active_gun.mag_curr:
@@ -50,6 +50,7 @@ func shoot():
 				var damage_scale = float(damage_number - active_gun.metadata.damage_floor) / (active_gun.metadata.damage_ceiling - active_gun.metadata.damage_floor)
 				result.collider.take_damage(damage_number, damage_scale, character, result.position)
 	_update_mag(active_gun.mag_curr - active_gun.metadata.ammo_per_shot)
+
 
 func pickup_gun(gun_model: GunModel, gun_id: int):
 	_add_gun_to_inventory(gun_model)
@@ -85,10 +86,10 @@ func set_camera_zoom(gun_zoom: float, boo: bool):
 
 func finish_reload():
 	reset_gun_slot()
-	character.set_action_state(PlayerModel.ActionState.idling)
 	var new_mag = min(core.inventory.ammo, active_gun.metadata.mag_size)
 	_set_ammo(core.inventory.ammo - new_mag + active_gun.mag_curr)
 	_update_mag(new_mag)
+	character.set_action_state(PlayerModel.ActionState.idling)
 
 func reset_gun_slot():
 	shoot_cd.reset_cd(0)
@@ -112,19 +113,22 @@ func _on_core_changed(context, payload):
 	if len(core.inventory.guns) > 0:
 		if context == contexts.gun_swap_started:
 			_set_active_gun(core.inventory.active_gun_index, payload["is_cycle"], payload["prev_index"])
+		elif context == contexts.reload_started:
+			reload()
+		elif context == contexts.reload_ended:
+			finish_reload()
+		
 		if core.player.is_ads:
 			set_camera_zoom(active_gun.metadata.zoom, true)
 		else:
 			set_camera_zoom(0, false)
+		print(core.player.action_state)
 		if core.player.action_state == PlayerModel.ActionState.triggering and shoot_cd.tick(0) <= 0:
 			if active_gun.mag_curr > 0:
 				shoot()
 			if active_gun.mag_curr <= 0:
 				character.set_action_state(PlayerModel.ActionState.reloading)
-		elif context == contexts.reload_started:
-			reload()
-		elif core.player.action_state == PlayerModel.ActionState.reloading and reload_cd.tick(0) <= 0:
-			finish_reload()
+		
 		
 	# Logs
 	if context == contexts.gun_dropped and not active_gun:
@@ -197,5 +201,5 @@ func _add_bullet_hole(node_position: Vector3):
 	core.map.entities[payload["rid"]] = payload["entity_model"]
 	core_changed.emit(contexts.bullet_hole_added, payload)
 
-func _finish_cd():
-	core_changed.emit(contexts.none, null)
+func _finish_cd(context = contexts.none):
+	core_changed.emit(context, null)

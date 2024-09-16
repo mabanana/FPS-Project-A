@@ -19,6 +19,7 @@ var rid: int
 var object_in_view
 var hp : int = 100
 var input_dir: Vector2
+var trigger_down : bool
 var fov_multiplier: float
 
 var jump_cd: Countdown
@@ -87,9 +88,11 @@ func _input(event):
 			set_movement_state(PlayerModel.MovementState.sprinting)
 	
 	if event.is_action_pressed("left_click"):
+		trigger_down = true
 		if !is_as(PlayerModel.ActionState.reloading) and !is_as(PlayerModel.ActionState.throwing):
 			set_action_state(PlayerModel.ActionState.triggering)
 	elif event.is_action_released("left_click"):
+		trigger_down = false
 		if is_as(PlayerModel.ActionState.triggering):
 			set_action_state(PlayerModel.ActionState.idling)
 	if event.is_action_pressed("right_click"):
@@ -177,8 +180,8 @@ func set_active_gun_index(index: int, is_cycle: bool = false):
 func set_action_state(state: PlayerModel.ActionState):
 	if core.player.action_state == state:
 		return
-	_on_action_change(state, core.player.action_state)
 	core.player.action_state = state
+	_on_action_change(state, core.player.action_state)
 	if state == PlayerModel.ActionState.reloading:
 		core_changed.emit(contexts.reload_started, null)
 	else:
@@ -187,8 +190,8 @@ func set_action_state(state: PlayerModel.ActionState):
 func set_movement_state(state: PlayerModel.MovementState):
 	if core.player.movement_state == state:
 		return
-	_on_movement_change(state,  core.player.movement_state)
 	core.player.movement_state = state
+	_on_movement_change(state,  core.player.movement_state)
 	core_changed.emit(contexts.none, null)
 
 func is_ms(state: PlayerModel.MovementState):
@@ -201,6 +204,8 @@ func _on_action_change(next_state: PlayerModel.ActionState, prev_state: PlayerMo
 	prints("Action state changed to " + str(next_state))
 	if next_state != PlayerModel.ActionState.idling:
 		set_movement_state(PlayerModel.MovementState.standing)
+	elif trigger_down:
+		set_action_state(PlayerModel.ActionState.triggering)
 	pass
 
 func _on_movement_change(next_state: PlayerModel.MovementState, prev_state: PlayerModel.MovementState):
@@ -210,7 +215,9 @@ func _on_movement_change(next_state: PlayerModel.MovementState, prev_state: Play
 		set_ads(false)
 		set_action_state(PlayerModel.ActionState.idling)
 		anim.play("sprint_fov")
+	
 	if prev_state == PlayerModel.MovementState.sprinting:
 		# TODO: find a better implementation
 		anim.stop()
+	
 	pass

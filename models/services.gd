@@ -11,6 +11,7 @@ enum Context {
 	bullet_hole_added,
 	map_updated,
 	reload_started,
+	reload_ended,
 	enemy_spawned,
 	damage_dealt,
 	player_spawned,

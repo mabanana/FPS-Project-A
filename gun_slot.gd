@@ -41,7 +41,10 @@ func reload():
 func shoot():
 	shoot_cd.reset_cd(UNIT / active_gun.metadata.fire_rate)
 	for i in range(core.inventory.active_gun.metadata.pellet_count):
-		var query = cast_ray_towards_mouse(active_gun.metadata.accuracy)
+		var acc = active_gun.metadata.accuracy
+		if core.player.is_ads:
+			acc = MAX_ACCURACY - (MAX_ACCURACY - active_gun.metadata.accuracy) / active_gun.metadata.zoom
+		var query = cast_ray_towards_mouse(acc)
 		var result = get_world_3d().direct_space_state.intersect_ray(query)
 		if result:
 			_add_bullet_hole(result.position)

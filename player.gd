@@ -157,6 +157,9 @@ func _on_core_changed(context, payload):
 func set_ads(boo: bool):
 	if core.player.is_ads == boo:
 		return
+	if !(is_as(PlayerModel.ActionState.triggering) or is_as(PlayerModel.ActionState.idling)):
+		core.player.is_ads = false
+		return
 	print("Aiming down sights set to " + ("true" if boo else "false"))
 	core.player.is_ads = boo
 	core_changed.emit(contexts.none, null)

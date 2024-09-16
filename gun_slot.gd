@@ -24,6 +24,7 @@ func _ready():
 	character = get_parent()
 	shoot_cd = Countdown.new(0)
 	reload_cd = Countdown.new(0)
+	_set_active_gun(0)
 
 func _process(delta):
 	# Only timers
@@ -61,7 +62,7 @@ func drop_gun():
 	throw_vector = inaccuratize_vector(throw_vector, THROW_ACCURACY)
 	_drop_gun_on_map(active_gun, throw_vector)
 	_remove_active_gun()
-	_set_active_gun(core.inventory.active_gun_index - 1)
+	
 
 # TODO: move utilities to services or player script
 
@@ -143,17 +144,10 @@ func _add_gun_to_inventory(gun_model: GunModel) -> void:
 
 func _remove_active_gun() -> void:
 	core.inventory.guns.remove_at(core.inventory.active_gun_index)
-	while core.inventory.active_gun_index > len(core.inventory.guns) - 1 and core.inventory.active_gun_index > 0:
-		core.inventory.active_gun_index -= 1
-	core_changed.emit(contexts.none, null)
-
-func _next_active_gun() -> void:
-	var new_index = core.inventory.active_gun_index + 1 
-	if new_index > len(core.inventory.guns) - 1:
-		new_index =  0
-	reset_gun_slot()
-	core.inventory.active_gun_index = new_index
-	active_gun = core.inventory.active_gun
+	if len(core.inventory.guns) == 0:
+		_set_active_gun(0)
+	else:
+		_set_active_gun(core.inventory.active_gun_index - 1)
 	core_changed.emit(contexts.none, null)
 
 func _set_active_gun(index: int, is_cycle: bool = false, prev_index: int = 0) -> void:
@@ -166,6 +160,7 @@ func _set_active_gun(index: int, is_cycle: bool = false, prev_index: int = 0) ->
 	reset_gun_slot()
 	core.inventory.active_gun_index = new_index
 	active_gun = core.inventory.active_gun
+	prints("Active gun is", str(core.inventory.active_gun_index))
 	core_changed.emit(contexts.none, null)
 
 func _drop_gun_on_map(active_gun: GunModel, throw_vector) -> void:

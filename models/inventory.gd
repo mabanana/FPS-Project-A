@@ -6,7 +6,6 @@ var ammo: int
 
 func _init() -> void:
 	guns = []
-	active_gun_index = 0
 	
 	# Temporary placeholder values
 	ammo = 5000

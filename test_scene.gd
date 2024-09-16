@@ -5,6 +5,7 @@ class_name TestScene
 var core: CoreModel
 signal core_changed(context, payload)
 var contexts
+var entity_spawner
 # TODO Compartmentalize responsibilities into helper classes e.g. entity spawner
 @onready var scene_entities: Node3D = %SceneEntities
 @onready var dropped_gun: PackedScene = preload("res://gun_on_floor.tscn")
@@ -19,10 +20,13 @@ var pos_update_cd: Countdown
 func _ready() -> void:
 	# Load all gun metadata
 	GunMetadataModel.init_gun_metadata_map()
+	EntityMetadataModel.init_entity_metadata_map()
 	# Instantiate core
 	core = CoreModel.new()
+	entity_spawner = EntitySpawner.new(self)
 	# Add bindings to all relevant observers
 	# TODO: bind enemies and NPCs to core and core_changed like player entity
+	entity_spawner.bind(core, core_changed)
 	%Player.bind(core, core_changed)
 	%Hud.bind(core, core_changed)
 	core_changed.connect(_on_core_changed)
@@ -59,24 +63,8 @@ func _process(delta):
 	if pos_update_cd.tick(delta) <= 0:
 		_pos_update()
 
-# Updates Scene to match the state of Core Model
 func _on_core_changed(context, payload):
-	# Spawns gun node on the map when signal is received
-	if context == core.services.Context.gun_dropped:
-		print("Gun Node Dropped!")
-		var new_dropped_gun = dropped_gun.instantiate()
-		new_dropped_gun.position = payload["position"]
-		new_dropped_gun.linear_velocity = payload["linear_velocity"]
-		new_dropped_gun.angular_velocity = payload["angular_velocity"]
-		new_dropped_gun.gun_model = payload["gun_model"]
-		new_dropped_gun.id = payload["id"]
-		scene_entities.add_child(new_dropped_gun)
-		entity_hash[payload["id"]] = new_dropped_gun
-	# Removes Gun node from the map when signal is received
-	if context == contexts.gun_picked_up:
-		# TODO: improve behavior for despawning node from scene
-		entity_hash[payload["id"]].queue_free()
-		entity_hash.erase(payload["id"])
+	pass
 
 func _pos_update():
 	var player_key

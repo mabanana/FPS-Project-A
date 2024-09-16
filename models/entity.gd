@@ -8,6 +8,13 @@ enum EntityType {
 	removed
 }
 
+static func new_entity(entity_type:EntityMetadataModel.EntityType) -> EntityModel:
+	return EntityModel.new(EntityMetadataModel.entity_metadata_map[entity_type].name, Vector3.ZERO, Vector3.ZERO, EntityMetadataModel.entity_metadata_map[entity_type].entity_type)
+
+var metadata: EntityMetadataModel:
+	get:
+		return EntityMetadataModel.entity_metadata_map[type]
+
 var position: Vector3
 var rotation: Vector3
 var type: EntityType

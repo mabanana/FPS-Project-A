@@ -68,6 +68,7 @@ func drop_gun():
 	signal_payload["gun_model"] = active_gun
 	signal_payload["linear_velocity"] = throw_vector * THROW_FORCE / active_gun.metadata.mass
 	signal_payload["angular_velocity"] = throw_vector.cross(Vector3.UP) * THROW_FORCE / active_gun.metadata.mass
+	signal_payload["entity_model"] = EntityModel.new_entity(EntityMetadataModel.EntityType.GUN_ON_FLOOR)
 	_drop_gun_on_map(active_gun, signal_payload)
 	_remove_active_gun()
 	_set_active_gun(core.inventory.active_gun_index - 1)

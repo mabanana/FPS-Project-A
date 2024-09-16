@@ -75,5 +75,4 @@ func _remove_node(node):
 	node.queue_free()
 
 func _get_entity_scene(entity: EntityModel):
-	prints("scene for", entity.metadata.name, "found")
 	return node_scenes[entity.metadata.oid]

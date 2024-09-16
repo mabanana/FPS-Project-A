@@ -30,7 +30,6 @@ func bind(core, core_changed):
 func _on_core_changed(context: CoreServices.Context, payload):
 	if context in [
 		contexts.gun_dropped,
-		contexts.gun_picked_up,
 		contexts.bullet_hole_added,
 		contexts.enemy_spawned,
 		contexts.damage_dealt,

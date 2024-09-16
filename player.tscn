@@ -1,0 +1,73 @@
+[gd_scene load_steps=8 format=3 uid="uid://ceu5ajrnb7o3k"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_uj47b"]
+[ext_resource type="Script" path="res://gun_slot.gd" id="2_mm0q3"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_roha1"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_d7rov"]
+
+[sub_resource type="Animation" id="Animation_dxecw"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("%Camera3D:fov")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [75.0]
+}
+
+[sub_resource type="Animation" id="Animation_bts6k"]
+resource_name = "sprint_fov"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("%Camera3D:fov")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [75.0, 80.0, 75.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_80y3y"]
+_data = {
+"RESET": SubResource("Animation_dxecw"),
+"sprint_fov": SubResource("Animation_bts6k")
+}
+
+[node name="Player" type="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("1_uj47b")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_roha1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D"]
+cast_shadow = 3
+mesh = SubResource("BoxMesh_d7rov")
+
+[node name="GunSlot" type="Node3D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_mm0q3")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+libraries = {
+"": SubResource("AnimationLibrary_80y3y")
+}

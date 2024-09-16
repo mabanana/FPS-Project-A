@@ -3,7 +3,7 @@ class_name EnemyEntity
 
 @onready var damage_number: PackedScene = preload("res://damage_number.tscn")
 const POSITION_FORESHORTEN = 1
-var id: int
+var rid: int
 
 # TODO: add children to untracked entities
 func take_damage(damage_floor, damage_ceiling, dealer, damage_position):

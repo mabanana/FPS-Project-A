@@ -2,7 +2,7 @@ extends RigidBody3D
 class_name InteractableEntity
 
 var gun_model: GunModel
-var id: int
+var rid: int
 
 func on_interact():
 	return gun_model

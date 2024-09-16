@@ -16,7 +16,7 @@ const SPRINT_MULTIPLIER = 1.6
 const JUMP_BUFFER = 20
 const SPRINT_FOV_CD = 100
 const DEFAULT_CAMERA_ZOOM = 75
-var id: int
+var rid: int
 var object_in_view
 var hp : int = 100
 var input_dir
@@ -72,7 +72,7 @@ func _input(event):
 		gun_slot.drop_gun()
 	elif event.is_action_pressed("interact"):
 		if object_in_view.has_method("on_interact"):
-			gun_slot.pickup_gun(object_in_view.on_interact(), object_in_view.id)
+			gun_slot.pickup_gun(object_in_view.on_interact(), object_in_view.rid)
 		else:
 			print("Nothing to interact with...")
 	elif event.is_action_pressed("cycle_inventory"):

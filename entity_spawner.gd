@@ -11,13 +11,17 @@ var node_scenes: Dictionary
 
 enum SpawnContext {
 	gun_dropped,
-	bullet_hole_added
+	bullet_hole_added,
+	enemy_spawned,
 }
 
 func _init(scene):
 	self.scene = scene
 	node_scenes = {1001: preload("res://gun_on_floor.tscn"),
-	5001: preload("res://bullet_hole.tscn")}
+	5001: preload("res://bullet_hole.tscn"),
+	2001: preload("res://player.tscn"),
+	3001: preload("res://target_dummy.tscn"),
+	}
 
 func bind(core, core_changed):
 	self.core = core
@@ -31,9 +35,11 @@ func _on_core_changed(context: CoreServices.Context, payload):
 	if context == contexts.gun_dropped:
 		_spawn_node(_get_entity_scene(payload["entity_model"]), scene, SpawnContext.gun_dropped, payload)
 	elif context == contexts.gun_picked_up:
-		_remove_node(scene.entity_hash[payload["id"]])
+		_remove_node(scene.entity_hash[payload["rid"]])
 	elif context == contexts.bullet_hole_added:
 		_spawn_node(_get_entity_scene(payload["entity_model"]), scene, SpawnContext.bullet_hole_added, payload, false)
+	elif context == contexts.enemy_spawned:
+		_spawn_node(_get_entity_scene(payload["entity_model"]), scene, SpawnContext.enemy_spawned, payload)
 
 func _spawn_node(node_scene, target_scene, spawn_context, payload, tracked = true):
 	var new_node: Node3D
@@ -43,21 +49,24 @@ func _spawn_node(node_scene, target_scene, spawn_context, payload, tracked = tru
 		new_node.linear_velocity = payload["linear_velocity"]
 		new_node.angular_velocity = payload["angular_velocity"]
 		new_node.gun_model = payload["gun_model"]
-		new_node.id = payload["id"]
+		new_node.rid = payload["rid"]
 	elif spawn_context == SpawnContext.bullet_hole_added:
 		new_node.position = payload["position"]
+	elif spawn_context == SpawnContext.enemy_spawned:
+		new_node.position = payload["position"]
+		new_node.rid = payload["rid"]
 	
 	scene.add_child(new_node)
 	
 	if tracked:
-		scene.entity_hash[payload["id"]] = new_node
+		scene.entity_hash[payload["rid"]] = new_node
 	else:
-		core.map.entities.erase(payload["id"])
+		core.map.entities.erase(payload["rid"])
 	core_changed.emit(contexts.none, null)
 
 # TODO: improve behavior for despawning node from scene
 func _remove_node(node):
-	scene.entity_hash.erase(node.id)
+	scene.entity_hash.erase(node.rid)
 	node.queue_free()
 
 func _get_entity_scene(entity: EntityModel):

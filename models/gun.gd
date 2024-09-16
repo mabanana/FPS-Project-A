@@ -1,16 +1,16 @@
 class_name GunModel
 
-var id: int
+var rid: int
 var type: GunMetadataModel.GunType
 var mag_curr: int
 
-func _init(id: int, type: GunMetadataModel.GunType, mag_curr: int) -> void:
-	self.id = id
+func _init(rid: int, type: GunMetadataModel.GunType, mag_curr: int) -> void:
+	self.rid = rid
 	self.type = type
 	self.mag_curr = mag_curr
 
-static func new_with_full_ammo(id: int, type: GunMetadataModel.GunType) -> GunModel:
-	return GunModel.new(id, type, GunMetadataModel.gun_metadata_map[type].mag_size)
+static func new_with_full_ammo(rid: int, type: GunMetadataModel.GunType) -> GunModel:
+	return GunModel.new(rid, type, GunMetadataModel.gun_metadata_map[type].mag_size)
 
 var metadata: GunMetadataModel:
 	get:

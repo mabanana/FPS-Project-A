@@ -13,7 +13,7 @@ var entity_spawner
 
 const UNIT = 100
 
-# Hashmap { id : object_ref }
+# Hashmap { rid : object_ref }
 var entity_hash: Dictionary
 var pos_update_cd: Countdown
 
@@ -35,6 +35,12 @@ func _ready() -> void:
 	entity_hash = {}
 	pos_update_cd = Countdown.new(pos_update_interval)
 	initialize_test_scene_map()
+	_add_entity_to_map(EntityMetadataModel.EntityType.TARGET_DUMMY, Vector3(0,1,-10))
+	_add_entity_to_map(EntityMetadataModel.EntityType.TARGET_DUMMY, Vector3(10,1,-10))
+	_add_entity_to_map(EntityMetadataModel.EntityType.TARGET_DUMMY, Vector3(0,1,10))
+	_add_entity_to_map(EntityMetadataModel.EntityType.TARGET_DUMMY, Vector3(-10,1,-10))
+	print(core.map.entities)
+	print(entity_hash)
 	# Emit initial state to all observers
 	core_changed.emit(contexts.none, null)
 
@@ -48,18 +54,18 @@ func initialize_test_scene_map() -> void:
 	core_changed.emit(contexts.gun_swap_started, {"is_cycle": false, "prev_index" : 0})
 	# Initialize Map Model
 	for child in scene_entities.get_children():
-		child.id = core.services.generate_id()
 		var type: EntityModel.EntityType
 		if child is PlayerEntity:
-			core.map.entities[child.id] = EntityModel.new_entity(EntityMetadataModel.EntityType.PLAYER)
-			core.map.entities[child.id].position = child.position
+			child.rid = core.services.generate_rid()
+			print("player id is " + str(child.rid))
+			core.map.entities[child.rid] = EntityModel.new_entity(EntityMetadataModel.EntityType.PLAYER)
+			core.map.entities[child.rid].position = child.position
+			entity_hash[child.rid] = child
 		elif child is InteractableEntity:
-			core.map.entities[child.id] = EntityModel.new_entity(EntityMetadataModel.EntityType.GUN_ON_FLOOR)
-			core.map.entities[child.id].position = child.position
+			_add_entity_to_map(EntityMetadataModel.EntityType.GUN_ON_FLOOR, child.position)
 		elif child is EnemyEntity:
-			core.map.entities[child.id] = EntityModel.new_entity(EntityMetadataModel.EntityType.TARGET_DUMMY)
-			core.map.entities[child.id].position = child.position
-		entity_hash[child.id] = child
+			_add_entity_to_map(EntityMetadataModel.EntityType.TARGET_DUMMY, child.position)
+		
 
 func _process(delta):
 	if pos_update_cd.tick(delta) <= 0:
@@ -89,3 +95,32 @@ func _pos_update():
 			relative_pos.y *= -1
 			positions.append(relative_pos)
 	core_changed.emit(contexts.map_updated, {"positions" : positions})
+
+func _add_entity_to_map(entity_type: EntityMetadataModel.EntityType, position: Vector3):
+	var rid = core.services.generate_rid()
+	core.map.entities[rid] = EntityModel.new_entity(entity_type)
+	core.map.entities[rid].position = position
+	if entity_type == EntityMetadataModel.EntityType.TARGET_DUMMY:
+		var payload = {
+			"position" : position,
+			"rid" : rid,
+			"entity_model" : core.map.entities[rid],
+		}
+		core_changed.emit(contexts.enemy_spawned, payload)
+	elif entity_type == EntityMetadataModel.EntityType.GUN_ON_FLOOR:
+		var payload = {
+			"position" : position,
+			"rid" : rid,
+			"entity_model" : core.map.entities[rid],
+			"gun_model" : GunModel.new_with_full_ammo(1, GunMetadataModel.GunType.TEST_GUN_D),
+			"linear_velocity" : 0,
+			"angular_velocity" : 0,
+		}
+		core_changed.emit(contexts.gun_dropped, payload)
+	elif entity_type == EntityMetadataModel.EntityType.PLAYER:
+		var payload = {
+			"position" : position,
+			"rid" : rid,
+			"entity_model" : core.map.entities[rid],
+		}
+	

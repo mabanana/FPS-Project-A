@@ -35,10 +35,10 @@ func _process(delta):
 
 # TODO: also render map navmesh underneath and clip contents
 func _update(positions):
+	for child in $Panel.get_children():
+		if child != %ColorRect:
+			child.queue_free()
 	for pos in positions:
-		for child in $Panel.get_children():
-			if child != %ColorRect:
-				child.queue_free()
 		var pos_2d = Vector2(pos.x, pos.z)
 		if pos_2d.length() < detect_dist / 2:
 			var new_map_dot = map_dot.instantiate()

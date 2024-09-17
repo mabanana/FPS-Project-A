@@ -3,9 +3,11 @@
 [ext_resource type="Script" path="res://player.gd" id="1_uj47b"]
 [ext_resource type="Script" path="res://gun_slot.gd" id="2_mm0q3"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_lum0b"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_leku3"]
+height = 1.8
 
-[sub_resource type="BoxMesh" id="BoxMesh_d7rov"]
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_rhwuk"]
+height = 1.8
 
 [sub_resource type="Animation" id="Animation_dxecw"]
 length = 0.001
@@ -56,12 +58,12 @@ unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-shape = SubResource("SphereShape3D_lum0b")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.103888, 0)
+shape = SubResource("CapsuleShape3D_leku3")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D"]
 cast_shadow = 3
-mesh = SubResource("BoxMesh_d7rov")
+mesh = SubResource("CapsuleMesh_rhwuk")
 
 [node name="GunSlot" type="Node3D" parent="."]
 unique_name_in_owner = true

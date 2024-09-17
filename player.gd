@@ -127,7 +127,7 @@ func _physics_process(delta):
 # Avoid putting state logic into _process
 func _process(delta):
 	object_in_view = get_object_in_view()
-	if object_in_view.has_method("take_damage"):
+	if object_in_view and object_in_view.has_method("take_damage"):
 		_set_target(object_in_view.rid)
 	else:
 		_set_target(-1)

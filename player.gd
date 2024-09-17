@@ -20,7 +20,8 @@ var object_in_view
 var hp : int = 100
 var input_dir: Vector2
 var trigger_down : bool
-var fov_multiplier: float
+@export var fov_multiplier: float
+@export var fov_modifier: float
 
 var jump_cd: Countdown
 var sprint_cd: Countdown
@@ -83,7 +84,7 @@ func _input(event):
 	elif event.is_action_pressed("ui_accept"):
 		set_jump(true)
 	elif event.is_action_pressed("sprint"):
-		if !core.player.is_ads:
+		if !core.player.is_ads and is_ms(PlayerModel.MovementState.walking):
 			set_movement_state(PlayerModel.MovementState.sprinting)
 	
 	if event.is_action_pressed("left_click"):
@@ -132,7 +133,7 @@ func _process(delta):
 		_set_target(-1)
 	if jump_cd.tick(delta) <= 0:
 		set_jump(false)
-	camera.fov = move_toward(camera.fov, DEFAULT_CAMERA_ZOOM * fov_multiplier, 10 / fov_multiplier)
+	camera.fov = move_toward(camera.fov, fov_modifier + DEFAULT_CAMERA_ZOOM * fov_multiplier, 10 / fov_multiplier)
 
 func get_object_in_view():
 	var query = gun_slot.cast_ray_towards_mouse()
@@ -165,6 +166,12 @@ func set_ads(boo: bool):
 		core.player.is_ads = false
 		return
 	print("Aiming down sights set to " + ("true" if boo else "false"))
+	
+	if boo:
+		gun_slot.set_camera_zoom(gun_slot.active_gun.metadata.zoom, true)
+	else:
+		gun_slot.set_camera_zoom(0, false)
+	
 	core.player.is_ads = boo
 	core_changed.emit(contexts.none, null)
 	
@@ -190,8 +197,9 @@ func set_active_gun_index(index: int, is_cycle: bool = false):
 func set_action_state(state: PlayerModel.ActionState):
 	if core.player.action_state == state:
 		return
+	var prev_state = core.player.action_state
 	core.player.action_state = state
-	_on_action_change(state, core.player.action_state)
+	_on_action_change(state, prev_state)
 	if state == PlayerModel.ActionState.reloading:
 		core_changed.emit(contexts.reload_started, null)
 	else:
@@ -200,8 +208,9 @@ func set_action_state(state: PlayerModel.ActionState):
 func set_movement_state(state: PlayerModel.MovementState):
 	if core.player.movement_state == state:
 		return
+	var prev_state = core.player.movement_state
 	core.player.movement_state = state
-	_on_movement_change(state,  core.player.movement_state)
+	_on_movement_change(state,  prev_state)
 	core_changed.emit(contexts.none, null)
 
 func is_ms(state: PlayerModel.MovementState):
@@ -227,7 +236,5 @@ func _on_movement_change(next_state: PlayerModel.MovementState, prev_state: Play
 		anim.play("sprint_fov")
 	
 	if prev_state == PlayerModel.MovementState.sprinting:
-		# TODO: find a better implementation
-		anim.stop()
-	
+		anim.seek(anim.get_animation(anim.current_animation).length)
 	pass

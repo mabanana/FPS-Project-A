@@ -129,12 +129,6 @@ func _on_core_changed(context, payload):
 			if active_gun.mag_curr <= 0:
 				character.set_action_state(PlayerModel.ActionState.reloading)
 		
-		if core.player.is_ads:
-			set_camera_zoom(active_gun.metadata.zoom, true)
-		else:
-			set_camera_zoom(0, false)
-		
-		
 	# Logs
 	if context == contexts.gun_dropped and not active_gun:
 		print("No gun equipped")

@@ -236,5 +236,6 @@ func _on_movement_change(next_state: PlayerModel.MovementState, prev_state: Play
 		anim.play("sprint_fov")
 	
 	if prev_state == PlayerModel.MovementState.sprinting:
-		anim.seek(anim.get_animation(anim.current_animation).length)
+		if anim.current_animation:
+			anim.seek(anim.get_animation(anim.current_animation).length)
 	pass

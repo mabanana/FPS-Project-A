@@ -25,3 +25,5 @@ mesh = SubResource("BoxMesh_d0x4v")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_ye45r")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]

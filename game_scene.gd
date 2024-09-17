@@ -63,7 +63,7 @@ func _pos_update(origin_rid: ):
 			relative_pos = relative_pos.rotated(Vector3.UP, -entities[origin_key].rotation.y)
 			relative_pos.y *= -1
 			positions.append(relative_pos)
-	core_changed.emit(contexts.map_updated, {"positions" : positions})
+	core_changed.emit(contexts.map_updated, {"positions" : positions, "player_pos" : entities[origin_key].position})
 
 func _add_entity_to_map(entity_type: EntityMetadataModel.EntityType, position: Vector3):
 	var rid = core.services.generate_rid()

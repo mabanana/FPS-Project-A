@@ -17,6 +17,7 @@ func _init(scene):
 	5003: preload("res://bullet_particle.tscn"),
 	2001: preload("res://player.tscn"),
 	3001: preload("res://target_dummy.tscn"),
+	3002: preload("res://moving_box_enemy.tscn"),
 	}
 
 func bind(core, core_changed):

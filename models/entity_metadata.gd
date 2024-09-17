@@ -7,6 +7,7 @@ enum EntityType {
 	TARGET_DUMMY,
 	DAMAGE_NUMBER,
 	BULLET_PARTICLE,
+	MOVING_BOX,
 }
 
 var name: String
@@ -50,6 +51,11 @@ func _init(
 			self.entity_type = EntityModel.EntityType.enemy
 			self.oid = 3001
 			self.hp = 1000
+		EntityType.MOVING_BOX:
+			self.name = "Moving Box"
+			self.entity_type = EntityModel.EntityType.enemy
+			self.oid = 3002
+			self.hp = 100
 		EntityType.DAMAGE_NUMBER:
 			self.name = "Damage Number"
 			self.entity_type = EntityModel.EntityType.removed

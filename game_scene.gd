@@ -69,7 +69,7 @@ func _add_entity_to_map(entity_type: EntityMetadataModel.EntityType, position: V
 	var rid = core.services.generate_rid()
 	core.map.entities[rid] = EntityModel.new_entity(entity_type)
 	core.map.entities[rid].position = position
-	if entity_type == EntityMetadataModel.EntityType.TARGET_DUMMY:
+	if EntityMetadataModel.entity_metadata_map[entity_type].entity_type == EntityModel.EntityType.enemy:
 		var payload = {
 			"position" : position,
 			"rid" : rid,

@@ -39,7 +39,7 @@ func _on_core_changed(context: CoreServices.Context, payload):
 		_spawn_node(_get_entity_scene(payload["entity_model"]), scene, context, payload)
 	elif context in [
 		contexts.gun_picked_up, 
-		contexts.entity_died
+		contexts.entity_died,
 		]:
 		_remove_node(scene.entity_hash[payload["rid"]])
 
@@ -75,8 +75,16 @@ func _spawn_node(node_scene, target_scene, spawn_context, payload):
 
 # TODO: improve behavior for despawning node from scene
 func _remove_node(node):
+	prints(node.rid, "removed")
+	if core.player.target_rid == node.rid:
+		core.player.target_rid = 0
+		core_changed.emit(contexts.none, null)
+	core.map.entities.erase(node.rid)
 	scene.entity_hash.erase(node.rid)
 	node.queue_free()
 
 func _get_entity_scene(entity: EntityModel):
-	return node_scenes[entity.metadata.oid]
+	var oid = entity.metadata.oid
+	if node_scenes.has(oid):
+		return node_scenes[oid]
+	else: print("Entity Scene not found!")

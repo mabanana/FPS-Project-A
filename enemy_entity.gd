@@ -1,6 +1,11 @@
 extends CharacterBody3D
 class_name EnemyEntity
 
+enum EnemyState {
+	idling,
+	chasing,
+}
+var current_state
 const POSITION_FORESHORTEN = 1
 var rid: int
 var core: CoreModel

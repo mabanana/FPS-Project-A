@@ -17,6 +17,7 @@ func _init(nav_agent_node: NavigationAgent3D):
 	nav_agent = nav_agent_node
 
 func _on_core_changed(context, payload):
+	# TODO: allow for setting target pos to non_player positions
 	if context == contexts.map_updated:
 		var player_pos = payload["player_pos"]
 		target_position = player_pos

@@ -59,7 +59,7 @@ func _pos_update(origin_rid: ):
 	var positions: Array[Vector3] = []
 	for key in entities.keys():
 		if entities[key].type == EntityModel.EntityType.enemy:
-			var relative_pos = entities[key].position - entities[origin_key].position
+			var relative_pos = entity_hash[key].position - entity_hash[origin_key].position
 			relative_pos = relative_pos.rotated(Vector3.UP, -entities[origin_key].rotation.y)
 			relative_pos.y *= -1
 			positions.append(relative_pos)

@@ -81,7 +81,6 @@ func _spawn_node(node_scene, target_scene, spawn_context, payload):
 
 # TODO: improve behavior for despawning node from scene
 func _remove_node(node):
-	prints(node.rid, "removed")
 	if core.player.target_rid == node.rid:
 		core.player.target_rid = 0
 		core_changed.emit(contexts.none, null)

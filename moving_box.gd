@@ -5,6 +5,7 @@ var target_position
 var nav_agent: NavigationAgent3D
 var next_pos
 var movement_speed = 5
+var dir
 
 func _ready():
 	hp = 100
@@ -15,12 +16,11 @@ func _on_core_changed(context, payload):
 		var player_pos = payload["player_pos"]
 		target_position = player_pos
 		nav_agent.target_position = target_position
-		
+		next_pos = nav_agent.get_next_path_position()
+		dir = global_position.direction_to(next_pos)
 
 func _physics_process(delta):
 	if target_position:
-		next_pos = nav_agent.get_next_path_position()
-		var dir = global_position.direction_to(next_pos)
 		velocity = dir * movement_speed
 		if nav_agent.is_navigation_finished:
 			target_position = null

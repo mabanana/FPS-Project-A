@@ -54,9 +54,13 @@ func _spawn_node(node_scene, target_scene, spawn_context, payload):
 		new_node.gun_model = payload["gun_model"]
 	elif spawn_context == contexts.enemy_spawned:
 		new_node.rid = payload["rid"]
+		new_node.hp = payload["entity_model"].metadata.hp
+		new_node.movement_speed = payload["entity_model"].metadata.movement_speed
 		new_node.bind(core, core_changed)
 	elif spawn_context == contexts.player_spawned:
 		new_node.rid = payload["rid"]
+		new_node.hp = payload["entity_model"].metadata.hp
+		new_node.movement_speed = payload["entity_model"].metadata.movement_speed
 		new_node.bind(core, core_changed)
 	elif spawn_context == contexts.damage_dealt:
 		new_node.damage_number = payload["damage_number"]

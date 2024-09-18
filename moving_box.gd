@@ -1,7 +1,6 @@
 extends EnemyEntity
 class_name MovingBox
 
-var movement_speed = 5
 var nav_ai: AINav
 
 func _ready():

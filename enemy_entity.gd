@@ -6,9 +6,10 @@ var rid: int
 var core: CoreModel
 var core_changed: Signal
 var contexts
-var hp = 1000
+var hp
 var alive = true
 var dir
+var movement_speed : float
 
 func bind(core, core_changed):
 	self.core = core

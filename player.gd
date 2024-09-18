@@ -7,7 +7,7 @@ class_name PlayerEntity
 
 @export var MOUSE_SENSITIVITY = 0.001
 # TODO: change these constants to variables that can be affected by character stats
-const SPEED = 5.0
+
 const JUMP_VELOCITY = 4.5
 const VERTICAL_LOOK_LIMIT = deg_to_rad(90)
 const RAY_LENGTH = 1000
@@ -17,7 +17,8 @@ const SPRINT_FOV_CD = 100
 const DEFAULT_CAMERA_ZOOM = 75
 var rid: int
 var object_in_view
-var hp : int = 100
+var hp : int
+var movement_speed: float
 var input_dir: Vector2
 var trigger_down : bool
 @export var fov_multiplier: float
@@ -111,16 +112,16 @@ func _physics_process(delta):
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
 		if is_ms(PlayerModel.MovementState.sprinting) and input_dir.y < 0:
-			velocity.x = direction.x * SPEED * SPRINT_MULTIPLIER
-			velocity.z = direction.z * SPEED * SPRINT_MULTIPLIER
+			velocity.x = direction.x * movement_speed * SPRINT_MULTIPLIER
+			velocity.z = direction.z * movement_speed * SPRINT_MULTIPLIER
 		else:
 			set_movement_state(PlayerModel.MovementState.walking)
-			velocity.x = direction.x * SPEED
-			velocity.z = direction.z * SPEED
+			velocity.x = direction.x * movement_speed
+			velocity.z = direction.z * movement_speed
 	else:
 		set_movement_state(PlayerModel.MovementState.standing)
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
+		velocity.x = move_toward(velocity.x, 0, movement_speed)
+		velocity.z = move_toward(velocity.z, 0, movement_speed)
 
 	move_and_slide()
 

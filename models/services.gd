@@ -18,7 +18,7 @@ enum Context {
 	player_spawned,
 	entity_died,
 	hp_changed,
-	
+	player_spotted,
 }
 
 func _init() -> void:

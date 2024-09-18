@@ -5,16 +5,19 @@ enum EnemyState {
 	idling,
 	chasing,
 }
-var current_state
+var current_state: EnemyState
 const POSITION_FORESHORTEN = 1
+var dir: Vector3
+var alive = true
+
 var rid: int
+var hp: float
+var vision_range: float
+var movement_speed : float
+
 var core: CoreModel
 var core_changed: Signal
 var contexts
-var hp
-var alive = true
-var dir
-var movement_speed : float
 
 func bind(core, core_changed):
 	self.core = core

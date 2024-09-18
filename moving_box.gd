@@ -1,13 +1,17 @@
 extends EnemyEntity
 class_name MovingBox
 
-var nav_ai: AINav
+var nav_ai: AiNavigator
+var sight: AiSightController
 
 func _ready():
 	current_state = EnemyState.idling
 	hp = 100
-	nav_ai = AINav.new($NavigationAgent3D)
+	nav_ai = AiNavigator.new($NavigationAgent3D)
+	sight = AiSightController.new(self, Vector3(0, 1.8, 0), vision_range)
 	nav_ai.bind(core, core_changed)
+	sight.bind(core, core_changed)
+
 
 func _physics_process(delta):
 	if nav_ai.target_position and current_state == EnemyState.chasing:
@@ -23,7 +27,5 @@ func _physics_process(delta):
 
 func _on_core_changed(context: CoreServices.Context, payload):
 	# Temporary state logic
-	if context == contexts.gun_shot:
+	if context == contexts.player_spotted and payload["observer_rid"] == rid:
 		current_state = EnemyState.chasing
-	elif context == contexts.gun_dropped:
-		current_state = EnemyState.idling

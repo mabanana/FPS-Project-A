@@ -15,6 +15,7 @@ var entity_type: EntityModel.EntityType
 var oid: int
 var hp: int
 var movement_speed: float
+var vision_range: float
 
 static var entity_metadata_map := {}
 
@@ -54,12 +55,14 @@ func _init(
 			self.oid = 3001
 			self.hp = 1000
 			self.movement_speed = 0
+			self.vision_range = 0
 		EntityType.MOVING_BOX:
 			self.name = "Moving Box"
 			self.entity_type = EntityModel.EntityType.enemy
 			self.oid = 3002
 			self.hp = 100
 			self.movement_speed = 5
+			self.vision_range = 10
 		EntityType.DAMAGE_NUMBER:
 			self.name = "Damage Number"
 			self.entity_type = EntityModel.EntityType.removed

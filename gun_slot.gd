@@ -77,9 +77,8 @@ func inaccuratize_vector(vector, acc):
 	return vector.rotated(Vector3.UP, randf_range(-rot,rot)).rotated(Vector3.BACK, randf_range(-rot,rot)).rotated(Vector3.RIGHT, randf_range(-rot,rot)) 
 
 func cast_ray_towards_mouse(accuracy: int = MAX_ACCURACY, ray_length: int = RAY_LENGTH):
-	var mousepos = get_viewport().get_mouse_position()
-	var origin = character.camera.project_ray_origin(mousepos)
-	var cast_vector = character.camera.project_ray_normal(mousepos) * RAY_LENGTH
+	var origin = character.camera.global_position
+	var cast_vector = -character.camera.get_global_transform().basis.z.normalized() * RAY_LENGTH
 	var end = origin + inaccuratize_vector(cast_vector, accuracy)
 	return PhysicsRayQueryParameters3D.create(origin, end)
 

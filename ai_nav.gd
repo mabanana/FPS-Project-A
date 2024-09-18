@@ -1,4 +1,4 @@
-class_name AINav
+class_name AiNavigator
 
 var target_position
 var nav_agent: NavigationAgent3D

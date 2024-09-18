@@ -8,6 +8,7 @@ var core_changed: Signal
 var contexts
 var hp = 1000
 var alive = true
+var dir
 
 func bind(core, core_changed):
 	self.core = core

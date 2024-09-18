@@ -1,28 +1,19 @@
 extends EnemyEntity
 class_name MovingBox
 
-var target_position
-var nav_agent: NavigationAgent3D
-var next_pos
 var movement_speed = 5
-var dir
+var nav_ai: AINav
 
 func _ready():
 	hp = 100
-	nav_agent = $NavigationAgent3D
-
-func _on_core_changed(context, payload):
-	if context == contexts.map_updated:
-		var player_pos = payload["player_pos"]
-		target_position = player_pos
-		nav_agent.target_position = target_position
-		next_pos = nav_agent.get_next_path_position()
-		dir = global_position.direction_to(next_pos)
+	nav_ai = AINav.new($NavigationAgent3D)
+	nav_ai.bind(core, core_changed)
 
 func _physics_process(delta):
-	if target_position:
+	if nav_ai.target_position:
+		dir = global_position.direction_to(nav_ai.next_pos)
 		velocity = dir * movement_speed
-		if nav_agent.is_navigation_finished:
-			target_position = null
+		if nav_ai.nav_agent.is_navigation_finished:
+			nav_ai.target_position = null
 	
 	move_and_slide()

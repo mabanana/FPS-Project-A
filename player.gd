@@ -6,8 +6,12 @@ class_name PlayerEntity
 @export var anim: AnimationPlayer
 
 @export var MOUSE_SENSITIVITY = 0.001
-# TODO: change these constants to variables that can be affected by character stats
+# TODO: setup collision layers
+# TODO: make proper state machine class for both player and enemy entities
+# TODO: setup placeholder sprites & animations for gunplay
+# TODO: add LOS points on player model for AISight to cast towards
 
+# TODO: change these constants to variables that can be affected by character stats
 const JUMP_VELOCITY = 4.5
 const VERTICAL_LOOK_LIMIT = deg_to_rad(90)
 const RAY_LENGTH = 1000

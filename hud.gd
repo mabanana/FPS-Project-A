@@ -21,6 +21,7 @@ func update():
 	%HpValue.text = str(core.player.hp)
 
 	# Update Target Display
+	# TODO: create target display for interactables
 	if core.player.target_rid > 0:
 		%TargetDisplay.modulate.a = 1
 		var target_rid = core.player.target_rid

@@ -35,18 +35,21 @@ var core: CoreModel
 var core_changed: Signal
 
 var contexts
+var input_handler: InputHandler
 
 func _ready():
 	jump_cd = Countdown.new(JUMP_BUFFER)
 	sprint_cd = Countdown.new(SPRINT_FOV_CD)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	input_dir = Vector2.ZERO
+	input_handler = InputHandler.new()
 
 # TODO: Create input handler class not coupled with player entity
 # TODO: Move all gun_slot logic away from input
 	# e.g. hold trigger through reload moves state back to triggering 
 
-func _input(event):
+func _input(event: InputEvent):
+	print(input_handler._handle_input(event))
 	# Camera Controls via mouse
 	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and event is InputEventMouseMotion:
 		camera.rotate_x(-event.relative.y * MOUSE_SENSITIVITY)

@@ -42,19 +42,24 @@ func _ready():
 	sprint_cd = Countdown.new(SPRINT_FOV_CD)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	input_dir = Vector2.ZERO
-	input_handler = InputHandler.new()
 
-# TODO: Create input handler class not coupled with player entity
+
+
 # TODO: Move all gun_slot logic away from input
 	# e.g. hold trigger through reload moves state back to triggering 
 
+func _rotate_camera(x, y, z):
+	camera.rotate_x(-y * MOUSE_SENSITIVITY)
+	camera.rotation.x = clampf(camera.rotation.x, -VERTICAL_LOOK_LIMIT, VERTICAL_LOOK_LIMIT)
+	rotate_object_local(Vector3.UP, -x * MOUSE_SENSITIVITY)
+
 func _input(event: InputEvent):
-	print(input_handler._handle_input(event))
+	input_handler.handle_input(event)
 	# Camera Controls via mouse
-	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and event is InputEventMouseMotion:
-		camera.rotate_x(-event.relative.y * MOUSE_SENSITIVITY)
-		camera.rotation.x = clampf(camera.rotation.x, -VERTICAL_LOOK_LIMIT, VERTICAL_LOOK_LIMIT)
-		rotate_object_local(Vector3.UP, -event.relative.x * MOUSE_SENSITIVITY)
+	#if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and event is InputEventMouseMotion:
+		#camera.rotate_x(-event.relative.y * MOUSE_SENSITIVITY)
+		#camera.rotation.x = clampf(camera.rotation.x, -VERTICAL_LOOK_LIMIT, VERTICAL_LOOK_LIMIT)
+		#rotate_object_local(Vector3.UP, -event.relative.x * MOUSE_SENSITIVITY)
 	
 	input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	
@@ -161,11 +166,97 @@ func bind(core: CoreModel, core_changed: Signal):
 
 func _on_bind():
 	contexts = core.services.Context
+	# TODO make input handler child of game manager instead of player
+	input_handler = InputHandler.new()
+	input_handler.bind(core, core_changed)
 	gun_slot.bind(core, core_changed)
 
 func _on_core_changed(context, payload):
 	if context == contexts.gun_dropped:
 		set_action_state(PlayerModel.ActionState.idling)
+	elif context == contexts.event_mouse_moved:
+		var relative = payload["relative"]
+		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			_rotate_camera(relative.x, relative.y, 0)
+	elif context == contexts.event_input_pressed:
+		var action_pressed = payload["action"]
+		match action_pressed:
+			InputHandler.PlayerActions.FIRE:
+				print("fire")
+			InputHandler.PlayerActions.NEXT_WEAPON:
+				print("next weapon")
+			InputHandler.PlayerActions.PREV_WEAPON:
+				print("previous weapon")
+			InputHandler.PlayerActions.MOVE_FORWARD:
+				print("move forward")
+			InputHandler.PlayerActions.MOVE_BACKWARD:
+				print("move backward")
+			InputHandler.PlayerActions.MOVE_LEFT:
+				print("move left")
+			InputHandler.PlayerActions.MOVE_RIGHT:
+				print("move right")
+			InputHandler.PlayerActions.JUMP:
+				print("jump")
+			InputHandler.PlayerActions.SPRINT:
+				print("sprint")
+			InputHandler.PlayerActions.CROUCH:
+				print("crouch")
+			InputHandler.PlayerActions.RELOAD:
+				print("reload")
+			InputHandler.PlayerActions.ADS:
+				print("aim down sights")
+			InputHandler.PlayerActions.INTERACT:
+				print("interact")
+			InputHandler.PlayerActions.MELEE:
+				print("melee")
+			InputHandler.PlayerActions.SELECT_SlOT_1:
+				print("select slot 1")
+			InputHandler.PlayerActions.SELECT_SlOT_2:
+				print("select slot 2")
+			InputHandler.PlayerActions.SELECT_SlOT_3:
+				print("select slot 3")
+			InputHandler.PlayerActions.SELECT_SlOT_4:
+				print("select slot 4")
+			InputHandler.PlayerActions.ESC_MENU:
+				print("pause menu")
+			InputHandler.PlayerActions.GAME_MENU:
+				print("open game menu")
+			InputHandler.PlayerActions.DROP_GUN:
+				print("drop gun")
+			_:
+				print("unhandled action press")
+	elif context == contexts.event_input_released:
+		var action_released = payload["action"]
+		match action_released:
+			InputHandler.PlayerActions.FIRE:
+				print("stop firing")
+			InputHandler.PlayerActions.MOVE_FORWARD:
+				print("stop move forward")
+			InputHandler.PlayerActions.MOVE_BACKWARD:
+				print("stop move backward")
+			InputHandler.PlayerActions.MOVE_LEFT:
+				print("stop move left")
+			InputHandler.PlayerActions.MOVE_RIGHT:
+				print("stop move right")
+			InputHandler.PlayerActions.JUMP:
+				print("jump released")
+			InputHandler.PlayerActions.SPRINT:
+				print("sprint released")
+			InputHandler.PlayerActions.CROUCH:
+				print("crouch released")
+			InputHandler.PlayerActions.RELOAD:
+				print("reload released")
+			InputHandler.PlayerActions.ADS:
+				print("aim down sights released")
+			InputHandler.PlayerActions.INTERACT:
+				print("interact released")
+			InputHandler.PlayerActions.MELEE:
+				print("melee released")
+			InputHandler.PlayerActions.DROP_GUN:
+				print("drop gun released")
+			_:
+				print("unhandled action release")
+
 
 func set_ads(boo: bool):
 	if core.player.is_ads == boo:

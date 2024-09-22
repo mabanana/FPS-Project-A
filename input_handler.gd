@@ -1,7 +1,10 @@
-extends Object
 class_name InputHandler
 
 var input_map
+
+var core: CoreModel
+var core_changed: Signal
+var contexts
 
 static var DEFAULT_INPUT_MAP := {
 	MouseButton.MOUSE_BUTTON_LEFT : PlayerActions.FIRE,
@@ -29,7 +32,6 @@ static var DEFAULT_INPUT_MAP := {
 	Key.KEY_V : PlayerActions.NEXT_WEAPON,
 	Key.KEY_X : PlayerActions.PREV_WEAPON,
 }
-
 
 # Enum for potential player actions
 enum PlayerActions {
@@ -61,10 +63,45 @@ enum PlayerActions {
 func _init():
 	input_map = DEFAULT_INPUT_MAP
 	
-func _handle_input(event: InputEvent):
+func handle_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index in input_map:
-		return PlayerActions.keys()[input_map[event.button_index]]
-	elif event is InputEventMouseMotion:
-		return event.relative
+		var context
+		if event.is_pressed() and !event.is_echo():
+			context = contexts.event_input_pressed
+		elif event.is_released():
+			context = contexts.event_input_released
+		else:
+			print("ERROR: event mouse button that is neither pressed nor released detected")
+			return
+		core_changed.emit(context, {
+				"action": input_map[event.button_index], 
+				"button_index" : event.button_index
+				})
 	elif event is InputEventKey and event.keycode in input_map:
-		return PlayerActions.keys()[input_map[event.keycode]]
+		var context
+		if event.is_pressed() and !event.is_echo():
+			context = contexts.event_input_pressed
+		elif event.is_echo():
+			# print("echo press event")
+			return
+		elif event.is_released():
+			context = contexts.event_input_released
+		else:
+			print("ERROR: event key press that is neither pressed nor released detected")
+			return
+		core_changed.emit(context, {
+			"action": input_map[event.keycode], 
+			"key_code" : event.keycode
+			})
+	elif event is InputEventMouseMotion:
+		core_changed.emit(contexts.event_mouse_moved, {
+			"relative": event.relative
+			})
+	else:
+		print("InputHandler: unhandled input")
+
+
+func bind(core: CoreModel, core_changed: Signal):
+	self.core = core
+	self.core_changed = core_changed
+	contexts = core.services.Context

@@ -43,8 +43,6 @@ func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	input_dir = Vector2.ZERO
 
-
-
 # TODO: Move all gun_slot logic away from input
 	# e.g. hold trigger through reload moves state back to triggering 
 
@@ -55,63 +53,7 @@ func _rotate_camera(x, y, z):
 
 func _input(event: InputEvent):
 	input_handler.handle_input(event)
-	# Camera Controls via mouse
-	#if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and event is InputEventMouseMotion:
-		#camera.rotate_x(-event.relative.y * MOUSE_SENSITIVITY)
-		#camera.rotation.x = clampf(camera.rotation.x, -VERTICAL_LOOK_LIMIT, VERTICAL_LOOK_LIMIT)
-		#rotate_object_local(Vector3.UP, -event.relative.x * MOUSE_SENSITIVITY)
-	
 	input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-	
-	# TODO: implement pause functionality
-	if event.is_action_pressed("ui_cancel"):
-		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		else:
-			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	# Button Inputs
-	elif event.is_action_pressed("reload"):
-		if gun_slot.active_gun:
-			set_action_state(PlayerModel.ActionState.reloading)
-		else:
-			print("Can't reload without a gun in hand.")
-	elif event.is_action_pressed("drop_equip"):
-		set_action_state(PlayerModel.ActionState.throwing)
-		gun_slot.drop_gun()
-	elif event.is_action_pressed("interact"):
-		if object_in_view.has_method("on_interact"):
-			gun_slot.pickup_gun(object_in_view.on_interact(), object_in_view.rid)
-		else:
-			print("Nothing to interact with...")
-	elif event.is_action_pressed("cycle_inventory"):
-		set_action_state(PlayerModel.ActionState.idling)
-		set_active_gun_index(core.inventory.active_gun_index + 1, true)
-	elif event.is_action_pressed("hotkey_1"): 
-		set_active_gun_index(0)
-	elif event.is_action_pressed("hotkey_2"): 
-		set_active_gun_index(1)
-	elif event.is_action_pressed("hotkey_3"): 
-		set_active_gun_index(2)
-	elif event.is_action_pressed("hotkey_4"): 
-		set_active_gun_index(3)
-	elif event.is_action_pressed("ui_accept"):
-		set_jump(true)
-	elif event.is_action_pressed("sprint"):
-		if !core.player.is_ads and is_ms(PlayerModel.MovementState.walking):
-			set_movement_state(PlayerModel.MovementState.sprinting)
-	
-	if event.is_action_pressed("left_click"):
-		trigger_down = true
-		if !is_as(PlayerModel.ActionState.reloading) and !is_as(PlayerModel.ActionState.throwing):
-			set_action_state(PlayerModel.ActionState.triggering)
-	elif event.is_action_released("left_click"):
-		trigger_down = false
-		if is_as(PlayerModel.ActionState.triggering):
-			set_action_state(PlayerModel.ActionState.idling)
-	if event.is_action_pressed("right_click"):
-		set_ads(true)
-	elif event.is_action_released("right_click"):
-		set_ads(false)
 
 # Default Godot Template movement
 func _physics_process(delta):
@@ -182,11 +124,15 @@ func _on_core_changed(context, payload):
 		var action_pressed = payload["action"]
 		match action_pressed:
 			InputHandler.PlayerActions.FIRE:
-				print("fire")
+				trigger_down = true
+				if !is_as(PlayerModel.ActionState.reloading) and !is_as(PlayerModel.ActionState.throwing):
+					set_action_state(PlayerModel.ActionState.triggering)
 			InputHandler.PlayerActions.NEXT_WEAPON:
-				print("next weapon")
+				set_action_state(PlayerModel.ActionState.idling)
+				set_active_gun_index(core.inventory.active_gun_index + 1, true)
 			InputHandler.PlayerActions.PREV_WEAPON:
-				print("previous weapon")
+				set_action_state(PlayerModel.ActionState.idling)
+				set_active_gun_index(core.inventory.active_gun_index - 1, true)
 			InputHandler.PlayerActions.MOVE_FORWARD:
 				print("move forward")
 			InputHandler.PlayerActions.MOVE_BACKWARD:
@@ -196,40 +142,55 @@ func _on_core_changed(context, payload):
 			InputHandler.PlayerActions.MOVE_RIGHT:
 				print("move right")
 			InputHandler.PlayerActions.JUMP:
-				print("jump")
+				set_jump(true)
 			InputHandler.PlayerActions.SPRINT:
-				print("sprint")
+				if !core.player.is_ads and is_ms(PlayerModel.MovementState.walking):
+					set_movement_state(PlayerModel.MovementState.sprinting)
 			InputHandler.PlayerActions.CROUCH:
 				print("crouch")
 			InputHandler.PlayerActions.RELOAD:
-				print("reload")
+				if gun_slot.active_gun:
+					set_action_state(PlayerModel.ActionState.reloading)
+				else:
+					print("Can't reload without a gun in hand.")
 			InputHandler.PlayerActions.ADS:
-				print("aim down sights")
+				set_ads(true)
 			InputHandler.PlayerActions.INTERACT:
-				print("interact")
+				# TODO: interact through signal emit instead of direct reference of object
+				if object_in_view.has_method("on_interact"):
+					gun_slot.pickup_gun(object_in_view.on_interact(), object_in_view.rid)
+				else:
+					print("Nothing to interact with...")
 			InputHandler.PlayerActions.MELEE:
 				print("melee")
 			InputHandler.PlayerActions.SELECT_SlOT_1:
-				print("select slot 1")
+				set_active_gun_index(0)
 			InputHandler.PlayerActions.SELECT_SlOT_2:
-				print("select slot 2")
+				set_active_gun_index(1)
 			InputHandler.PlayerActions.SELECT_SlOT_3:
-				print("select slot 3")
+				set_active_gun_index(2)
 			InputHandler.PlayerActions.SELECT_SlOT_4:
-				print("select slot 4")
+				set_active_gun_index(4)
 			InputHandler.PlayerActions.ESC_MENU:
-				print("pause menu")
+				# TODO: implement pause functionality
+				if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+					Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+				else:
+					Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 			InputHandler.PlayerActions.GAME_MENU:
 				print("open game menu")
 			InputHandler.PlayerActions.DROP_GUN:
-				print("drop gun")
+				set_action_state(PlayerModel.ActionState.throwing)
+				gun_slot.drop_gun()
 			_:
 				print("unhandled action press")
 	elif context == contexts.event_input_released:
 		var action_released = payload["action"]
 		match action_released:
 			InputHandler.PlayerActions.FIRE:
-				print("stop firing")
+				trigger_down = false
+				if is_as(PlayerModel.ActionState.triggering):
+					set_action_state(PlayerModel.ActionState.idling)
 			InputHandler.PlayerActions.MOVE_FORWARD:
 				print("stop move forward")
 			InputHandler.PlayerActions.MOVE_BACKWARD:
@@ -247,7 +208,7 @@ func _on_core_changed(context, payload):
 			InputHandler.PlayerActions.RELOAD:
 				print("reload released")
 			InputHandler.PlayerActions.ADS:
-				print("aim down sights released")
+				set_ads(false)
 			InputHandler.PlayerActions.INTERACT:
 				print("interact released")
 			InputHandler.PlayerActions.MELEE:

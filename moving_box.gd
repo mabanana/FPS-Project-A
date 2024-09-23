@@ -11,6 +11,7 @@ func _ready():
 	sight = AiSightController.new(self, Vector3(0, 1.8, 0), vision_range)
 	nav_ai.bind(core, core_changed)
 	sight.bind(core, core_changed)
+	$AnimationPlayer.play("Idle")
 
 
 func _physics_process(delta):

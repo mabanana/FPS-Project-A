@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://njibrjir8fft"]
+[gd_scene load_steps=9 format=3 uid="uid://njibrjir8fft"]
 
 [ext_resource type="Script" path="res://moving_box.gd" id="1_evaqw"]
+[ext_resource type="Texture2D" uid="uid://v5rvweainl48" path="res://Ninja Adventure - Asset Pack/Actor/Monsters/Cyclope/SpriteSheet.png" id="2_mqnt5"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mww7d"]
 albedo_color = Color(1, 0.36, 0.36, 1)
@@ -15,15 +16,72 @@ material = SubResource("StandardMaterial3D_mww7d")
 size = Vector3(0.7, 2, 0.7)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ye45r"]
+height = 1.8
+
+[sub_resource type="Animation" id="Animation_vviis"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_57p5n"]
+resource_name = "Idle"
+length = 0.8
+loop_mode = 1
+step = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [Vector2i(0, 0), Vector2i(0, 1), Vector2i(0, 2), Vector2i(0, 3)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_pgt1t"]
+_data = {
+"Idle": SubResource("Animation_57p5n"),
+"RESET": SubResource("Animation_vviis")
+}
 
 [node name="MovingBox" type="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 script = ExtResource("1_evaqw")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+visible = false
 mesh = SubResource("BoxMesh_d0x4v")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.101194, 0)
 shape = SubResource("CapsuleShape3D_ye45r")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+pixel_size = 0.125
+billboard = 2
+shaded = true
+texture_filter = 2
+texture = ExtResource("2_mqnt5")
+hframes = 4
+vframes = 4
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_pgt1t")
+}

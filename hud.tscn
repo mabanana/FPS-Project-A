@@ -1,9 +1,48 @@
-[gd_scene load_steps=4 format=3 uid="uid://cix1j6ynfe7pn"]
+[gd_scene load_steps=8 format=3 uid="uid://cix1j6ynfe7pn"]
 
 [ext_resource type="Script" path="res://hud.gd" id="1_y46dv"]
 [ext_resource type="Script" path="res://minimap.gd" id="2_7l5sd"]
+[ext_resource type="Texture2D" uid="uid://d2ojqjerpiwf6" path="res://Ninja Adventure - Asset Pack/Items/Weapons/Bow/Sprite.png" id="3_gv8b5"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_bawmo"]
+
+[sub_resource type="Animation" id="Animation_40vnb"]
+resource_name = "Idle"
+loop_mode = 2
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MarginContainer/Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.8, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(4, -20), Vector2(5, -25)]
+}
+
+[sub_resource type="Animation" id="Animation_v4qme"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MarginContainer/Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2atdu"]
+_data = {
+"Idle": SubResource("Animation_40vnb"),
+"RESET": SubResource("Animation_v4qme")
+}
 
 [node name="Hud" type="Control"]
 layout_mode = 3
@@ -166,3 +205,37 @@ layout_mode = 2
 [node name="TargetLabel" type="Label" parent="TargetDisplay"]
 unique_name_in_owner = true
 layout_mode = 2
+
+[node name="WeaponSprite" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="WeaponSprite"]
+custom_minimum_size = Vector2(180, 100)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -100.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="WeaponSprite/MarginContainer"]
+rotation = 1.14319
+scale = Vector2(25, 25)
+texture = ExtResource("3_gv8b5")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="WeaponSprite"]
+libraries = {
+"": SubResource("AnimationLibrary_2atdu")
+}
+autoplay = "Idle"

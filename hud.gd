@@ -6,7 +6,7 @@ var core_changed: Signal
 
 func update():
 	# Update Weapon HUD
-	if core.inventory.active_gun_index < len(core.inventory.guns):
+	if core.inventory.active_gun:
 		%GunName.text = str(core.inventory.active_gun.metadata.name)
 		%Magazine.text = str(core.inventory.active_gun.mag_curr)
 		%ProgressBar.max_value = core.inventory.active_gun.metadata.mag_size 

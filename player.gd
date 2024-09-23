@@ -150,7 +150,10 @@ func _on_core_changed(context, payload):
 				print("crouch")
 			InputHandler.PlayerActions.RELOAD:
 				if gun_slot.active_gun:
-					set_action_state(PlayerModel.ActionState.reloading)
+					if core.inventory.active_gun.mag_curr < core.inventory.active_gun.metadata.mag_size:
+						set_action_state(PlayerModel.ActionState.reloading)
+					else:
+						print("Mag already full")
 				else:
 					print("Can't reload without a gun in hand.")
 			InputHandler.PlayerActions.ADS:
@@ -251,8 +254,12 @@ func set_active_gun_index(index: int, is_cycle: bool = false):
 	var prev_index = core.inventory.active_gun_index
 	if core.inventory.active_gun_index == index:
 		return
+	if index > 3 or index > len(core.inventory.guns) - 1:
+		index = 0
+	elif index < 0:
+		index = min(len(core.inventory.guns) - 1, 3)
 	core.inventory.active_gun_index = index
-	core_changed.emit(contexts.gun_swap_started, {"is_cycle": is_cycle, "prev_index" : prev_index})
+	core_changed.emit(contexts.gun_swap_started)
 
 func set_action_state(state: PlayerModel.ActionState):
 	if core.player.action_state == state:
@@ -285,7 +292,9 @@ func _on_action_change(next_state: PlayerModel.ActionState, prev_state: PlayerMo
 		set_movement_state(PlayerModel.MovementState.standing)
 	elif trigger_down:
 		set_action_state(PlayerModel.ActionState.triggering)
-	pass
+	if next_state == PlayerModel.ActionState.reloading:
+		set_ads(false)
+		set_jump(false)
 
 func _on_movement_change(next_state: PlayerModel.MovementState, prev_state: PlayerModel.MovementState):
 	prints("Movement state changed to " + str(next_state))

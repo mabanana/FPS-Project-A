@@ -23,7 +23,7 @@ static var DEFAULT_INPUT_MAP := {
 	Key.KEY_F : PlayerActions.ACTION_F,
 	Key.KEY_G : PlayerActions.ACTION_G,
 	Key.KEY_Q : PlayerActions.DROP_GUN,
-	Key.KEY_TAB : PlayerActions.GAME_MENU,
+	Key.KEY_TAB : PlayerActions.NEXT_WEAPON,
 	Key.KEY_ESCAPE : PlayerActions.ESC_MENU,
 	Key.KEY_1 : PlayerActions.SELECT_SlOT_1,
 	Key.KEY_2 : PlayerActions.SELECT_SlOT_2,

@@ -116,7 +116,7 @@ func _on_core_changed(context, payload):
 	# Actions
 	if len(core.inventory.guns) > 0:
 		if context == contexts.gun_swap_started:
-			_set_active_gun(core.inventory.active_gun_index, payload["is_cycle"], payload["prev_index"])
+			_set_active_gun(core.inventory.active_gun_index)
 		elif context == contexts.reload_started:
 			reload()
 		elif context == contexts.reload_ended:
@@ -152,13 +152,10 @@ func _remove_active_gun() -> void:
 		_set_active_gun(core.inventory.active_gun_index - 1)
 	core_changed.emit(contexts.none, null)
 
-func _set_active_gun(index: int, is_cycle: bool = false, prev_index: int = 0) -> void:
-	var new_index = index if index >= 0 else 0
-	if new_index > len(core.inventory.guns) - 1:
-		if is_cycle:
-			new_index = 0
-		else:
-			new_index = prev_index
+func _set_active_gun(index: int) -> void:
+	var new_index = index
+	if new_index < 0 or new_index > len(core.inventory.guns) - 1:
+		new_index = 0
 	reset_gun_slot()
 	core.inventory.active_gun_index = new_index
 	active_gun = core.inventory.active_gun

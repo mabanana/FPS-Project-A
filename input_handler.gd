@@ -9,8 +9,8 @@ var contexts
 static var DEFAULT_INPUT_MAP := {
 	MouseButton.MOUSE_BUTTON_LEFT : PlayerActions.FIRE,
 	MouseButton.MOUSE_BUTTON_RIGHT : PlayerActions.ADS,
-	MouseButton.MOUSE_BUTTON_WHEEL_UP : PlayerActions.PREV_WEAPON,
-	MouseButton.MOUSE_BUTTON_WHEEL_DOWN : PlayerActions.NEXT_WEAPON,
+	MouseButton.MOUSE_BUTTON_WHEEL_UP : PlayerActions.NEXT_WEAPON,
+	MouseButton.MOUSE_BUTTON_WHEEL_DOWN : PlayerActions.PREV_WEAPON,
 	Key.KEY_W : PlayerActions.MOVE_FORWARD,
 	Key.KEY_A : PlayerActions.MOVE_LEFT,
 	Key.KEY_S : PlayerActions.MOVE_BACKWARD,

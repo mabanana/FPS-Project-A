@@ -63,12 +63,11 @@ func pickup_gun(gun_model: GunModel, gun_id: int):
 
 func drop_gun():
 	if not core.inventory.active_gun:
-		return	
+		return
 	var throw_vector = -character.camera.get_global_transform().basis.z.normalized()
 	throw_vector = inaccuratize_vector(throw_vector, THROW_ACCURACY)
 	_drop_gun_on_map(active_gun, throw_vector)
 	_remove_active_gun()
-	
 
 # TODO: move utilities to services or player script
 
@@ -156,6 +155,7 @@ func _set_active_gun(index: int) -> void:
 	var new_index = index
 	if new_index < 0 or new_index > len(core.inventory.guns) - 1:
 		new_index = 0
+	print(new_index)
 	reset_gun_slot()
 	core.inventory.active_gun_index = new_index
 	active_gun = core.inventory.active_gun

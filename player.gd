@@ -19,6 +19,8 @@ const SPRINT_MULTIPLIER = 1.6
 const JUMP_BUFFER = 20
 const SPRINT_FOV_CD = 100
 const DEFAULT_CAMERA_ZOOM = 75
+
+var max_gun_slots = 4
 var rid: int
 var object_in_view
 var hp : int
@@ -129,10 +131,10 @@ func _on_core_changed(context, payload):
 					set_action_state(PlayerModel.ActionState.triggering)
 			InputHandler.PlayerActions.NEXT_WEAPON:
 				set_action_state(PlayerModel.ActionState.idling)
-				set_active_gun_index(core.inventory.active_gun_index + 1, true)
+				set_active_gun_index(core.inventory.active_gun_index + 1)
 			InputHandler.PlayerActions.PREV_WEAPON:
 				set_action_state(PlayerModel.ActionState.idling)
-				set_active_gun_index(core.inventory.active_gun_index - 1, true)
+				set_active_gun_index(core.inventory.active_gun_index - 1)
 			InputHandler.PlayerActions.MOVE_FORWARD:
 				print("move forward")
 			InputHandler.PlayerActions.MOVE_BACKWARD:
@@ -173,7 +175,7 @@ func _on_core_changed(context, payload):
 			InputHandler.PlayerActions.SELECT_SlOT_3:
 				set_active_gun_index(2)
 			InputHandler.PlayerActions.SELECT_SlOT_4:
-				set_active_gun_index(4)
+				set_active_gun_index(3)
 			InputHandler.PlayerActions.ESC_MENU:
 				# TODO: implement pause functionality
 				if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
@@ -219,7 +221,8 @@ func _on_core_changed(context, payload):
 			InputHandler.PlayerActions.DROP_GUN:
 				print("drop gun released")
 			_:
-				print("unhandled action release")
+				pass
+				#print("unhandled action release")
 
 
 func set_ads(boo: bool):
@@ -250,16 +253,15 @@ func _set_target(rid):
 	core.player.target_rid = rid
 	core_changed.emit(contexts.none, null)
 
-func set_active_gun_index(index: int, is_cycle: bool = false):
-	var prev_index = core.inventory.active_gun_index
+func set_active_gun_index(index: int):
 	if core.inventory.active_gun_index == index:
 		return
-	if index > 3 or index > len(core.inventory.guns) - 1:
+	if index > max_gun_slots - 1 or index > len(core.inventory.guns) - 1:
 		index = 0
 	elif index < 0:
-		index = min(len(core.inventory.guns) - 1, 3)
+		index = min(len(core.inventory.guns) - 1, max_gun_slots - 1)
 	core.inventory.active_gun_index = index
-	core_changed.emit(contexts.gun_swap_started)
+	core_changed.emit(contexts.gun_swap_started, null)
 
 func set_action_state(state: PlayerModel.ActionState):
 	if core.player.action_state == state:

@@ -7,18 +7,11 @@ var core: CoreModel
 var core_changed: Signal
 var contexts
 # Define the list of required PackedScenes for each scene to save on storing every single PackedScene in memory.
-var node_scenes: Dictionary
+var asset_loader: AssetLoader
 
 func _init(scene):
 	self.scene = scene
-	node_scenes = {1001: preload("res://gun_on_floor.tscn"),
-	5001: preload("res://bullet_hole.tscn"),
-	5002: preload("res://damage_number.tscn"),
-	5003: preload("res://bullet_particle.tscn"),
-	2001: preload("res://player.tscn"),
-	3001: preload("res://target_dummy.tscn"),
-	3002: preload("res://moving_box_enemy.tscn"),
-	}
+	asset_loader = AssetLoader.new()
 
 func bind(core, core_changed):
 	self.core = core
@@ -92,6 +85,5 @@ func _remove_node(node):
 
 func _get_entity_scene(entity: EntityModel):
 	var oid = entity.metadata.oid
-	if node_scenes.has(oid):
-		return node_scenes[oid]
-	else: print("Entity Scene not found!")
+	var new_scene = asset_loader.get_scene(oid)
+	return new_scene

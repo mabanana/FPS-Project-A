@@ -1,9 +1,10 @@
-[gd_scene load_steps=46 format=3 uid="uid://cbn72isa03aii"]
+[gd_scene load_steps=47 format=3 uid="uid://cbn72isa03aii"]
 
 [ext_resource type="Script" path="res://test_scene.gd" id="1_slrf8"]
 [ext_resource type="Texture2D" uid="uid://bvx06pup72xam" path="res://Stylized Sky Background (2).png" id="2_nfgm5"]
 [ext_resource type="Shader" path="res://test_shader.gdshader" id="3_ckenp"]
 [ext_resource type="FastNoiseLite" uid="uid://crqtqh0j2cenj" path="res://test_noise.tres" id="4_ubwnw"]
+[ext_resource type="PackedScene" uid="uid://cxmfujbjkhl18" path="res://grid_map.tscn" id="5_8piqb"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_s2ful"]
 sky_top_color = Color(0.2275, 0.7735, 0.91, 1)
@@ -172,10 +173,17 @@ environment = SubResource("Environment_nscj1")
 
 [node name="DirectionalLight3D2" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.688742, -0.0454959, -0.723578, 0.61784, 0.559043, 0.552942, 0.379353, -0.82789, 0.413144, 0, 8.61871, 0)
-light_energy = 5.04
 shadow_enabled = true
-shadow_bias = 0.0
 shadow_normal_bias = 0.889
+shadow_blur = 1.303
+directional_shadow_mode = 0
+sky_mode = 1
+
+[node name="DirectionalLight3D3" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.727576, 0.649384, 0.221217, -0.175664, -0.135362, 0.975098, 0.663158, -0.748317, 0.0155823, 0, 8.61871, 0)
+shadow_enabled = true
+shadow_reverse_cull_face = true
+shadow_blur = 1.303
 directional_shadow_mode = 0
 sky_mode = 1
 
@@ -371,3 +379,9 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 37.732
 
 [node name="Marker3D3" type="Marker3D" parent="Map/WalledArea"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 55.272, 3.90277, -0.946755)
+
+[node name="GridMap" parent="." instance=ExtResource("5_8piqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 1, 70)
+data = {
+"cells": PackedInt32Array(65535, 65532, 0, 65535, 65533, 0, 65535, 65534, 0, 65535, 65535, 0, 65535, 0, 0, 65534, 0, 0, 65534, 1, 0, 65534, 2, 0, 65533, 2, 0, 65533, 3, 0, 65532, 2, 0, 65532, 1, 0, 65532, 0, 0, 65532, 65535, 0, 65532, 65534, 0, 65533, 65533, 0, 65533, 65532, 0, 65533, 65534, 0, 65533, 65535, 0, 65533, 0, 0, 65533, 1, 0, 65534, 65533, 0, 65534, 65532, 0, 65534, 65534, 0, 65534, 65535, 0, 65535, 65530, 0, 65535, 65528, 0, 65535, 65527, 0, 65535, 65526, 0, 65534, 65526, 0, 65533, 65526, 0, 65533, 65527, 0, 65532, 65528, 0, 65532, 65530, 0, 65532, 65531, 0, 65531, 65533, 0, 65531, 65534, 0, 65531, 65535, 0, 65533, 65531, 0, 65533, 65529, 0, 65534, 65528, 0, 65534, 65527, 0, 65534, 65530, 0, 65534, 65529, 0, 65532, 3, 0, 65532, 65532, 0, 65533, 65528, 0, 65533, 65530, 0, 65534, 65531, 0, 65535, 65531, 0, 65535, 65529, 0, 65532, 65529, 0, 65532, 65527, 0, 65532, 65526, 0, 65531, 65531, 0, 65531, 65532, 0)
+}

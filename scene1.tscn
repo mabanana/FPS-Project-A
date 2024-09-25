@@ -380,6 +380,21 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 37.732
 [node name="Marker3D3" type="Marker3D" parent="Map/WalledArea"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 55.272, 3.90277, -0.946755)
 
+[node name="Marker3D4" type="Marker3D" parent="Map/WalledArea"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 55.272, 3.90277, 20.8171)
+
+[node name="Marker3D5" type="Marker3D" parent="Map/WalledArea"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 48.7857, 3.90277, 20.8171)
+
+[node name="Marker3D6" type="Marker3D" parent="Map/WalledArea"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 48.7857, 3.90277, 17.6094)
+
+[node name="Marker3D7" type="Marker3D" parent="Map/WalledArea"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 31.8355, 3.90277, 17.6094)
+
+[node name="Marker3D8" type="Marker3D" parent="Map/WalledArea"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 31.8355, 3.90277, 2.07305)
+
 [node name="GridMap" parent="." instance=ExtResource("5_8piqb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 1, 70)
 data = {

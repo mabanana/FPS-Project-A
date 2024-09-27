@@ -53,7 +53,7 @@ func _init(
 			self.name = "Target Dummy"
 			self.entity_type = EntityModel.EntityType.enemy
 			self.oid = 3001
-			self.hp = 1000
+			self.hp = 1000000
 			self.movement_speed = 0
 			self.vision_range = 0
 		EntityType.MOVING_BOX:
@@ -62,7 +62,7 @@ func _init(
 			self.oid = 3002
 			self.hp = 100
 			self.movement_speed = 5
-			self.vision_range = 10
+			self.vision_range = 20
 		EntityType.DAMAGE_NUMBER:
 			self.name = "Damage Number"
 			self.entity_type = EntityModel.EntityType.removed

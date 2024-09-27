@@ -1,0 +1,49 @@
+{
+	"loot_classes": [
+		{
+			"loot_class": "TEST_SCENE_1_DROP",
+			"items": [
+				{
+					"name": "GOLD_DROP",
+					"type": "Interactable",
+					"weight": 5
+				},
+				{
+					"name": "RARE_GUN_A",
+					"type": "Interactable",
+					"weight": 1
+				},
+				{
+					"name": "WEAPON_BASE_LIST",
+					"type": "LootClass",
+					"weight": 3
+				}
+			]
+		},
+		{
+			"loot_class": "WEAPON_BASE_LIST",
+			"items": [
+				{
+					"name": "TEST_GUN_A",
+					"type": "Interactable",
+					"weight": 2
+				},
+				{
+					"name": "TEST_GUN_B",
+					"type": "Interactable",
+					"weight": 1
+				},
+				{
+					"name": "TEST_GUN_C",
+					"type": "Interactable",
+					"weight": 6
+				},
+				{
+					"name": "TEST_GUN_D",
+					"type": "Interactable",
+					"weight": 3
+				}
+			]
+		}
+	]
+}

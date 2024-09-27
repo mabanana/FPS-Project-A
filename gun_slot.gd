@@ -44,9 +44,11 @@ func shoot():
 		var acc = active_gun.metadata.accuracy
 		if core.player.is_ads:
 			acc = MAX_ACCURACY - (MAX_ACCURACY - active_gun.metadata.accuracy) / active_gun.metadata.zoom
-		var query = cast_ray_towards_mouse(acc)
+		var query: PhysicsRayQueryParameters3D = cast_ray_towards_mouse(acc)
+		query.set_exclude([character.get_rid()])
 		var result = get_world_3d().direct_space_state.intersect_ray(query)
 		if result:
+			print(result.collider)
 			if result.collider.has_method("take_damage"):
 				var damage_number = randf_range(active_gun.metadata.damage_floor, active_gun.metadata.damage_ceiling)
 				var damage_scale = float(damage_number - active_gun.metadata.damage_floor) / (active_gun.metadata.damage_ceiling - active_gun.metadata.damage_floor)

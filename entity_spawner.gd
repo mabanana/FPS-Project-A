@@ -77,8 +77,6 @@ func _remove_node(node):
 	if core.player.target_rid == node.rid:
 		core.player.target_rid = 0
 		core_changed.emit(contexts.none, null)
-	prints("Loot Dropped by", core.map.entities[node.rid].name,
-	Randomizer.roll_loot(Randomizer.TEST_LOOT_TABLE))
 	core.map.entities.erase(node.rid)
 	scene.entity_hash.erase(node.rid)
 	node.queue_free()

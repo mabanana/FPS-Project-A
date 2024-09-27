@@ -5,6 +5,7 @@ var core: CoreModel
 signal core_changed(context, payload)
 var contexts
 var entity_spawner: EntitySpawner
+var loot_manager: LootManager
 var Hud: HudController
 
 @export var pos_update_interval: int
@@ -21,8 +22,10 @@ func _ready() -> void:
 	# Instantiate core
 	core = CoreModel.new()
 	entity_spawner = EntitySpawner.new(self)
+	loot_manager = LootManager.new()
 	# Add bindings to all relevant observers
 	entity_spawner.bind(core, core_changed)
+	loot_manager.bind(core, core_changed)
 	Hud = preload("res://hud.tscn").instantiate()
 	add_child(Hud)
 	Hud.bind(core, core_changed)

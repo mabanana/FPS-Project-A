@@ -57,10 +57,16 @@ func _add_damage_number_to_map(damage_number: int, damage_scale: float, dealer: 
 
 func _health_change(dealer, hp):
 	if alive:
+		
 		var payload = {
 			"dealer" : dealer,
+			# DO NOT REFERENCE SELF OR SELF.RID
+			# "target", "target_rid"
+			"target_name" : core.map.entities[rid].metadata.name,
 			"rid" : rid,
 			"hp" : hp,
+			"loot_class" : LootManager.LootClass.TEST_SCENE_1_DROP,
+			"position": global_position,
 		}
 		core.map.entities[rid].hp = hp
 		if hp <= 0:

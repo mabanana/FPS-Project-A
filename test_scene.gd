@@ -19,6 +19,7 @@ func initialize_test_scene_map() -> void:
 	_add_entity_to_map(EntityMetadataModel.EntityType.TARGET_DUMMY, Vector3(10,1,-10))
 	_add_entity_to_map(EntityMetadataModel.EntityType.TARGET_DUMMY, Vector3(10,01,10))
 	_add_entity_to_map(EntityMetadataModel.EntityType.TARGET_DUMMY, Vector3(-10,01,-10))
-	for marker in $Map/WalledArea.get_children():
-		if marker is Marker3D:
-			_add_entity_to_map(EntityMetadataModel.EntityType.MOVING_BOX, marker.global_position)
+	for child in $Map.get_children():
+		for marker in child.get_children():
+			if marker is Marker3D:
+				_add_entity_to_map(EntityMetadataModel.EntityType.MOVING_BOX, marker.global_position)

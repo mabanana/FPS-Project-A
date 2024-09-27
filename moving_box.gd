@@ -11,10 +11,11 @@ func _ready():
 	sight = AiSightController.new(self, Vector3(0, 1.8, 0), vision_range)
 	nav_ai.bind(core, core_changed)
 	sight.bind(core, core_changed)
-	$AnimationPlayer.play("Idle")
 
 
 func _physics_process(delta):
+	if current_state == EnemyState.chasing and !$AnimationPlayer.is_playing():
+		$AnimationPlayer.play("Idle")
 	if nav_ai.target_position and current_state == EnemyState.chasing:
 		dir = global_position.direction_to(nav_ai.next_pos)
 		velocity = dir * movement_speed
@@ -23,6 +24,8 @@ func _physics_process(delta):
 	else:
 		velocity.x = move_toward(velocity.x, 0, movement_speed / 2)
 		velocity.z = move_toward(velocity.z, 0, movement_speed / 2)
+	if !is_on_floor():
+		velocity += get_gravity() * delta
 				
 	move_and_slide()
 

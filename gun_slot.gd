@@ -48,7 +48,6 @@ func shoot():
 		query.set_exclude([character.get_rid()])
 		var result = get_world_3d().direct_space_state.intersect_ray(query)
 		if result:
-			print(result.collider)
 			if result.collider.has_method("take_damage"):
 				var damage_number = randf_range(active_gun.metadata.damage_floor, active_gun.metadata.damage_ceiling)
 				var damage_scale = float(damage_number - active_gun.metadata.damage_floor) / (active_gun.metadata.damage_ceiling - active_gun.metadata.damage_floor)

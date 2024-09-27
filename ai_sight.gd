@@ -24,9 +24,9 @@ func _init(character, eye_pos, vision_range):
 func _on_core_changed(context, payload):
 	# TODO: setup detection countdown for dynamic polling rate
 	if context == contexts.map_updated:
-		player_pos = payload["player_pos"]
+		player_pos = payload["player_eye_pos"]
 		var ray_result = cast_ray_towards_target(player_pos, vision_range)
-		if ray_result and ray_result.collider is PlayerEntity:
+		if ray_result and ray_result["collider"] is PlayerEntity:
 			can_see_player = true
 			core_changed.emit(contexts.player_spotted, {"observer_rid": character.rid, "player_pos": player_pos})
 

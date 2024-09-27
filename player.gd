@@ -20,6 +20,7 @@ const JUMP_BUFFER = 20
 const SPRINT_FOV_CD = 100
 const DEFAULT_CAMERA_ZOOM = 75
 
+var eye_pos
 var max_gun_slots = 4
 var rid: int
 var object_in_view
@@ -44,6 +45,7 @@ func _ready():
 	sprint_cd = Countdown.new(SPRINT_FOV_CD)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	input_dir = Vector2.ZERO
+	eye_pos = camera.position
 
 # TODO: Move all gun_slot logic away from input
 	# e.g. hold trigger through reload moves state back to triggering 

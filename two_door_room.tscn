@@ -1,6 +1,6 @@
-[gd_scene load_steps=12 format=3 uid="uid://bnnxpbeimkhrg"]
+[gd_scene load_steps=11 format=3 uid="uid://bnnxpbeimkhrg"]
 
-[ext_resource type="Material" uid="uid://7863s5g1aika" path="res://test_flat_tile_material.tres" id="1_hkuxe"]
+[ext_resource type="PackedScene" uid="uid://bjkk7c44jgjv5" path="res://base_floor.tscn" id="1_3f03i"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_enbys"]
 size = Vector3(40, 8, 0.5)
@@ -9,16 +9,12 @@ size = Vector3(40, 8, 0.5)
 size = Vector3(0.5, 8, 39)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_ncvp7"]
-top_radius = 0.75
-bottom_radius = 0.75
+top_radius = 1.5
+bottom_radius = 1.5
 height = 0.75
 
 [sub_resource type="BoxMesh" id="BoxMesh_l6kw8"]
-size = Vector3(3, 0.75, 1.5)
-
-[sub_resource type="BoxMesh" id="BoxMesh_dk8l5"]
-material = ExtResource("1_hkuxe")
-size = Vector3(40, 1, 40)
+size = Vector3(3, 0.75, 3)
 
 [sub_resource type="BoxMesh" id="BoxMesh_ffrtp"]
 size = Vector3(2, 5, 12)
@@ -82,52 +78,10 @@ transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -19.75
 operation = 2
 mesh = SubResource("BoxMesh_l6kw8")
 
-[node name="CSGMesh3D5" type="CSGMesh3D" parent="CSGCombiner3D"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -19.75, 3, 5)
-operation = 2
-mesh = SubResource("CylinderMesh_ncvp7")
-
-[node name="CSGMesh3D6" type="CSGMesh3D" parent="CSGCombiner3D"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -19.75, 1.5, -5)
-operation = 2
-mesh = SubResource("BoxMesh_l6kw8")
-
-[node name="CSGMesh3D7" type="CSGMesh3D" parent="CSGCombiner3D"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -19.75, 3, -5)
-operation = 2
-mesh = SubResource("CylinderMesh_ncvp7")
-
-[node name="CSGMesh3D8" type="CSGMesh3D" parent="CSGCombiner3D"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -19.75, 1.5, 5)
-operation = 2
-mesh = SubResource("BoxMesh_l6kw8")
-
-[node name="CSGMesh3D9" type="CSGMesh3D" parent="CSGCombiner3D"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 19.75, 3, 5)
-operation = 2
-mesh = SubResource("CylinderMesh_ncvp7")
-
-[node name="CSGMesh3D10" type="CSGMesh3D" parent="CSGCombiner3D"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 19.75, 1.5, -5)
-operation = 2
-mesh = SubResource("BoxMesh_l6kw8")
-
-[node name="CSGMesh3D11" type="CSGMesh3D" parent="CSGCombiner3D"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 19.75, 3, -5)
-operation = 2
-mesh = SubResource("CylinderMesh_ncvp7")
-
-[node name="CSGMesh3D12" type="CSGMesh3D" parent="CSGCombiner3D"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 19.75, 1.5, 5)
-operation = 2
-mesh = SubResource("BoxMesh_l6kw8")
-
 [node name="CSGCombiner3D2" type="CSGCombiner3D" parent="."]
 use_collision = true
 
-[node name="Base Floor" type="CSGMesh3D" parent="CSGCombiner3D2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-mesh = SubResource("BoxMesh_dk8l5")
+[node name="Base Floor" parent="CSGCombiner3D2" instance=ExtResource("1_3f03i")]
 
 [node name="MeshInstance3D" type="CSGMesh3D" parent="CSGCombiner3D2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 5.97162)

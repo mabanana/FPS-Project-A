@@ -57,13 +57,14 @@ func _pos_update(origin_rid: ):
 	# calculate relative positions for minimap based on player
 	var entities = core.map.entities
 	var positions: Array[Vector3] = []
+	var eye_pos = entity_hash[origin_key].position + entity_hash[origin_key].eye_pos
 	for key in entities.keys():
 		if entities[key].type == EntityModel.EntityType.enemy:
 			var relative_pos = entity_hash[key].position - entity_hash[origin_key].position
 			relative_pos = relative_pos.rotated(Vector3.UP, -entities[origin_key].rotation.y)
 			relative_pos.y *= -1
 			positions.append(relative_pos)
-	core_changed.emit(contexts.map_updated, {"positions" : positions, "player_pos" : entities[origin_key].position, "player_rid" : player_rid})
+	core_changed.emit(contexts.map_updated, {"positions" : positions, "player_pos" : entities[origin_key].position, "player_rid" : player_rid, "player_eye_pos" : eye_pos})
 
 func _add_entity_to_map(entity_type: EntityMetadataModel.EntityType, position: Vector3):
 	var rid = core.services.generate_rid()

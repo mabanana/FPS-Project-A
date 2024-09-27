@@ -232,7 +232,6 @@ func set_ads(boo: bool):
 		return
 	if !(is_as(PlayerModel.ActionState.triggering) or is_as(PlayerModel.ActionState.idling)):
 		core.player.is_ads = false
-		return
 	print("Aiming down sights set to " + ("true" if boo else "false"))
 	
 	if boo:
@@ -298,7 +297,6 @@ func _on_action_change(next_state: PlayerModel.ActionState, prev_state: PlayerMo
 		set_action_state(PlayerModel.ActionState.triggering)
 	if next_state == PlayerModel.ActionState.reloading:
 		set_ads(false)
-		set_jump(false)
 
 func _on_movement_change(next_state: PlayerModel.MovementState, prev_state: PlayerModel.MovementState):
 	prints("Movement state changed to " + str(next_state))

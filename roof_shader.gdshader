@@ -19,9 +19,9 @@ void vertex() {
     float distance_z = abs(uv.y);
 
     // Compute the distance to the corner: Use the Euclidean distance formula
-	
+
     float corner_distance = sqrt(pow(distance_x, 2.0) + pow(distance_z, 2.0));
-	
+
 	float height = texture(height_noise, uv / 2.0 + 0.5).x;
     // Scale the vertex along the z-axis to form a square-based pyramid
 	VERTEX.y += (1.0 - corner_distance) * pyramid_height;
@@ -39,7 +39,7 @@ void fragment() {
     // Set roughness of the material
     ROUGHNESS = roughness;
 	METALLIC = metallic;
-	
+
 }
 
 //void light() {

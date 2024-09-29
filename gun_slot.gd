@@ -166,7 +166,7 @@ func _set_active_gun(index: int) -> void:
 func _drop_gun_on_map(active_gun: GunModel, throw_vector) -> void:
 	var payload = {
 		"rid" : core.services.generate_rid(),
-		"position" : character.position + throw_vector,
+		"position" : character.position + character.eye_pos + throw_vector,
 		"gun_model" : active_gun,
 		"linear_velocity" : throw_vector * THROW_FORCE / active_gun.metadata.mass,
 		"angular_velocity" : throw_vector.cross(Vector3.UP) * THROW_FORCE / active_gun.metadata.mass,
@@ -176,7 +176,7 @@ func _drop_gun_on_map(active_gun: GunModel, throw_vector) -> void:
 	core_changed.emit(contexts.gun_dropped, payload)
 
 func _pickup_gun_from_map(gun_id: int) -> void:
-	core_changed.emit(contexts.gun_picked_up, {"rid": gun_id})
+	core_changed.emit(contexts.gun_picked_up, {"target_rid": gun_id})
 
 func _update_mag(mag_curr: int) -> void:
 	core.inventory.active_gun.mag_curr = mag_curr

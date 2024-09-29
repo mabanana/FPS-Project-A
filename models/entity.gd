@@ -1,11 +1,11 @@
 class_name EntityModel
 
 enum EntityType {
+	removed,
 	interactable,
 	player,
 	enemy,
 	npc,
-	removed
 }
 
 # TODO: Move rid assignment to new_entity
@@ -23,7 +23,11 @@ var entity_type: EntityMetadataModel.EntityType
 var name:
 	get:
 		return EntityMetadataModel.entity_metadata_map[entity_type].name
+var loot_class: 
+	get:
+		return EntityMetadataModel.entity_metadata_map[entity_type].loot_class
 var hp
+
 
 func _init(entity_type: EntityMetadataModel.EntityType, position: Vector3, rotation: Vector3, type: EntityType) -> void:
 	self.position = position

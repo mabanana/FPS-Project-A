@@ -67,8 +67,7 @@ func _change_hp(hp_change, dealer_rid):
 			"target_name" : core.map.entities[rid].name,
 			"target_rid" : rid,
 			"hp_change" : hp_change,
-			# TODO: move loot class to entitymodel
-			"loot_class" : LootManager.LootClass.TEST_SCENE_1_DROP,
+			"loot_class" : core.map.entities[rid].loot_class,
 	}
 	if core.map.entities[rid].hp <= 0:
 		alive = false

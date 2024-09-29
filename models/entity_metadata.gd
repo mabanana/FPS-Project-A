@@ -16,6 +16,7 @@ var oid: int
 var hp: int
 var movement_speed: float
 var vision_range: float
+var loot_class: LootManager.LootClass
 
 static var entity_metadata_map := {}
 
@@ -63,6 +64,7 @@ func _init(
 			self.hp = 100
 			self.movement_speed = 5
 			self.vision_range = 20
+			self.loot_class = LootManager.LootClass.TEST_SCENE_1_DROP
 		EntityType.DAMAGE_NUMBER:
 			self.name = "Damage Number"
 			self.entity_type = EntityModel.EntityType.removed

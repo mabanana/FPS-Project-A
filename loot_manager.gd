@@ -7,6 +7,7 @@ var contexts
 
 var loot_classes: Dictionary
 enum LootClass {
+	NONE,
 	TEST_SCENE_1_DROP,
 	WEAPON_BASE_LIST,
 }
@@ -17,12 +18,15 @@ func _init():
 		loot_classes[LootClass[lc.loot_class]] = lc.items
 
 func drop_loot(loot_class: LootClass, target_name: String):
-	var loot_table = get_loot_table(loot_class)
-	var loot = Randomizer.roll_loot(loot_table)
-	if loot in LootClass.keys():
-		drop_loot(LootClass[loot], target_name)
-		return
-	prints("Loot Dropped by", target_name, loot)
+	if loot_class:
+		var loot_table = get_loot_table(loot_class)
+		var loot = Randomizer.roll_loot(loot_table)
+		if loot in LootClass.keys():
+			drop_loot(LootClass[loot], target_name)
+			return
+		prints("Loot Dropped by", target_name, loot)
+	else:
+		print("no loot from this one.")
 
 func get_loot_table(loot_class: LootClass):
 	var loot_table = {}

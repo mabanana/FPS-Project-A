@@ -53,7 +53,7 @@ func shoot():
 				var damage_scale = float(damage_number - active_gun.metadata.damage_floor) / (active_gun.metadata.damage_ceiling - active_gun.metadata.damage_floor)
 				result.collider.take_damage(damage_number, damage_scale, character.rid, result.position)
 				_add_bullet_particle(result.position, -character.camera.get_global_transform().basis.z.normalized())
-			else:
+			elif !(result.collider is RigidBody3D):
 				_add_bullet_hole(result.position)
 	_update_mag(active_gun.mag_curr - active_gun.metadata.ammo_per_shot)
 

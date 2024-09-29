@@ -89,6 +89,12 @@ func _process(delta):
 		_set_target(object_in_view.rid)
 	else:
 		_set_target(-1)
+	if object_in_view and object_in_view is InteractableEntity:
+		_set_interact_target(object_in_view.rid)
+	else:
+		_set_interact_target(-1)
+	
+	
 	if jump_cd.tick(delta) <= 0:
 		set_jump(false)
 	camera.fov = move_toward(camera.fov, fov_modifier + DEFAULT_CAMERA_ZOOM * fov_multiplier, 10 / fov_multiplier)
@@ -251,6 +257,10 @@ func set_jump(boo: bool):
 
 func _set_target(rid):
 	core.player.target_rid = rid
+	core_changed.emit(contexts.none, null)
+	
+func _set_interact_target(rid):
+	core.player.interact_rid = rid
 	core_changed.emit(contexts.none, null)
 
 func set_active_gun_index(index: int, cycle = false):

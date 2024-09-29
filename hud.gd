@@ -3,6 +3,7 @@ class_name HudController
 
 var core: CoreModel
 var core_changed: Signal
+var contexts
 
 func update():
 	# Update Weapon HUD
@@ -25,17 +26,31 @@ func update():
 	if core.player.target_rid > 0:
 		%TargetDisplay.modulate.a = 1
 		var target_rid = core.player.target_rid
+		%TargetHp.modulate.a = 1
 		%TargetHp.value = core.map.entities[target_rid].hp
 		%TargetHp.max_value = core.map.entities[target_rid].metadata.hp
 		%TargetLabel.text = core.map.entities[target_rid].name
+	elif core.player.interact_rid > 0:
+		%TargetDisplay.modulate.a = 1
+		var target_rid = core.player.interact_rid
+		%TargetHp.modulate.a = 0
+		var entity_hash = get_parent().entity_hash
+		if target_rid in entity_hash:
+			%TargetLabel.text = entity_hash[target_rid].gun_model.metadata.name
+		else:
+			core.player.interact_rid = -1
+			core_changed.emit(contexts.none, null)
 	else:
 		%TargetDisplay.modulate.a = 0
+	
+	
 
 # Bindings
 
 func bind(core: CoreModel, core_changed: Signal):
 	self.core = core
 	self.core_changed = core_changed
+	contexts = core.services.Context
 	
 	core_changed.connect(_on_core_changed)
 	_on_bind()

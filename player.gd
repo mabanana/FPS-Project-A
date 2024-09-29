@@ -132,10 +132,10 @@ func _on_core_changed(context, payload):
 					set_action_state(PlayerModel.ActionState.triggering)
 			InputHandler.PlayerActions.NEXT_WEAPON:
 				set_action_state(PlayerModel.ActionState.idling)
-				set_active_gun_index(core.inventory.active_gun_index + 1)
+				set_active_gun_index(core.inventory.active_gun_index + 1, true)
 			InputHandler.PlayerActions.PREV_WEAPON:
 				set_action_state(PlayerModel.ActionState.idling)
-				set_active_gun_index(core.inventory.active_gun_index - 1)
+				set_active_gun_index(core.inventory.active_gun_index - 1, true)
 			InputHandler.PlayerActions.MOVE_FORWARD:
 				print("move forward")
 			InputHandler.PlayerActions.MOVE_BACKWARD:
@@ -253,14 +253,21 @@ func _set_target(rid):
 	core.player.target_rid = rid
 	core_changed.emit(contexts.none, null)
 
-func set_active_gun_index(index: int):
+func set_active_gun_index(index: int, cycle = false):
+	if index > max_gun_slots - 1 or index > len(core.inventory.guns) - 1:
+		if cycle:
+			index = 0
+		else:
+			return
 	if core.inventory.active_gun_index == index:
 		return
-	if index > max_gun_slots - 1 or index > len(core.inventory.guns) - 1:
-		index = 0
 	elif index < 0:
-		index = min(len(core.inventory.guns) - 1, max_gun_slots - 1)
+		if cycle:
+			index = min(len(core.inventory.guns) - 1, max_gun_slots - 1)
+		else:
+			return
 	core.inventory.active_gun_index = index
+	set_ads(false)
 	core_changed.emit(contexts.gun_swap_started, null)
 
 func set_action_state(state: PlayerModel.ActionState):
@@ -294,7 +301,7 @@ func _on_action_change(next_state: PlayerModel.ActionState, prev_state: PlayerMo
 		set_movement_state(PlayerModel.MovementState.standing)
 	elif trigger_down:
 		set_action_state(PlayerModel.ActionState.triggering)
-	if next_state == PlayerModel.ActionState.reloading:
+	if !(next_state == PlayerModel.ActionState.triggering or next_state == PlayerModel.ActionState.idling):
 		set_ads(false)
 
 func _on_movement_change(next_state: PlayerModel.MovementState, prev_state: PlayerModel.MovementState):

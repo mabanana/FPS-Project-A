@@ -31,8 +31,6 @@ func take_damage(damage_amount: int, damage_scale: float, dealer_rid: int, damag
 func _on_core_changed(context: CoreServices.Context, payload):
 	if context == contexts.damage_dealt and payload["target_rid"] == rid and alive:
 		var hp_change = -payload["damage_amount"]
-		prints("signal received for hp change", hp_change, "on", core.map.entities[payload["target_rid"]].name)
-		# pass into perk controller to edit value
 		_add_damage_number_to_map(hp_change, payload["damage_scale"], payload["dealer_rid"], payload["damage_position"])
 		_change_hp(hp_change, payload["dealer_rid"])
 		
@@ -59,6 +57,7 @@ func _take_damage(damage_amount: int, damage_scale: float, dealer_rid: int, dama
 		"damage_position": damage_position,
 		"damage_scale": damage_scale,
 	}
+	payload = PerkController.apply_perks(contexts.damage_dealt, payload, core, core_changed)
 	core_changed.emit(contexts.damage_dealt, payload)
 
 func _change_hp(hp_change, dealer_rid):
@@ -68,10 +67,12 @@ func _change_hp(hp_change, dealer_rid):
 			"target_name" : core.map.entities[rid].name,
 			"target_rid" : rid,
 			"hp_change" : hp_change,
+			# TODO: move loot class to entitymodel
 			"loot_class" : LootManager.LootClass.TEST_SCENE_1_DROP,
 	}
 	if core.map.entities[rid].hp <= 0:
 		alive = false
+		payload = PerkController.apply_perks(contexts.entity_died, payload, core, core_changed)
 		core_changed.emit(contexts.entity_died, payload)
 	else:
 		core_changed.emit(contexts.health_changed, payload)

@@ -21,6 +21,11 @@ enum MovementState {
 	sprinting
 }
 
+var perks = {
+	PerkController.Perk.double_damage : true,
+	PerkController.Perk.heal_on_kill : true,
+}
+
 func _init(hp: int = 100) -> void:
 	self.hp = hp
 	is_ads = false

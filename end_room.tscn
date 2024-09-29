@@ -1,5 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://xxktuvij7grb"]
+[gd_scene load_steps=8 format=3 uid="uid://xxktuvij7grb"]
 
+[ext_resource type="Material" uid="uid://cwo5cjo8jqdic" path="res://test_wall_texture.tres" id="1_kxc4l"]
 [ext_resource type="PackedScene" uid="uid://bjkk7c44jgjv5" path="res://base_floor.tscn" id="1_ohieg"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_enbys"]
@@ -27,6 +28,7 @@ omni_range = 100.0
 omni_attenuation = 0.1
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
+material_override = ExtResource("1_kxc4l")
 use_collision = true
 
 [node name="MeshInstance3D2" type="CSGMesh3D" parent="CSGCombiner3D"]
@@ -55,26 +57,26 @@ transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 19.75,
 operation = 2
 mesh = SubResource("BoxMesh_l6kw8")
 
+[node name="MeshInstance3D6" type="CSGMesh3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 3, -12)
+mesh = SubResource("BoxMesh_1mj8l")
+
+[node name="MeshInstance3D7" type="CSGMesh3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 3, 12)
+mesh = SubResource("BoxMesh_1mj8l")
+
+[node name="MeshInstance3D8" type="CSGMesh3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 3, 12)
+mesh = SubResource("BoxMesh_1mj8l")
+
+[node name="MeshInstance3D9" type="CSGMesh3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 3, -12)
+mesh = SubResource("BoxMesh_1mj8l")
+
 [node name="CSGCombiner3D2" type="CSGCombiner3D" parent="."]
 use_collision = true
 
 [node name="Base Floor" parent="CSGCombiner3D2" instance=ExtResource("1_ohieg")]
-
-[node name="MeshInstance3D3" type="CSGMesh3D" parent="CSGCombiner3D2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 3, -12)
-mesh = SubResource("BoxMesh_1mj8l")
-
-[node name="MeshInstance3D6" type="CSGMesh3D" parent="CSGCombiner3D2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 3, 12)
-mesh = SubResource("BoxMesh_1mj8l")
-
-[node name="MeshInstance3D5" type="CSGMesh3D" parent="CSGCombiner3D2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 3, 12)
-mesh = SubResource("BoxMesh_1mj8l")
-
-[node name="MeshInstance3D4" type="CSGMesh3D" parent="CSGCombiner3D2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 3, -12)
-mesh = SubResource("BoxMesh_1mj8l")
 
 [node name="Marker3D9" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.454, 0, -2.129)

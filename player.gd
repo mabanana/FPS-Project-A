@@ -24,7 +24,6 @@ var eye_pos
 var max_gun_slots = 4
 var rid: int
 var object_in_view
-var hp : int
 var movement_speed: float
 var input_dir: Vector2
 var trigger_down : bool

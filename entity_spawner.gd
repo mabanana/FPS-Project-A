@@ -26,7 +26,7 @@ func _on_core_changed(context: CoreServices.Context, payload):
 		contexts.gun_dropped,
 		contexts.bullet_hole_added,
 		contexts.enemy_spawned,
-		contexts.damage_dealt,
+		contexts.damage_taken,
 		contexts.player_spawned,
 		contexts.bullet_particle_added,
 		]:
@@ -35,7 +35,7 @@ func _on_core_changed(context: CoreServices.Context, payload):
 		contexts.gun_picked_up, 
 		contexts.entity_died,
 		]:
-		_remove_node(scene.entity_hash[payload["rid"]])
+		_remove_node(scene.entity_hash[payload["target_rid"]])
 
 func _spawn_node(node_scene, target_scene, spawn_context, payload):
 	var new_node: Node3D
@@ -47,17 +47,15 @@ func _spawn_node(node_scene, target_scene, spawn_context, payload):
 		new_node.gun_model = payload["gun_model"]
 	elif spawn_context == contexts.enemy_spawned:
 		new_node.rid = payload["rid"]
-		new_node.hp = payload["entity_model"].metadata.hp
 		new_node.movement_speed = payload["entity_model"].metadata.movement_speed
 		new_node.vision_range = payload["entity_model"].metadata.vision_range
 		new_node.bind(core, core_changed)
 	elif spawn_context == contexts.player_spawned:
 		new_node.rid = payload["rid"]
-		new_node.hp = payload["entity_model"].metadata.hp
 		new_node.movement_speed = payload["entity_model"].metadata.movement_speed
 		new_node.bind(core, core_changed)
-	elif spawn_context == contexts.damage_dealt:
-		new_node.damage_number = payload["damage_number"]
+	elif spawn_context == contexts.damage_taken:
+		new_node.damage_number = payload["hp_change"]
 		new_node.damage_scale = payload["damage_scale"]
 	elif spawn_context == contexts.bullet_particle_added:
 		new_node.rotation = payload["facing"]

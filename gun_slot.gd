@@ -51,7 +51,7 @@ func shoot():
 			if result.collider.has_method("take_damage"):
 				var damage_number = randf_range(active_gun.metadata.damage_floor, active_gun.metadata.damage_ceiling)
 				var damage_scale = float(damage_number - active_gun.metadata.damage_floor) / (active_gun.metadata.damage_ceiling - active_gun.metadata.damage_floor)
-				result.collider.take_damage(damage_number, damage_scale, character, result.position)
+				result.collider.take_damage(damage_number, damage_scale, character.rid, result.position)
 				_add_bullet_particle(result.position, -character.camera.get_global_transform().basis.z.normalized())
 			else:
 				_add_bullet_hole(result.position)

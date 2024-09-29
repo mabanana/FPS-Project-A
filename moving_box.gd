@@ -6,7 +6,6 @@ var sight: AiSightController
 
 func _ready():
 	current_state = EnemyState.idling
-	hp = 100
 	nav_ai = AiNavigator.new($NavigationAgent3D)
 	sight = AiSightController.new(self, Vector3(0, 1.5, 0), vision_range)
 	nav_ai.bind(core, core_changed)
@@ -33,5 +32,6 @@ func _physics_process(delta):
 
 func _on_core_changed(context: CoreServices.Context, payload):
 	# Temporary state logic
+	super._on_core_changed(context, payload)
 	if context == contexts.player_spotted and payload["observer_rid"] == rid:
 		current_state = EnemyState.chasing

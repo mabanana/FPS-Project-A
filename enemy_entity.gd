@@ -9,6 +9,7 @@ var current_state: EnemyState
 const POSITION_FORESHORTEN = 1
 var dir: Vector3
 var alive = true
+var eye_pos = Vector3(0, 1.2, 0)
 
 var rid: int
 var vision_range: float
@@ -68,6 +69,7 @@ func _change_hp(hp_change, dealer_rid):
 			"target_rid" : rid,
 			"hp_change" : hp_change,
 			"loot_class" : core.map.entities[rid].loot_class,
+			"target_position": global_position + eye_pos
 	}
 	if core.map.entities[rid].hp <= 0:
 		alive = false

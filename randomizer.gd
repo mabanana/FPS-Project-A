@@ -6,7 +6,7 @@ static var TEST_LOOT_TABLE := {
 		"rare": 10
 		}
 
-static func roll_loot(table: Dictionary) -> String:
+static func roll_loot(table: Dictionary):
 	var weight_total = 0
 	for loot in table.keys():
 		weight_total += table[loot]
@@ -16,4 +16,3 @@ static func roll_loot(table: Dictionary) -> String:
 		if roll_result <= 0:
 			return loot
 	push_error("Failed loot probability roll.")
-	return ""

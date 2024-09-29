@@ -4,7 +4,8 @@ enum GunType {
 	TEST_GUN_A,
 	TEST_GUN_B,
 	TEST_GUN_C,
-	TEST_GUN_D
+	TEST_GUN_D,
+	RARE_GUN_A,
 }
 
 var name: String
@@ -78,5 +79,17 @@ func _init(
 			self.pellet_count = 1
 			self.ammo_per_shot = 2
 			self.zoom = 4
+		GunType.RARE_GUN_A:
+			self.name = "Bullet Sprinkler"
+			self.damage_floor = 150
+			self.damage_ceiling = 200
+			self.fire_rate = 10
+			self.reload_time = 2
+			self.accuracy = 90
+			self.mag_size = 40
+			self.mass = 7
+			self.pellet_count = 10
+			self.ammo_per_shot = 4
+			self.zoom = 2
 		_:
 			assert(false, "Unknown GunType")

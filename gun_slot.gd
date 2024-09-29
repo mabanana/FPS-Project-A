@@ -72,7 +72,7 @@ func drop_gun():
 
 # TODO: move utilities to services or player script
 
-func inaccuratize_vector(vector, acc):
+static func inaccuratize_vector(vector, acc):
 	var rot = deg_to_rad(ACCURACY_FLOOR * (MAX_ACCURACY - acc) / 100)
 	return vector.rotated(Vector3.UP, randf_range(-rot,rot)).rotated(Vector3.BACK, randf_range(-rot,rot)).rotated(Vector3.RIGHT, randf_range(-rot,rot)) 
 

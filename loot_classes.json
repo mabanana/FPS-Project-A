@@ -5,12 +5,12 @@
 			"items": [
 				{
 					"name": "GOLD_DROP",
-					"type": "Interactable",
+					"type": "Entity",
 					"weight": 5
 				},
 				{
 					"name": "RARE_GUN_A",
-					"type": "Interactable",
+					"type": "Gun",
 					"weight": 1
 				},
 				{
@@ -25,22 +25,22 @@
 			"items": [
 				{
 					"name": "TEST_GUN_A",
-					"type": "Interactable",
+					"type": "Gun",
 					"weight": 2
 				},
 				{
 					"name": "TEST_GUN_B",
-					"type": "Interactable",
+					"type": "Gun",
 					"weight": 1
 				},
 				{
 					"name": "TEST_GUN_C",
-					"type": "Interactable",
+					"type": "Gun",
 					"weight": 6
 				},
 				{
 					"name": "TEST_GUN_D",
-					"type": "Interactable",
+					"type": "Gun",
 					"weight": 3
 				}
 			]

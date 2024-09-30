@@ -87,6 +87,5 @@ func _remove_node(node):
 	node.queue_free()
 
 func _get_entity_scene(entity: EntityModel):
-	var oid = entity.metadata.oid
-	var new_scene = asset_loader.get_scene(oid)
+	var new_scene = asset_loader.get_scene(entity.entity_type)
 	return new_scene

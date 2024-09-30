@@ -5,29 +5,28 @@ var scenes: Dictionary
 
 var scene_paths: Dictionary
 
-# TODO: phase out OID and use EntityMetadataModel.EntityType instead
 func _init():
 	scenes = {}
 	scene_paths = {
-	1001: "res://gun_on_floor.tscn",
-	5001: "res://bullet_hole.tscn",
-	5002: "res://damage_number.tscn",
-	5003: "res://bullet_particle.tscn",
+	EntityMetadataModel.EntityType.GUN_ON_FLOOR: "res://gun_on_floor.tscn",
+	EntityMetadataModel.EntityType.BULLET_HOLE: "res://bullet_hole.tscn",
+	EntityMetadataModel.EntityType.DAMAGE_NUMBER: "res://damage_number.tscn",
+	EntityMetadataModel.EntityType.BULLET_PARTICLE: "res://bullet_particle.tscn",
 	# TODO: Use particle trail instead of mesh
-	5004: "res://ray_trail_mesh.tscn",
-	2001: "res://player.tscn",
-	3001: "res://target_dummy.tscn",
-	3002: "res://moving_box_enemy.tscn",
+	EntityMetadataModel.EntityType.RAY_TRAIL: "res://ray_trail_mesh.tscn",
+	EntityMetadataModel.EntityType.PLAYER: "res://player.tscn",
+	EntityMetadataModel.EntityType.TARGET_DUMMY: "res://target_dummy.tscn",
+	EntityMetadataModel.EntityType.MOVING_BOX: "res://moving_box_enemy.tscn",
 	}
 	
-func get_scene(oid):
-	if !oid in scenes:
-		prints(oid ,"load successful" if load_scene(oid) else "load unsuccessful")
+func get_scene(entity_type: EntityMetadataModel.EntityType):
+	if !entity_type in scenes:
+		prints(EntityMetadataModel.EntityType.find_key(entity_type) ,"load successful" if load_scene(entity_type) else "load unsuccessful")
 	else:
 		push_error("Scene not found")
-	return scenes[oid]
+	return scenes[entity_type]
 
-func load_scene(oid):
-	if oid in scene_paths:
-		scenes[oid] = load(scene_paths[oid])
+func load_scene(entity_type):
+	if entity_type in scene_paths:
+		scenes[entity_type] = load(scene_paths[entity_type])
 		return true

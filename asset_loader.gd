@@ -1,10 +1,11 @@
 class_name AssetLoader
+# TODO Consider combining functionality with node instancer
 
 var scenes: Dictionary
 
 var scene_paths: Dictionary
 
-
+# TODO: phase out OID and use EntityMetadataModel.EntityType instead
 func _init():
 	scenes = {}
 	scene_paths = {
@@ -21,7 +22,7 @@ func _init():
 	
 func get_scene(oid):
 	if !oid in scenes:
-		print("load successful") if load_scene(oid) else print("load unsuccessful")
+		prints(oid ,"load successful" if load_scene(oid) else "load unsuccessful")
 	else:
 		push_error("Scene not found")
 	return scenes[oid]

@@ -23,6 +23,7 @@ enum Context {
 	event_input_pressed,
 	event_mouse_moved,
 	event_input_released,
+	ray_trail_added,
 }
 
 func _init() -> void:

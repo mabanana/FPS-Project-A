@@ -29,6 +29,7 @@ func _on_core_changed(context: CoreServices.Context, payload):
 		contexts.damage_taken,
 		contexts.player_spawned,
 		contexts.bullet_particle_added,
+		contexts.ray_trail_added,
 		]:
 		_spawn_node(_get_entity_scene(payload["entity_model"]), scene, context, payload)
 	elif context in [
@@ -61,6 +62,12 @@ func _spawn_node(node_scene, target_scene, spawn_context, payload):
 		new_node.rotation = payload["facing"]
 		new_node.emitting = true
 		new_node.one_shot = true
+	elif spawn_context == contexts.ray_trail_added:
+		new_node.direction = payload["direction"].normalized()
+		new_node.speed = 120
+		new_node.distance = 60
+		new_node.position = payload["position"]
+	# TODO: create custom add/free that reuses previously added children
 	target_scene.add_child(new_node)
 	
 	if payload["entity_model"].type == EntityModel.EntityType.removed:

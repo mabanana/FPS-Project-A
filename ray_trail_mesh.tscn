@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://bomgturw15chu"]
+
+[ext_resource type="Script" path="res://ray_trail_mesh.gd" id="1_rqg5q"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n7hnw"]
+albedo_color = Color(1, 0.967333, 0.51, 1)
+emission = Color(1, 0.34, 0.34, 1)
+emission_energy_multiplier = 16.0
+subsurf_scatter_strength = 1.0
+billboard_mode = 1
+use_particle_trails = true
+distance_fade_mode = 1
+distance_fade_min_distance = 1.0
+distance_fade_max_distance = 30.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_e34n7"]
+material = SubResource("StandardMaterial3D_n7hnw")
+size = Vector2(0.2, 0.2)
+orientation = 2
+
+[node name="RayTrailMesh" type="MeshInstance3D"]
+physics_interpolation_mode = 1
+mesh = SubResource("PlaneMesh_e34n7")
+script = ExtResource("1_rqg5q")

@@ -41,10 +41,14 @@ func reload():
 func shoot():
 	shoot_cd.reset_cd(UNIT / active_gun.metadata.fire_rate)
 	for i in range(core.inventory.active_gun.metadata.pellet_count):
-		var acc = active_gun.metadata.accuracy
+		var acc: float
+		var cast_vector: Vector3
 		if core.player.is_ads:
 			acc = MAX_ACCURACY - (MAX_ACCURACY - active_gun.metadata.accuracy) / active_gun.metadata.zoom
+		else:
+			acc = active_gun.metadata.accuracy
 		var query: PhysicsRayQueryParameters3D = cast_ray_towards_mouse(acc)
+		_add_ray_trail(global_position, query.to - global_position)
 		query.set_exclude([character.get_rid()])
 		var result = get_world_3d().direct_space_state.intersect_ray(query)
 		if result:
@@ -52,9 +56,9 @@ func shoot():
 				var damage_number = randf_range(active_gun.metadata.damage_floor, active_gun.metadata.damage_ceiling)
 				var damage_scale = float(damage_number - active_gun.metadata.damage_floor) / (active_gun.metadata.damage_ceiling - active_gun.metadata.damage_floor)
 				result.collider.take_damage(damage_number, damage_scale, character.rid, result.position)
-				_add_bullet_particle(result.position, -character.camera.get_global_transform().basis.z.normalized())
 			elif !(result.collider is RigidBody3D):
 				_add_bullet_hole(result.position)
+			_add_bullet_particle(result.position, -character.camera.get_global_transform().basis.z.normalized())
 	_update_mag(active_gun.mag_curr - active_gun.metadata.ammo_per_shot)
 
 
@@ -196,6 +200,16 @@ func _add_bullet_hole(node_position: Vector3):
 	}
 	core.map.entities[payload["rid"]] = payload["entity_model"]
 	core_changed.emit(contexts.bullet_hole_added, payload)
+	
+func _add_ray_trail(node_position: Vector3, trail_direction: Vector3):
+	var payload = {
+		"rid" : core.services.generate_rid(),
+		"entity_model" : EntityModel.new_entity(EntityMetadataModel.EntityType.RAY_TRAIL),
+		"position" : node_position,
+		"direction" : trail_direction,
+	}
+	core.map.entities[payload["rid"]] = payload["entity_model"]
+	core_changed.emit(contexts.ray_trail_added, payload)
 
 func _add_bullet_particle(node_position, facing):
 	var payload = {

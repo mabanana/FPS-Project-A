@@ -66,7 +66,7 @@ mesh = SubResource("CapsuleMesh_rhwuk")
 
 [node name="GunSlot" type="Node3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.427035, 1.04592, -0.348663)
 script = ExtResource("2_mm0q3")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]

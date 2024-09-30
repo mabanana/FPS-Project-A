@@ -12,6 +12,8 @@ func _init():
 	5001: "res://bullet_hole.tscn",
 	5002: "res://damage_number.tscn",
 	5003: "res://bullet_particle.tscn",
+	# TODO: Use particle trail instead of mesh
+	5004: "res://ray_trail_mesh.tscn",
 	2001: "res://player.tscn",
 	3001: "res://target_dummy.tscn",
 	3002: "res://moving_box_enemy.tscn",

@@ -48,7 +48,7 @@ func _ready():
 
 # TODO: Move all gun_slot logic away from input
 	# e.g. hold trigger through reload moves state back to triggering 
-
+# BUG: Camera rotation tied to pixels travelled by mouse instead of % viewport travelled
 func _rotate_camera(x, y, z):
 	camera.rotate_x(-y * MOUSE_SENSITIVITY)
 	camera.rotation.x = clampf(camera.rotation.x, -VERTICAL_LOOK_LIMIT, VERTICAL_LOOK_LIMIT)

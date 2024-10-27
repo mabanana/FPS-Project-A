@@ -1,17 +1,21 @@
 class_name GridSlot
 extends PanelContainer
 
-var item
+var item: GridSlotItem
+var hotkey_label: Label
 
 func _init():
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
 	item = GridSlotItem.new()
+	hotkey_label = Label.new()
+	hotkey_label.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	hotkey_label.size_flags_vertical = Control.SIZE_FILL
 	add_child(item)
+	add_child(hotkey_label)
 	
 func _ready():
 	custom_minimum_size = Vector2(64,64)
-	
 
 func _on_mouse_entered():
 	modulate.a = 0.6

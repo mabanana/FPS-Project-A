@@ -1,7 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://dsmo0bih66hl6"]
+[gd_scene load_steps=8 format=3 uid="uid://dsmo0bih66hl6"]
 
 [ext_resource type="Script" path="res://grid_ui_controller.gd" id="1_i81yg"]
 [ext_resource type="Texture2D" uid="uid://c3w2yh612yvtc" path="res://Ninja Adventure - Asset Pack/Actor/Characters/Cavegirl/Faceset.png" id="2_8sprm"]
+[ext_resource type="Script" path="res://grid_slot.gd" id="3_qr4gy"]
+[ext_resource type="Texture2D" uid="uid://chvqvqwtqmypy" path="res://Ninja Adventure - Asset Pack/Actor/Animals/Chicken/FacesetBrown.png" id="4_wbp5y"]
+[ext_resource type="Script" path="res://grid_slot_item.gd" id="5_igbga"]
+[ext_resource type="Material" uid="uid://do3c2ru1xe6t4" path="res://GridSelectionMaterial.tres" id="6_expr6"]
+[ext_resource type="Script" path="res://grid_slot_selection_rect.gd" id="7_bn1bh"]
 
 [node name="TestUI" type="CanvasLayer"]
 
@@ -11,6 +16,8 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -38.0
+offset_top = -38.0
 grow_horizontal = 0
 grow_vertical = 0
 size_flags_horizontal = 3
@@ -20,3 +27,25 @@ size_flags_vertical = 3
 layout_mode = 2
 script = ExtResource("1_i81yg")
 test_tex = ExtResource("2_8sprm")
+
+[node name="GridSlot" type="PanelContainer" parent="PanelContainer/Inventory"]
+layout_mode = 2
+script = ExtResource("3_qr4gy")
+
+[node name="GridSlotItem" type="TextureRect" parent="PanelContainer/Inventory/GridSlot"]
+layout_mode = 2
+texture = ExtResource("4_wbp5y")
+script = ExtResource("5_igbga")
+
+[node name="GridSlotSelectionRect" type="ColorRect" parent="PanelContainer/Inventory/GridSlot/GridSlotItem"]
+material = ExtResource("6_expr6")
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(1, 0.7585, 0.37, 1)
+script = ExtResource("7_bn1bh")
+
+[node name="Label" type="Label" parent="PanelContainer/Inventory/GridSlot/GridSlotItem"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "1"

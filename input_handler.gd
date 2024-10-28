@@ -64,7 +64,8 @@ func _init():
 	input_map = DEFAULT_INPUT_MAP
 	
 func handle_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index in input_map:
+	# TODO: add input uncaptured state for pause screens and inventories
+	if event is InputEventMouseButton and event.button_index in input_map and Input.mouse_mode == Input.MouseMode.MOUSE_MODE_CAPTURED:
 		var context
 		if event.is_pressed() and !event.is_echo():
 			context = contexts.event_input_pressed
@@ -98,7 +99,7 @@ func handle_input(event: InputEvent) -> void:
 			"relative": event.relative
 			})
 	else:
-		print("InputHandler: unhandled input")
+		prints("InputHandler: unhandled input", event.as_text())
 
 
 func bind(core: CoreModel, core_changed: Signal):

@@ -18,11 +18,25 @@ func _init():
 	custom_minimum_size = Vector2(256, 64)
 	add_child(grid_container)
 
-# TODO : reflect inventory in the data
 func swap_data(item1, item2):
-	var temp = item1.texture
-	item1.texture = item2.texture
-	item2.texture = temp
+	var guns = core.inventory.guns
+	var index1 = item1.get_parent().index
+	var index2 = item2.get_parent().index
+	if index2 < 0:
+		var temp = guns.pop_at(index1)
+		guns.append(temp)
+		print("%s is now at %s" %[temp, str(len(guns))])
+		if index1 == selection:
+			change_active_gun(len(guns) - 1)
+	else:
+		var temp = guns[index1]
+		guns[index1] = guns[index2]
+		guns[index2] = temp
+		print("%s is now at index %s" %[temp, str(index2)])
+		if index1 == selection:
+			change_active_gun(index2)
+		elif index2 == selection:
+			change_active_gun(index1)
 	_update()
 
 func change_active_gun(index):
@@ -54,7 +68,7 @@ func _update():
 			selection_rect = GridSelectRect.new()
 			slot.add_child(selection_rect)
 			slot.custom_minimum_size = Vector2(70,64)
-		if i < 4: # TODO tie to weapon slots number constant
+		if i < 4:
 			slot.add_item(test_tex)
 			slot.index = i
 		slot.controller = self

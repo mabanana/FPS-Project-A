@@ -201,9 +201,12 @@ func _on_core_changed(context, payload):
 		var action_released = payload["action"]
 		match action_released:
 			InputHandler.PlayerActions.FIRE:
-				trigger_down = false
-				if is_as(PlayerModel.ActionState.triggering):
-					set_action_state(PlayerModel.ActionState.idling)
+				if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+					trigger_down = false
+					if is_as(PlayerModel.ActionState.triggering):
+						set_action_state(PlayerModel.ActionState.idling)
+				elif !get_viewport().gui_is_drag_successful():
+					core_changed.emit(contexts.gun_swap_started, null)
 			InputHandler.PlayerActions.MOVE_FORWARD:
 				print("stop move forward")
 			InputHandler.PlayerActions.MOVE_BACKWARD:

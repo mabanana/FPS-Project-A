@@ -1,6 +1,8 @@
 class_name GridSlotItem
 extends TextureRect
 
+# TODO : get texture based on inventory data
+
 func _ready():
 	expand_mode = TextureRect.EXPAND_KEEP_SIZE
 	stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED

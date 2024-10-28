@@ -1,5 +1,6 @@
 class_name NodeInstancer
 
+# TODO: Implement this class and add to entity spawner
 # child of entity spawner and receives scene instantiation and queue_free commands
 # should be the only place in the code that has instantiate() and queue_free()
 # instantiates a certain number of commmon scenes and provides them to entity spawner instead of instantiating a new scene everytime something is called

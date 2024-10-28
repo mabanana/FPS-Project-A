@@ -133,9 +133,10 @@ func _on_core_changed(context, payload):
 		var action_pressed = payload["action"]
 		match action_pressed:
 			InputHandler.PlayerActions.FIRE:
-				trigger_down = true
-				if !is_as(PlayerModel.ActionState.reloading) and !is_as(PlayerModel.ActionState.throwing):
-					set_action_state(PlayerModel.ActionState.triggering)
+				if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+					trigger_down = true
+					if !is_as(PlayerModel.ActionState.reloading) and !is_as(PlayerModel.ActionState.throwing):
+						set_action_state(PlayerModel.ActionState.triggering)
 			InputHandler.PlayerActions.NEXT_WEAPON:
 				set_action_state(PlayerModel.ActionState.idling)
 				set_active_gun_index(core.inventory.active_gun_index + 1, true)

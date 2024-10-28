@@ -57,6 +57,7 @@ func bind(core: CoreModel, core_changed: Signal):
 
 func _on_bind():
 	%Minimap.bind(core, core_changed)
-
+	%ScrollContainer.bind(core, core_changed)
+	
 func _on_core_changed(context, payload):
 	update()

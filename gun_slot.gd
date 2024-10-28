@@ -160,7 +160,6 @@ func _set_active_gun(index: int) -> void:
 	var new_index = index
 	if new_index < 0 or new_index > len(core.inventory.guns) - 1:
 		new_index = 0
-	print(new_index)
 	reset_gun_slot()
 	core.inventory.active_gun_index = new_index
 	active_gun = core.inventory.active_gun

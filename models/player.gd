@@ -3,6 +3,7 @@ class_name PlayerModel
 var target_rid: int
 var interact_rid: int
 var hp: int
+var inventory_size: int
 
 var is_ads: bool
 var is_jump: bool
@@ -29,6 +30,7 @@ var perks = {
 
 func _init(hp: int = 100) -> void:
 	self.hp = hp
+	self.inventory_size = 4
 	is_ads = false
 	is_jump = false
 

@@ -13,7 +13,7 @@ func _get_drag_data(at_position):
 func make_drag_preview(at_position):
 	var t := TextureRect.new()
 	t.texture = texture
-	t.modulate.a = 0.5
+	t.modulate.a = 0.8
 	t.position = Vector2(-at_position)
 	var c := Control.new()
 	c.add_child(t)

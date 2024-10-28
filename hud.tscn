@@ -1,8 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://cix1j6ynfe7pn"]
+[gd_scene load_steps=10 format=3 uid="uid://cix1j6ynfe7pn"]
 
 [ext_resource type="Script" path="res://hud.gd" id="1_y46dv"]
 [ext_resource type="Script" path="res://minimap.gd" id="2_7l5sd"]
+[ext_resource type="Script" path="res://scroll_vbox_controller.gd" id="2_xdmpv"]
 [ext_resource type="Texture2D" uid="uid://d2ojqjerpiwf6" path="res://Ninja Adventure - Asset Pack/Items/Weapons/Bow/Sprite.png" id="3_gv8b5"]
+[ext_resource type="Texture2D" uid="uid://d2hfplywmao7g" path="res://Ninja Adventure - Asset Pack/Actor/Animals/CatCyclop/Faceset.png" id="3_ip4o3"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_bawmo"]
 
@@ -147,6 +149,19 @@ unique_name_in_owner = true
 layout_mode = 2
 value = 20.0
 show_percentage = false
+
+[node name="PanelContainer" type="PanelContainer" parent="WeaponDisplay"]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="WeaponDisplay/PanelContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(192, 64)
+layout_mode = 2
+follow_focus = true
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
+script = ExtResource("2_xdmpv")
+test_tex = ExtResource("3_ip4o3")
 
 [node name="Minimap" type="Control" parent="."]
 unique_name_in_owner = true

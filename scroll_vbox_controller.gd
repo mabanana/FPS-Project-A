@@ -18,6 +18,16 @@ func _init():
 	custom_minimum_size = Vector2(256, 64)
 	add_child(grid_container)
 
+func _notification(what):
+	match what:
+		NOTIFICATION_DRAG_END:
+			if get_viewport().gui_is_drag_successful():
+				core_changed.emit(contexts.gun_swap_started, null)
+			else:
+				_update()
+		NOTIFICATION_DRAG_BEGIN:
+			pass
+
 func swap_data(item1, item2):
 	var guns = core.inventory.guns
 	var index1 = item1.get_parent().index
@@ -56,7 +66,12 @@ func bind(core: CoreModel, core_changed: Signal):
 
 func _on_core_changed(context, payload):
 	selection = core.inventory.active_gun_index
-	if context in [contexts.gun_dropped, contexts.gun_picked_up, contexts.gun_swap_started]:
+	if context in [
+		contexts.gun_dropped,
+		contexts.gun_picked_up,
+		contexts.gun_swap_started, 
+		contexts.inventory_accessed
+		]:
 		_update()
 
 func _update():
@@ -68,7 +83,7 @@ func _update():
 			selection_rect = GridSelectRect.new()
 			slot.add_child(selection_rect)
 			slot.custom_minimum_size = Vector2(70,64)
-		if i < 4:
+		if i < len(core.inventory.guns):
 			slot.add_item(test_tex)
 			slot.index = i
 		slot.controller = self

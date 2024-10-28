@@ -170,7 +170,7 @@ func _on_core_changed(context, payload):
 				set_ads(true)
 			InputHandler.PlayerActions.INTERACT:
 				# TODO: interact through signal emit instead of direct reference of object
-				if object_in_view.has_method("on_interact"):
+				if object_in_view and object_in_view.has_method("on_interact"):
 					gun_slot.pickup_gun(object_in_view.on_interact(), object_in_view.rid)
 				else:
 					print("Nothing to interact with...")
@@ -205,8 +205,6 @@ func _on_core_changed(context, payload):
 					trigger_down = false
 					if is_as(PlayerModel.ActionState.triggering):
 						set_action_state(PlayerModel.ActionState.idling)
-				elif !get_viewport().gui_is_drag_successful():
-					core_changed.emit(contexts.gun_swap_started, null)
 			InputHandler.PlayerActions.MOVE_FORWARD:
 				print("stop move forward")
 			InputHandler.PlayerActions.MOVE_BACKWARD:

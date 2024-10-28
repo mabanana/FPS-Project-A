@@ -154,7 +154,7 @@ func _remove_active_gun() -> void:
 		_set_active_gun(0)
 	else:
 		_set_active_gun(core.inventory.active_gun_index - 1)
-	core_changed.emit(contexts.none, null)
+	core_changed.emit(contexts.inventory_accessed, null)
 
 func _set_active_gun(index: int) -> void:
 	var new_index = index

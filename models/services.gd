@@ -24,6 +24,7 @@ enum Context {
 	event_mouse_moved,
 	event_input_released,
 	ray_trail_added,
+	inventory_accessed,
 }
 
 func _init() -> void:

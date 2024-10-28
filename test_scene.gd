@@ -11,6 +11,7 @@ func initialize_test_scene_map() -> void:
 	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunMetadataModel.GunType.TEST_GUN_B))
 	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunMetadataModel.GunType.TEST_GUN_C))
 	core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunMetadataModel.GunType.TEST_GUN_D))
+	core_changed.emit(contexts.inventory_accessed, null)
 	
 	# Initialize Map Model
 	_add_entity_to_map(EntityMetadataModel.EntityType.PLAYER, Vector3(0,0,0))

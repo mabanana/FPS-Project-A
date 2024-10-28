@@ -33,7 +33,7 @@ func _on_core_changed(context: CoreServices.Context, payload):
 		]:
 		_spawn_node(_get_entity_scene(payload["entity_model"]), scene, context, payload)
 	elif context in [
-		contexts.gun_picked_up, 
+		contexts.gun_picked_up,
 		contexts.entity_died,
 		]:
 		_remove_node(scene.entity_hash[payload["target_rid"]])

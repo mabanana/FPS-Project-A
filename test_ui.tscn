@@ -39,6 +39,7 @@ script = ExtResource("5_igbga")
 
 [node name="GridSlotSelectionRect" type="ColorRect" parent="PanelContainer/Inventory/GridSlot/GridSlotItem"]
 material = ExtResource("6_expr6")
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 color = Color(1, 0.7585, 0.37, 1)

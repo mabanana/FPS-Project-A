@@ -6,6 +6,7 @@ var gui_drag
 
 enum Context {
 	none,
+	gun_drop_started,
 	gun_dropped,
 	gun_picked_up,
 	gun_swap_started,
@@ -29,6 +30,7 @@ enum Context {
 	inventory_accessed,
 	drag_ended,
 	drag_started,
+	mouse_capture_toggled,
 }
 
 func _init() -> void:

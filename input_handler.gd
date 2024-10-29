@@ -106,3 +106,12 @@ func bind(core: CoreModel, core_changed: Signal):
 	self.core = core
 	self.core_changed = core_changed
 	contexts = core.services.Context
+	
+	core_changed.connect(_on_core_changed)
+
+func _on_core_changed(context, payload):
+	if context == contexts.mouse_capture_toggled:
+		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		else:
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

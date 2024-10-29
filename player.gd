@@ -186,15 +186,12 @@ func _on_core_changed(context, payload):
 				set_active_gun_index(3)
 			InputHandler.PlayerActions.ESC_MENU:
 				# TODO: implement pause functionality
-				if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-					Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-				else:
-					Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+				core_changed.emit(contexts.mouse_capture_toggled, null)
 			InputHandler.PlayerActions.GAME_MENU:
 				print("open game menu")
 			InputHandler.PlayerActions.DROP_GUN:
 				set_action_state(PlayerModel.ActionState.throwing)
-				gun_slot.drop_gun()
+				core_changed.emit(contexts.gun_drop_started, {"rid": rid})
 			_:
 				print("unhandled action press")
 	elif context == contexts.event_input_released:

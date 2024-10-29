@@ -125,6 +125,10 @@ func _on_core_changed(context, payload):
 			reload()
 		elif context == contexts.reload_ended:
 			finish_reload()
+		elif context == contexts.gun_drop_started:
+			drop_gun()
+		elif context == contexts.drag_ended and payload["gui_hover"] is GuiDragSpace:
+			drop_gun()
 			
 		if core.player.action_state == PlayerModel.ActionState.triggering and shoot_cd.tick(0) <= 0:
 			if active_gun.mag_curr > 0:

@@ -47,3 +47,5 @@ func bind(core: CoreModel, core_changed: Signal):
 func _on_core_changed(context, payload):
 	if context == contexts.drag_ended:
 		modulate.a = 0
+		if payload["gui_hover"] == self:
+			core_changed.emit(contexts.mouse_capture_toggled, null)

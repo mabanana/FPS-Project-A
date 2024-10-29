@@ -28,10 +28,12 @@ func _ready():
 		hotkey_label.text = str(index+1)
 
 func _on_mouse_entered():
+	controller.core.services.gui_hover = self
 	if !is_pressed:
 		modulate.a = 0.6
 	
 func _on_mouse_exited():
+	controller.core.services.gui_hover = null
 	if !is_pressed:
 		modulate.a = 1
 
@@ -58,7 +60,3 @@ func _can_drop_data(at_position, data):
 	if data is GridSlotItem:
 		return true
 	return false
-
-func _drop_data(at_position, data):
-	if data is TextureRect:
-		controller.swap_data(data, item)

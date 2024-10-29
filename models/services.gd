@@ -1,6 +1,8 @@
 class_name CoreServices
 
 var id_counter
+var gui_hover
+var gui_drag
 
 enum Context {
 	none,
@@ -25,6 +27,8 @@ enum Context {
 	event_input_released,
 	ray_trail_added,
 	inventory_accessed,
+	drag_ended,
+	drag_started,
 }
 
 func _init() -> void:

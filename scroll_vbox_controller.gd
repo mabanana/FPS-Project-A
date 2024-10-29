@@ -15,18 +15,12 @@ var grid_container: GridContainer
 func _init():
 	grid_container = GridContainer.new()
 	grid_container.columns = 4
+	grid_container.add_theme_constant_override("h_separation", 0)
+	grid_container.add_theme_constant_override("v_separation", 0)
 	custom_minimum_size = Vector2(256, 64)
 	add_child(grid_container)
 
-func _notification(what):
-	match what:
-		NOTIFICATION_DRAG_END:
-			if get_viewport().gui_is_drag_successful():
-				core_changed.emit(contexts.gun_swap_started, null)
-			else:
-				_update()
-		NOTIFICATION_DRAG_BEGIN:
-			pass
+
 
 func swap_data(item1, item2):
 	var guns = core.inventory.guns
@@ -49,6 +43,7 @@ func swap_data(item1, item2):
 			change_active_gun(index1)
 	_update()
 
+
 func change_active_gun(index):
 	core.inventory.active_gun_index = index
 	core_changed.emit(contexts.gun_swap_started, null)
@@ -70,7 +65,8 @@ func _on_core_changed(context, payload):
 		contexts.gun_dropped,
 		contexts.gun_picked_up,
 		contexts.gun_swap_started, 
-		contexts.inventory_accessed
+		contexts.inventory_accessed,
+		contexts.drag_ended,
 		]:
 		_update()
 

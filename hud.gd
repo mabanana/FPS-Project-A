@@ -58,6 +58,24 @@ func bind(core: CoreModel, core_changed: Signal):
 func _on_bind():
 	%Minimap.bind(core, core_changed)
 	%ScrollContainer.bind(core, core_changed)
+	%DragSpace.bind(core, core_changed)
 	
 func _on_core_changed(context, payload):
 	update()
+
+func _notification(what):
+	match what:
+		NOTIFICATION_DRAG_END:
+			print("drag end")
+			core_changed.emit(contexts.drag_ended, 
+			{
+				"gui_drag": core.services.gui_drag,
+				"gui_hover": core.services.gui_hover
+			})
+			core.services.gui_drag = null
+		NOTIFICATION_DRAG_BEGIN:
+			print("drag start")
+			core.services.gui_drag = core.services.gui_hover
+			core_changed.emit(contexts.drag_started, {
+				"gui_drag": core.services.gui_drag
+			})

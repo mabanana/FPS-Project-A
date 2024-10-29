@@ -38,6 +38,7 @@ func _on_mouse_exited():
 		modulate.a = 1
 
 func _on_mouse_pressed():
+	controller.core.services.gui_hover = self
 	modulate.a = 0.3
 	is_pressed = true
 

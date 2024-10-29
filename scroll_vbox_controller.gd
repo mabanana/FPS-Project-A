@@ -24,8 +24,8 @@ func _init():
 
 func swap_data(item1, item2):
 	var guns = core.inventory.guns
-	var index1 = item1.get_parent().index
-	var index2 = item2.get_parent().index
+	var index1 = item1.index
+	var index2 = item2.index
 	if index2 < 0:
 		var temp = guns.pop_at(index1)
 		guns.append(temp)
@@ -66,9 +66,11 @@ func _on_core_changed(context, payload):
 		contexts.gun_picked_up,
 		contexts.gun_swap_started, 
 		contexts.inventory_accessed,
-		contexts.drag_ended,
 		]:
 		_update()
+	if context == contexts.drag_ended:
+		if payload["gui_hover"] is GridSlot and payload["gui_drag"]:
+			swap_data(payload["gui_drag"],payload["gui_hover"])
 
 func _update():
 	for child in grid_container.get_children():

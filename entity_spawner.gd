@@ -8,10 +8,12 @@ var core_changed: Signal
 var contexts
 # Define the list of required PackedScenes for each scene to save on storing every single PackedScene in memory.
 var asset_loader: AssetLoader
+var sound_manager: SoundManager
 
 func _init(scene):
 	self.scene = scene
 	asset_loader = AssetLoader.new()
+	sound_manager = SoundManager.new(self)
 
 func bind(core, core_changed):
 	self.core = core
@@ -19,6 +21,8 @@ func bind(core, core_changed):
 	
 	core_changed.connect(_on_core_changed)
 	contexts = core.services.Context
+	
+	sound_manager.bind(core, core_changed)
 
 # Does not make edits to core directly, and only edits Scene on core_changed
 func _on_core_changed(context: CoreServices.Context, payload):

@@ -1,0 +1,21 @@
+[gd_resource type="AudioBusLayout" load_steps=3 format=3 uid="uid://8528kyjo6c12"]
+
+[sub_resource type="AudioEffectCompressor" id="AudioEffectCompressor_ojtjc"]
+resource_name = "Compressor"
+threshold = -5.4
+sidechain = &"Notifications"
+
+[sub_resource type="AudioEffectReverb" id="AudioEffectReverb_5vvkr"]
+resource_name = "Reverb"
+
+[resource]
+bus/0/effect/0/effect = SubResource("AudioEffectCompressor_ojtjc")
+bus/0/effect/0/enabled = true
+bus/1/name = &"Notifications"
+bus/1/solo = false
+bus/1/mute = false
+bus/1/bypass_fx = false
+bus/1/volume_db = 0.0
+bus/1/send = &"Master"
+bus/1/effect/0/effect = SubResource("AudioEffectReverb_5vvkr")
+bus/1/effect/0/enabled = true

@@ -60,6 +60,7 @@ func shoot():
 				_add_bullet_hole(result.position)
 			_add_bullet_particle(result.position, -character.camera.get_global_transform().basis.z.normalized())
 	_update_mag(active_gun.mag_curr - active_gun.metadata.ammo_per_shot)
+	core_changed.emit(contexts.gun_shot, {"position": position})
 
 
 func pickup_gun(gun_model: GunModel, gun_id: int):
@@ -192,7 +193,7 @@ func _pickup_gun_from_map(gun_id: int) -> void:
 
 func _update_mag(mag_curr: int) -> void:
 	core.inventory.active_gun.mag_curr = mag_curr
-	core_changed.emit(contexts.gun_shot, null)
+	core_changed.emit(contexts.none, null)
 
 func _set_ammo(new_ammo: int) -> void:
 	if core.inventory.ammo == new_ammo:

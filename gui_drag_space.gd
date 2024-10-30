@@ -15,7 +15,6 @@ func _init():
 func _ready():
 	controller = get_parent()
 	modulate.a = 0
-	prints(controller, get_viewport_rect().size / 2)
 	var viewport_size = get_viewport_rect().size
 	size = viewport_size / 1.7
 	position = (viewport_size - size) / 2
@@ -23,14 +22,16 @@ func _ready():
 
 func _on_mouse_entered():
 	print("mouse entered drag space")
-	controller.core.services.gui_hover = self
-	if controller.core.services.gui_drag:
-		modulate.a = TRANSPARENCY
+	if controller.core:
+		controller.core.services.gui_hover = self
+		if controller.core.services.gui_drag:
+			modulate.a = TRANSPARENCY
 	
 func _on_mouse_exited():
-	controller.core.services.gui_hover = null
-	if controller.core.services.gui_drag:
-		modulate.a = 0
+	if controller.core:
+		controller.core.services.gui_hover = null
+		if controller.core.services.gui_drag:
+			modulate.a = 0
 	
 func _can_drop_data(at_position, data):
 	if data is GridSlotItem:

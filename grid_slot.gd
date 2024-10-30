@@ -3,6 +3,7 @@ extends PanelContainer
 
 var item: GridSlotItem
 var hotkey_label: Label
+var name_label: Label
 var index: int = -1
 var controller: ScrollVBoxController
 var is_pressed: bool
@@ -14,18 +15,24 @@ func _init():
 	
 	item = GridSlotItem.new()
 	hotkey_label = Label.new()
+	name_label = Label.new()
 	
 	hotkey_label.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	hotkey_label.size_flags_vertical = Control.SIZE_FILL
+	name_label.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	name_label.size_flags_vertical = Control.SIZE_FILL
+	name_label.autowrap_mode = TextServer.AUTOWRAP_ARBITRARY
 	
 	add_child(item)
 	add_child(hotkey_label)
+	add_child(name_label)
 	
 	custom_minimum_size = Vector2(64,64)
 	
 func _ready():
 	if index >= 0:
 		hotkey_label.text = str(index+1)
+		name_label.text = controller.core.inventory.guns[index].metadata.name
 
 func _on_mouse_entered():
 	controller.core.services.gui_hover = self

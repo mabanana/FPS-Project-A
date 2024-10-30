@@ -171,7 +171,12 @@ func _on_core_changed(context, payload):
 			InputHandler.PlayerActions.INTERACT:
 				# TODO: interact through signal emit instead of direct reference of object
 				if object_in_view and object_in_view.has_method("on_interact"):
-					gun_slot.pickup_gun(object_in_view.on_interact(), object_in_view.rid)
+					core_changed.emit(contexts.gun_pickup_started, 
+					{"gun_model": object_in_view.gun_model, "rid": rid, "target_rid": object_in_view.rid})
+					var linear_velocity = GunSlotController.inaccuratize_vector(Vector3.UP, 60) * 5
+					var angular_velocity = linear_velocity.cross(Vector3.UP).normalized() * 5
+					object_in_view.linear_velocity = linear_velocity
+					object_in_view.angular_velocity = angular_velocity
 				else:
 					print("Nothing to interact with...")
 			InputHandler.PlayerActions.MELEE:

@@ -7,6 +7,7 @@ var gui_drag
 enum Context {
 	none,
 	gun_drop_started,
+	gun_pickup_started,
 	gun_dropped,
 	gun_picked_up,
 	gun_swap_started,

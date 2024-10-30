@@ -139,8 +139,13 @@ func _on_core_changed(context, payload):
 	# Logs
 	if context == contexts.gun_dropped and not active_gun:
 		print("No gun equipped")
-	if context == contexts.gun_shot and active_gun.mag_curr == 0:
+	elif context == contexts.gun_shot and active_gun.mag_curr == 0:
 		print("Need to reload")
+	elif context == contexts.gun_pickup_started and payload["rid"] == character.rid:
+		if len(core.inventory.guns) < core.player.inventory_size:
+			pickup_gun(payload["gun_model"], payload["target_rid"])
+		else:
+			print("Inventory full")
 	
 
 

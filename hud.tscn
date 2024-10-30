@@ -6,7 +6,7 @@
 [ext_resource type="Shader" path="res://selection_space_shader.gdshader" id="2_reoib"]
 [ext_resource type="Script" path="res://scroll_vbox_controller.gd" id="2_xdmpv"]
 [ext_resource type="Texture2D" uid="uid://d2ojqjerpiwf6" path="res://Ninja Adventure - Asset Pack/Items/Weapons/Bow/Sprite.png" id="3_gv8b5"]
-[ext_resource type="Texture2D" uid="uid://d2hfplywmao7g" path="res://Ninja Adventure - Asset Pack/Actor/Animals/CatCyclop/Faceset.png" id="3_ip4o3"]
+[ext_resource type="Texture2D" uid="uid://vkamqn6t8m1k" path="res://Ninja Adventure - Asset Pack/Actor/Characters/Boy/Faceset.png" id="5_5b8f5"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_y1ifb"]
 shader = ExtResource("2_reoib")
@@ -200,7 +200,7 @@ follow_focus = true
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 3
 script = ExtResource("2_xdmpv")
-test_tex = ExtResource("3_ip4o3")
+test_tex = ExtResource("5_5b8f5")
 
 [node name="Minimap" type="Control" parent="."]
 unique_name_in_owner = true

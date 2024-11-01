@@ -74,8 +74,8 @@ func _notification(what):
 			})
 			core.services.gui_drag = null
 		NOTIFICATION_DRAG_BEGIN:
-			print("drag start")
-			core.services.gui_drag = core.services.gui_hover
+			core.services.gui_drag = get_viewport().gui_get_drag_data()
+			prints("drag start", core.services.gui_drag)
 			core_changed.emit(contexts.drag_started, {
 				"gui_drag": core.services.gui_drag
 			})

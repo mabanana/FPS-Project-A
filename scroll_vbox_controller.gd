@@ -20,8 +20,6 @@ func _init():
 	custom_minimum_size = Vector2(256, 64)
 	add_child(grid_container)
 
-
-
 func swap_data(item1, item2):
 	var guns = core.inventory.guns
 	var index1 = item1.index
@@ -42,7 +40,6 @@ func swap_data(item1, item2):
 		elif index2 == selection:
 			change_active_gun(index1)
 	_update()
-
 
 func change_active_gun(index):
 	core.inventory.active_gun_index = index
@@ -69,6 +66,7 @@ func _on_core_changed(context, payload):
 		]:
 		_update()
 	if context == contexts.drag_ended:
+		_update()
 		if payload["gui_hover"] is GridSlot and payload["gui_drag"]:
 			swap_data(payload["gui_drag"],payload["gui_hover"])
 

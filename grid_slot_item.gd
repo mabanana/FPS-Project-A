@@ -10,7 +10,7 @@ func _ready():
 func _get_drag_data(at_position):
 	if texture:
 		set_drag_preview(make_drag_preview(at_position))
-		return self
+		return get_parent()
 
 func make_drag_preview(at_position):
 	var t := TextureRect.new()

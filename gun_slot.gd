@@ -67,13 +67,13 @@ func pickup_gun(gun_model: GunModel, gun_id: int):
 	_add_gun_to_inventory(gun_model)
 	_pickup_gun_from_map(gun_id)
 
-func drop_gun():
-	if not core.inventory.active_gun:
+func drop_gun(index = core.inventory.active_gun_index):
+	if not core.inventory.guns[index]:
 		return
 	var throw_vector = -character.camera.get_global_transform().basis.z.normalized()
 	throw_vector = inaccuratize_vector(throw_vector, THROW_ACCURACY)
-	_drop_gun_on_map(active_gun, throw_vector)
-	_remove_active_gun()
+	_drop_gun_on_map(core.inventory.guns[index], throw_vector)
+	_remove_gun_at(index)
 
 # TODO: move utilities to services or player script
 
@@ -129,7 +129,8 @@ func _on_core_changed(context, payload):
 		elif context == contexts.gun_drop_started:
 			drop_gun()
 		elif context == contexts.drag_ended and payload["gui_hover"] is GuiDragSpace:
-			drop_gun()
+			var gun_index = payload["gui_drag"].index
+			drop_gun(gun_index)
 			
 		if core.player.action_state == PlayerModel.ActionState.triggering and shoot_cd.tick(0) <= 0:
 			if active_gun.mag_curr > 0:
@@ -158,12 +159,12 @@ func _add_gun_to_inventory(gun_model: GunModel) -> void:
 		_set_active_gun(0)
 	core_changed.emit(contexts.none, null)
 
-func _remove_active_gun() -> void:
-	core.inventory.guns.remove_at(core.inventory.active_gun_index)
-	if len(core.inventory.guns) == 0:
+func _remove_gun_at(index = core.inventory.active_gun_index) -> void:
+	if len(core.inventory.guns) == 1:
 		_set_active_gun(0)
-	else:
+	elif index == core.inventory.active_gun_index:
 		_set_active_gun(core.inventory.active_gun_index - 1)
+	core.inventory.guns.remove_at(index)
 	core_changed.emit(contexts.inventory_accessed, null)
 
 func _set_active_gun(index: int) -> void:

@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://ceu5ajrnb7o3k"]
+[gd_scene load_steps=10 format=3 uid="uid://ceu5ajrnb7o3k"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_uj47b"]
 [ext_resource type="Script" path="res://gun_slot.gd" id="2_mm0q3"]
+[ext_resource type="ArrayMesh" uid="uid://132jxpwv03o3" path="res://Ninja Adventure - Asset Pack/Models/test_shotgun.obj" id="3_0qagc"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_leku3"]
 height = 1.8
@@ -23,6 +24,30 @@ tracks/0/keys = {
 "update": 0,
 "values": [0.0]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("GunSlot/MeshInstance3D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.5168, 0.0352248, -0.693077)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("GunSlot/MeshInstance3D:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0.258012, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_bts6k"]
 resource_name = "sprint_fov"
@@ -40,9 +65,40 @@ tracks/0/keys = {
 "values": [1.0, 1.1, 1.0]
 }
 
+[sub_resource type="Animation" id="Animation_1abai"]
+resource_name = "gun_idle"
+length = 2.0
+loop_mode = 2
+step = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GunSlot/MeshInstance3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.4, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0.05, 0.01), Vector3(0, 0.07, 0.02)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("GunSlot/MeshInstance3D:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0.258012, 0), Vector3(0.028781, 0.218049, 0.00637607)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_80y3y"]
 _data = {
 "RESET": SubResource("Animation_dxecw"),
+"gun_idle": SubResource("Animation_1abai"),
 "sprint_fov": SubResource("Animation_bts6k")
 }
 
@@ -66,8 +122,13 @@ mesh = SubResource("CapsuleMesh_rhwuk")
 
 [node name="GunSlot" type="Node3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.427035, 1.04592, -0.348663)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.790485, 0.976448, -1.18448)
 script = ExtResource("2_mm0q3")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GunSlot"]
+transform = Transform3D(0.966899, 0, 0.255159, 0, 1, 0, -0.255159, 0, 0.966899, 0.5168, 0.0352248, -0.693077)
+mesh = ExtResource("3_0qagc")
+skeleton = NodePath("../..")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
@@ -77,3 +138,4 @@ unique_name_in_owner = true
 libraries = {
 "": SubResource("AnimationLibrary_80y3y")
 }
+autoplay = "gun_idle"

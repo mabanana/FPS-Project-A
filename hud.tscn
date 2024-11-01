@@ -261,6 +261,7 @@ unique_name_in_owner = true
 layout_mode = 2
 
 [node name="WeaponSprite" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0

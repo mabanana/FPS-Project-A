@@ -52,6 +52,7 @@ func _ready():
 func _rotate_camera(x, y, z):
 	camera.rotate_x(-y * MOUSE_SENSITIVITY)
 	camera.rotation.x = clampf(camera.rotation.x, -VERTICAL_LOOK_LIMIT, VERTICAL_LOOK_LIMIT)
+	gun_slot.rotation.x = camera.rotation.x
 	rotate_object_local(Vector3.UP, -x * MOUSE_SENSITIVITY)
 
 func _input(event: InputEvent):

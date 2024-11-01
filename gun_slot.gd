@@ -25,6 +25,7 @@ func _ready():
 	shoot_cd = Countdown.new(0)
 	reload_cd = Countdown.new(0)
 	_set_active_gun(0)
+	
 
 func _process(delta):
 	# Only timers
@@ -74,6 +75,28 @@ func drop_gun(index = core.inventory.active_gun_index):
 	throw_vector = inaccuratize_vector(throw_vector, THROW_ACCURACY)
 	_drop_gun_on_map(core.inventory.guns[index], throw_vector)
 	_remove_gun_at(index)
+	if index == core.inventory.active_gun_index:
+		update_gun_mesh()
+
+func update_gun_mesh():
+	var gun_model = core.inventory.active_gun
+	var mesh_instance = $MeshInstance3D
+	if gun_model:
+		match gun_model.type:
+			GunMetadataModel.GunType.TEST_GUN_A:
+				mesh_instance.mesh = load("res://Ninja Adventure - Asset Pack/Models/test_smg.obj")
+			GunMetadataModel.GunType.TEST_GUN_B:
+				mesh_instance.mesh = load("res://Ninja Adventure - Asset Pack/Models/test_pistol.obj")
+			GunMetadataModel.GunType.TEST_GUN_C:
+				mesh_instance.mesh = load("res://Ninja Adventure - Asset Pack/Models/test_shotgun.obj")
+			GunMetadataModel.GunType.TEST_GUN_D:
+				mesh_instance.mesh = load("res://Ninja Adventure - Asset Pack/Models/test_sniper.obj")
+			GunMetadataModel.GunType.RARE_GUN_A:
+				mesh_instance.mesh = load("res://Ninja Adventure - Asset Pack/Models/bullet_sprinkler.obj")
+			_:
+				mesh_instance.mesh = null
+	else:
+		mesh_instance.mesh = null
 
 # TODO: move utilities to services or player script
 
@@ -122,6 +145,7 @@ func _on_core_changed(context, payload):
 	if len(core.inventory.guns) > 0:
 		if context == contexts.gun_swap_started:
 			_set_active_gun(core.inventory.active_gun_index)
+			update_gun_mesh()
 		elif context == contexts.reload_started:
 			reload()
 		elif context == contexts.reload_ended:
@@ -148,7 +172,6 @@ func _on_core_changed(context, payload):
 			pickup_gun(payload["gun_model"], payload["target_rid"])
 		else:
 			print("Inventory full")
-	
 
 
 # Actions
@@ -174,6 +197,7 @@ func _set_active_gun(index: int) -> void:
 	reset_gun_slot()
 	core.inventory.active_gun_index = new_index
 	active_gun = core.inventory.active_gun
+	update_gun_mesh()
 	prints("Active gun is", str(core.inventory.active_gun_index))
 	core_changed.emit(contexts.none, null)
 

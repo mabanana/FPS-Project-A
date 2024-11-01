@@ -32,14 +32,17 @@ func _ready():
 		hotkey_label.add_theme_font_size_override("font_size", 10)
 
 func _on_mouse_entered():
+	controller.core.services.gui_hover = self
 	if !is_pressed:
 		modulate.a = 0.6
 	
 func _on_mouse_exited():
+	controller.core.services.gui_hover = null
 	if !is_pressed:
 		modulate.a = 1
 
 func _on_mouse_pressed():
+	controller.core.services.gui_hover = self
 	modulate.a = 0.3
 	is_pressed = true
 

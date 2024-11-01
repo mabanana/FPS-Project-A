@@ -66,7 +66,7 @@ func _on_core_changed(context, payload):
 func _notification(what):
 	match what:
 		NOTIFICATION_DRAG_END:
-			print("drag end")
+			print("drag end", core.services.gui_hover)
 			core_changed.emit(contexts.drag_ended, 
 			{
 				"gui_drag": core.services.gui_drag,

@@ -327,7 +327,7 @@ func _on_movement_change(next_state: PlayerModel.MovementState, prev_state: Play
 		sprint_cd.reset_cd()
 		set_ads(false)
 		set_action_state(PlayerModel.ActionState.idling)
-		anim.play("sprint_fov")
+		#anim.play("sprint_fov")
 	
 	if prev_state == PlayerModel.MovementState.sprinting:
 		if anim.current_animation:

@@ -26,11 +26,13 @@ func _process(delta):
 
 func _on_mouse_pressed(event):
 	is_pressed = true
+	$SubViewport.render_target_update_mode = SubViewport.UpdateMode.UPDATE_WHEN_VISIBLE
 	prev_rotation = gun_mesh.rotation
 	click_pos = get_viewport().get_mouse_position()
 
 func _on_mouse_released(event):
 	is_pressed = false
+	$SubViewport.render_target_update_mode = SubViewport.UpdateMode.UPDATE_DISABLED
 
 func _gui_input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:

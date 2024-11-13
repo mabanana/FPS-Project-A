@@ -4,6 +4,7 @@ class_name PlayerEntity
 @export var camera: Camera3D
 @export var gun_slot: GunSlotController
 @export var anim: AnimationPlayer
+@export var head_joint: Node3D
 
 @export var MOUSE_SENSITIVITY = 0.001
 # TODO: setup collision layers
@@ -45,14 +46,15 @@ func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	input_dir = Vector2.ZERO
 	eye_pos = camera.position
+	head_joint = %HeadJoint
+	gun_slot.character = self
 
 # TODO: Move all gun_slot logic away from input
 	# e.g. hold trigger through reload moves state back to triggering 
 # BUG: Camera rotation tied to pixels travelled by mouse instead of % viewport travelled
 func _rotate_camera(x, y, z):
-	camera.rotate_x(-y * MOUSE_SENSITIVITY)
-	camera.rotation.x = clampf(camera.rotation.x, -VERTICAL_LOOK_LIMIT, VERTICAL_LOOK_LIMIT)
-	gun_slot.rotation.x = camera.rotation.x
+	head_joint.rotate_x(-y * MOUSE_SENSITIVITY)
+	head_joint.rotation.x = clampf(head_joint.rotation.x, -VERTICAL_LOOK_LIMIT, VERTICAL_LOOK_LIMIT)
 	rotate_object_local(Vector3.UP, -x * MOUSE_SENSITIVITY)
 
 func _input(event: InputEvent):

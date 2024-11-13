@@ -21,7 +21,6 @@ var core: CoreModel
 var core_changed: Signal
 
 func _ready():
-	character = get_parent()
 	shoot_cd = Countdown.new(0)
 	reload_cd = Countdown.new(0)
 	_set_active_gun(0)
@@ -80,7 +79,7 @@ func drop_gun(index = core.inventory.active_gun_index):
 
 func update_gun_mesh():
 	var gun_model = core.inventory.active_gun
-	var mesh_instance = $MeshInstance3D
+	var mesh_instance = %GunMesh
 	if gun_model:
 		match gun_model.type:
 			GunMetadataModel.GunType.TEST_GUN_A:

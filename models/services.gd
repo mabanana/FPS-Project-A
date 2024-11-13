@@ -11,6 +11,7 @@ enum Context {
 	gun_dropped,
 	gun_picked_up,
 	gun_swap_started,
+	gun_swapped,
 	gun_shot,
 	bullet_hole_added,
 	bullet_particle_added,

@@ -31,6 +31,7 @@ static var DEFAULT_INPUT_MAP := {
 	Key.KEY_4 : PlayerActions.SELECT_SlOT_4,
 	Key.KEY_V : PlayerActions.NEXT_WEAPON,
 	Key.KEY_X : PlayerActions.PREV_WEAPON,
+	Key.KEY_P : PlayerActions.TOGGLE_GUN_PREVIEW,
 }
 
 # Enum for potential player actions
@@ -58,6 +59,7 @@ enum PlayerActions {
 	ESC_MENU, # Main pause menu
 	GAME_MENU, # Open inventory and other in game menus
 	DROP_GUN,
+	TOGGLE_GUN_PREVIEW,
 }
  
 func _init():
@@ -111,7 +113,7 @@ func bind(core: CoreModel, core_changed: Signal):
 
 func _on_core_changed(context, payload):
 	if context == contexts.mouse_capture_toggled:
-		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		if payload["prev_mode"] == Input.MOUSE_MODE_CAPTURED:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

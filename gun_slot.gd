@@ -96,6 +96,9 @@ func update_gun_mesh():
 				mesh_instance.mesh = null
 	else:
 		mesh_instance.mesh = null
+	# TODO: use asset loader instead of directly loading mesh
+	if mesh_instance.mesh:
+		core_changed.emit(contexts.gun_swapped, {"array_mesh" : mesh_instance.mesh})
 
 # TODO: move utilities to services or player script
 

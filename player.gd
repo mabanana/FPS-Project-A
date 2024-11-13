@@ -194,14 +194,16 @@ func _on_core_changed(context, payload):
 				set_active_gun_index(3)
 			InputHandler.PlayerActions.ESC_MENU:
 				# TODO: implement pause functionality
-				core_changed.emit(contexts.mouse_capture_toggled, null)
+				core_changed.emit(contexts.mouse_capture_toggled, {
+					"prev_mode" : Input.mouse_mode,
+					})
 			InputHandler.PlayerActions.GAME_MENU:
 				print("open game menu")
 			InputHandler.PlayerActions.DROP_GUN:
 				set_action_state(PlayerModel.ActionState.throwing)
 				core_changed.emit(contexts.gun_drop_started, {"rid": rid})
 			_:
-				print("unhandled action press")
+				pass
 	elif context == contexts.event_input_released:
 		var action_released = payload["action"]
 		match action_released:
@@ -236,7 +238,6 @@ func _on_core_changed(context, payload):
 				print("drop gun released")
 			_:
 				pass
-				#print("unhandled action release")
 
 
 func set_ads(boo: bool):
@@ -327,6 +328,7 @@ func _on_movement_change(next_state: PlayerModel.MovementState, prev_state: Play
 		sprint_cd.reset_cd()
 		set_ads(false)
 		set_action_state(PlayerModel.ActionState.idling)
+		# BUG: interacts incorrectly with ads fov change
 		#anim.play("sprint_fov")
 	
 	if prev_state == PlayerModel.MovementState.sprinting:

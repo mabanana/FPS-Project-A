@@ -5,6 +5,8 @@ var core: CoreModel
 var core_changed: Signal
 var contexts
 
+var show_gun_preview = true
+
 func update():
 	# Update Weapon HUD
 	if core.inventory.active_gun:
@@ -62,6 +64,14 @@ func _on_bind():
 	
 func _on_core_changed(context, payload):
 	update()
+	if context == contexts.mouse_capture_toggled:
+		%GunPreviewViewport.visible = (payload["prev_mode"] == Input.MOUSE_MODE_CAPTURED) and show_gun_preview
+	elif context == contexts.gun_swapped:
+		%GunPreviewViewport.update_mesh(payload["array_mesh"])
+	elif context == contexts.event_input_pressed:
+		if payload["action"] == InputHandler.PlayerActions.TOGGLE_GUN_PREVIEW:
+			show_gun_preview = !show_gun_preview
+		%GunPreviewViewport.visible = (Input.mouse_mode == Input.MOUSE_MODE_VISIBLE) and show_gun_preview
 
 func _notification(what):
 	match what:

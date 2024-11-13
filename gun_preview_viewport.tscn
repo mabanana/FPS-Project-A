@@ -1,0 +1,59 @@
+[gd_scene load_steps=6 format=3 uid="uid://u3ywy74448gn"]
+
+[ext_resource type="Script" path="res://gun_preview_viewport.gd" id="1_126b3"]
+[ext_resource type="ArrayMesh" uid="uid://cgf43augtxcq4" path="res://Ninja Adventure - Asset Pack/Models/tutorial model.obj" id="2_5hrx6"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_fjgyi"]
+sky_top_color = Color(0.2573, 0.495925, 0.83, 1)
+sky_horizon_color = Color(0.4416, 0.448653, 0.46, 1)
+ground_bottom_color = Color(0.1856, 0.19082, 0.29, 1)
+
+[sub_resource type="Sky" id="Sky_elfva"]
+sky_material = SubResource("ProceduralSkyMaterial_fjgyi")
+
+[sub_resource type="Environment" id="Environment_4m32j"]
+background_mode = 3
+sky = SubResource("Sky_elfva")
+ambient_light_source = 2
+ambient_light_color = Color(0.45676, 0.807337, 0.972298, 1)
+ambient_light_sky_contribution = 0.66
+ambient_light_energy = 0.29
+fog_mode = 1
+fog_light_color = Color(0.232, 0.449733, 0.8, 1)
+fog_density = 1.0
+
+[node name="GunPreviewViewport" type="SubViewportContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+script = ExtResource("1_126b3")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="SubViewport"]
+current = true
+
+[node name="OmniLight3D" type="OmniLight3D" parent="SubViewport/Camera3D"]
+light_color = Color(0.82, 0.964, 1, 1)
+omni_attenuation = -0.524
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewport"]
+transform = Transform3D(-0.29404, -0.723531, 0.624535, 0, 0.653421, 0.756995, -0.955793, 0.222587, -0.192132, 0, 0, 0)
+light_color = Color(0.949167, 0.39, 1, 1)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewport"]
+environment = SubResource("Environment_4m32j")
+
+[node name="TutorialModel" type="MeshInstance3D" parent="SubViewport"]
+unique_name_in_owner = true
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -3)
+mesh = ExtResource("2_5hrx6")
+skeleton = NodePath("../..")

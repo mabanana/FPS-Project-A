@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cix1j6ynfe7pn"]
+[gd_scene load_steps=14 format=3 uid="uid://cix1j6ynfe7pn"]
 
 [ext_resource type="Script" path="res://hud.gd" id="1_y46dv"]
 [ext_resource type="Script" path="res://minimap.gd" id="2_7l5sd"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://scroll_vbox_controller.gd" id="2_xdmpv"]
 [ext_resource type="Texture2D" uid="uid://d2ojqjerpiwf6" path="res://Ninja Adventure - Asset Pack/Items/Weapons/Bow/Sprite.png" id="3_gv8b5"]
 [ext_resource type="Texture2D" uid="uid://vkamqn6t8m1k" path="res://Ninja Adventure - Asset Pack/Actor/Characters/Boy/Faceset.png" id="5_5b8f5"]
+[ext_resource type="PackedScene" uid="uid://u3ywy74448gn" path="res://gun_preview_viewport.tscn" id="8_my3mk"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_y1ifb"]
 shader = ExtResource("2_reoib")
@@ -294,3 +295,25 @@ libraries = {
 "": SubResource("AnimationLibrary_2atdu")
 }
 autoplay = "Idle"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="GunPreview" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -284.0
+offset_top = -139.0
+offset_bottom = 139.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="GunPreviewViewport" parent="CanvasLayer/GunPreview" instance=ExtResource("8_my3mk")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+grow_horizontal = 1
+grow_vertical = 1

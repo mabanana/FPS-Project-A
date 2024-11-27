@@ -49,7 +49,7 @@ enum PlayerActions {
 	FIRE,
 	ADS, # Aim down sights
 	INTERACT,
-	ACTION_F, # TBD
+	ACTION_F, # Spell Cast
 	ACTION_G, # TBD
 	MELEE,
 	SELECT_SlOT_1,

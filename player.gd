@@ -202,6 +202,8 @@ func _on_core_changed(context, payload):
 			InputHandler.PlayerActions.DROP_GUN:
 				set_action_state(PlayerModel.ActionState.throwing)
 				core_changed.emit(contexts.gun_drop_started, {"rid": rid})
+			InputHandler.PlayerActions.ACTION_F:
+				core_changed.emit(contexts.spell_cast, {"rid": rid})
 			_:
 				pass
 	elif context == contexts.event_input_released:

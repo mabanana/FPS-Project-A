@@ -34,6 +34,7 @@ func _on_core_changed(context: CoreServices.Context, payload):
 		contexts.player_spawned,
 		contexts.bullet_particle_added,
 		contexts.ray_trail_added,
+		contexts.spell_entity_added,
 		]:
 		_spawn_node(_get_entity_scene(payload["entity_model"]), scene, context, payload)
 	elif context in [
@@ -71,6 +72,9 @@ func _spawn_node(node_scene, target_scene, spawn_context, payload):
 		new_node.speed = 120
 		new_node.distance = 60
 		new_node.position = payload["position"]
+	elif spawn_context == contexts.spell_entity_added:
+		new_node.linear_velocity = payload["linear_velocity"]
+		new_node.caster = payload["caster"]
 	# TODO: create custom add/free that reuses previously added children
 	target_scene.add_child(new_node)
 	

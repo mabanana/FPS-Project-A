@@ -9,6 +9,7 @@ const MAX_ACCURACY = 100
 const ACCURACY_FLOOR = 25
 const THROW_FORCE = 50
 const THROW_ACCURACY = 69
+const CAST_ACCURACY = 85
 
 
 var shoot_cd: Countdown
@@ -76,6 +77,11 @@ func drop_gun(index = core.inventory.active_gun_index):
 	_remove_gun_at(index)
 	if index == core.inventory.active_gun_index:
 		update_gun_mesh()
+
+func cast_spell():
+	var throw_vector = -character.camera.get_global_transform().basis.z.normalized()
+	throw_vector = inaccuratize_vector(throw_vector, CAST_ACCURACY)
+	_add_spell_on_map(throw_vector)
 
 func update_gun_mesh():
 	var gun_model = core.inventory.active_gun
@@ -157,6 +163,8 @@ func _on_core_changed(context, payload):
 		elif context == contexts.drag_ended and payload["gui_hover"] is GuiDragSpace:
 			var gun_index = payload["gui_drag"].index
 			drop_gun(gun_index)
+		elif context == contexts.spell_cast:
+			cast_spell()
 			
 		if core.player.action_state == PlayerModel.ActionState.triggering and shoot_cd.tick(0) <= 0:
 			if active_gun.mag_curr > 0:
@@ -214,6 +222,17 @@ func _drop_gun_on_map(active_gun: GunModel, throw_vector) -> void:
 	}
 	core.map.entities[payload["rid"]] = payload["entity_model"]
 	core_changed.emit(contexts.gun_dropped, payload)
+
+func _add_spell_on_map(throw_vector):
+	var payload = {
+		"rid" : core.services.generate_rid(),
+		"position" : character.position + character.eye_pos + throw_vector,
+		"linear_velocity" : throw_vector * THROW_FORCE,
+		"entity_model" : EntityModel.new_entity(EntityMetadataModel.EntityType.FIRE_BALL),
+		"caster": character.rid,
+	}
+	core.map.entities[payload["rid"]] = payload["entity_model"]
+	core_changed.emit(contexts.spell_entity_added, payload)
 
 func _pickup_gun_from_map(gun_id: int) -> void:
 	core_changed.emit(contexts.gun_picked_up, {"target_rid": gun_id})

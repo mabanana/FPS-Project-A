@@ -9,6 +9,7 @@ enum EntityType {
 	BULLET_PARTICLE,
 	MOVING_BOX,
 	RAY_TRAIL,
+	FIRE_BALL,
 }
 
 var name: String
@@ -65,6 +66,10 @@ func _init(
 			self.hp = 0
 		EntityType.RAY_TRAIL:
 			self.name = "Damage Number"
+			self.entity_type = EntityModel.EntityType.removed
+			self.hp = 0
+		EntityType.FIRE_BALL:
+			self.name = "Fire Ball"
 			self.entity_type = EntityModel.EntityType.removed
 			self.hp = 0
 		_:

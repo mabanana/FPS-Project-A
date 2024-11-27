@@ -33,6 +33,8 @@ enum Context {
 	drag_ended,
 	drag_started,
 	mouse_capture_toggled,
+	spell_cast,
+	spell_entity_added,
 }
 
 func _init() -> void:

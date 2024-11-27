@@ -1,0 +1,51 @@
+[gd_resource type="VisualShader" load_steps=4 format=3 uid="uid://crwdnjgpklsxl"]
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_uo6lc"]
+parameter_name = "Color"
+
+[sub_resource type="VisualShaderNodeFresnel" id="VisualShaderNodeFresnel_cs60q"]
+default_input_values = [2, true, 3, 3.0]
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_ehpnn"]
+parameter_name = "FresPow"
+
+[resource]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded, shadows_disabled, ambient_light_disabled;
+
+uniform vec4 Color : source_color;
+uniform float FresPow;
+
+
+
+void fragment() {
+// ColorParameter:2
+	vec4 n_out2p0 = Color;
+
+
+// FloatParameter:4
+	float n_out4p0 = FresPow;
+
+
+// Fresnel:3
+	float n_out3p0 = pow(clamp(dot(NORMAL, VIEW), 0.0, 1.0), n_out4p0);
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0.xyz);
+	ALPHA = n_out3p0;
+
+
+}
+"
+graph_offset = Vector2(-421.532, -19.0935)
+flags/unshaded = true
+flags/shadows_disabled = true
+flags/ambient_light_disabled = true
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_uo6lc")
+nodes/fragment/2/position = Vector2(-100, 20)
+nodes/fragment/3/node = SubResource("VisualShaderNodeFresnel_cs60q")
+nodes/fragment/3/position = Vector2(-60, 320)
+nodes/fragment/4/node = SubResource("VisualShaderNodeFloatParameter_ehpnn")
+nodes/fragment/4/position = Vector2(-380, 300)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 3, 0, 0, 1, 4, 0, 3, 3)

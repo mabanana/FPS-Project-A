@@ -35,6 +35,7 @@ enum Context {
 	mouse_capture_toggled,
 	spell_cast,
 	spell_entity_added,
+	hitbox_collided,
 }
 
 func _init() -> void:

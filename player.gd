@@ -45,8 +45,8 @@ func _ready():
 	sprint_cd = Countdown.new(SPRINT_FOV_CD)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	input_dir = Vector2.ZERO
-	eye_pos = camera.position
 	head_joint = %HeadJoint
+	eye_pos = head_joint.position
 	gun_slot.character = self
 
 # TODO: Move all gun_slot logic away from input

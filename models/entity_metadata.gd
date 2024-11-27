@@ -70,7 +70,7 @@ func _init(
 			self.hp = 0
 		EntityType.FIRE_BALL:
 			self.name = "Fire Ball"
-			self.entity_type = EntityModel.EntityType.removed
+			self.entity_type = EntityModel.EntityType.hitbox
 			self.hp = 0
 		_:
 			assert(false, "Unknown EntityType")

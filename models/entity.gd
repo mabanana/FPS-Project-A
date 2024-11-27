@@ -6,6 +6,7 @@ enum EntityType {
 	player,
 	enemy,
 	npc,
+	hitbox,
 }
 
 # TODO: Move rid assignment to new_entity

@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://b8ic4xd08gpk2"]
 
-[ext_resource type="Script" path="res://fireball_mesh.gd" id="1_gsx1e"]
 [ext_resource type="Shader" uid="uid://b33hrsbtt6m8y" path="res://fireball.tres" id="1_j2m4r"]
+[ext_resource type="Script" path="res://spell_hitbox.gd" id="1_mexvv"]
 [ext_resource type="Shader" uid="uid://crwdnjgpklsxl" path="res://fireball_head_mesh.tres" id="2_av0gk"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_80iy3"]
@@ -9,7 +9,6 @@ render_priority = 0
 shader = ExtResource("1_j2m4r")
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_1i6dm"]
-lightmap_size_hint = Vector2i(17, 14)
 material = SubResource("ShaderMaterial_80iy3")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_722sp"]
@@ -25,7 +24,7 @@ radius = 0.4
 [sub_resource type="SphereShape3D" id="SphereShape3D_fan0y"]
 
 [node name="Fireball" type="Area3D"]
-script = ExtResource("1_gsx1e")
+script = ExtResource("1_mexvv")
 
 [node name="FireEffect" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00598288, -0.576586, 0.00522709)

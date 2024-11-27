@@ -73,6 +73,7 @@ func _spawn_node(node_scene, target_scene, spawn_context, payload):
 		new_node.distance = 60
 		new_node.position = payload["position"]
 	elif spawn_context == contexts.spell_entity_added:
+		new_node.rid = payload["rid"]
 		new_node.linear_velocity = payload["linear_velocity"]
 		new_node.caster = payload["caster"]
 	# TODO: create custom add/free that reuses previously added children

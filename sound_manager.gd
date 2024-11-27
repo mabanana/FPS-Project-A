@@ -38,6 +38,8 @@ func _on_core_changed(context, payload):
 		_spawn_audio_player("Hit2", -10, "Master", Vector2(0.95, 1.05), payload["target_position"], true)
 	elif context == contexts.gun_dropped:
 		_spawn_audio_player("Magic1", 10, "Notification" ,Vector2(1.25, 1.35), payload["position"], true)
+	elif context == contexts.spell_entity_added:
+		_spawn_audio_player("Fireball", 10, "Master" ,Vector2(0.95, 1.0), payload["position"], true)
 		
 # TODO: use finite number of audio_players instead of instantiating new ones
 func _spawn_audio_player(sound_name: String, db_offset: float, bus = "Master", pitch_range: Vector2 = Vector2(0.95, 1.05), position: Vector3 = Vector3.ZERO, is_3d = false):

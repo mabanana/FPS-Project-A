@@ -1,4 +1,4 @@
-[gd_resource type="VisualShader" load_steps=15 format=3 uid="uid://b33hrsbtt6m8y"]
+[gd_resource type="VisualShader" load_steps=18 format=3 uid="uid://b33hrsbtt6m8y"]
 
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_sdvln"]
 input_name = "time"
@@ -9,6 +9,15 @@ operator = 2
 
 [sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_0iius"]
 default_input_values = [1, Vector2(0.2, -1), 2, Vector2(1, 0)]
+
+[sub_resource type="VisualShaderNodeFresnel" id="VisualShaderNodeFresnel_ksiu1"]
+default_input_values = [2, false, 3, 5.0]
+
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_xt5tr"]
+constant = Color(1, 0.7585, 0.31, 1)
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_avixi"]
+operator = 2
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_gnwf1"]
 
@@ -99,9 +108,23 @@ void fragment() {
 	float n_out9p0 = clamp(n_out7p0, n_in9p1, n_in9p2);
 
 
+// Fresnel:13
+	float n_in13p3 = 5.00000;
+	float n_out13p0 = pow(1.0 - clamp(dot(NORMAL, VIEW), 0.0, 1.0), n_in13p3);
+
+
+// ColorConstant:14
+	vec4 n_out14p0 = vec4(1.000000, 0.758500, 0.310000, 1.000000);
+
+
+// FloatOp:15
+	float n_out15p0 = n_out13p0 * n_out14p0.x;
+
+
 // Output:0
 	ALBEDO = vec3(n_out3p0.xyz);
 	ALPHA = n_out9p0;
+	EMISSION = vec3(n_out15p0);
 
 
 }
@@ -127,4 +150,10 @@ nodes/fragment/11/node = SubResource("VisualShaderNodeFloatOp_yusud")
 nodes/fragment/11/position = Vector2(-980, 980)
 nodes/fragment/12/node = SubResource("VisualShaderNodeUVFunc_0iius")
 nodes/fragment/12/position = Vector2(-780, 900)
-nodes/fragment/connections = PackedInt32Array(3, 0, 0, 0, 2, 1, 7, 0, 8, 1, 7, 1, 7, 0, 9, 0, 9, 0, 0, 1, 10, 0, 11, 0, 12, 0, 2, 0, 11, 0, 12, 2)
+nodes/fragment/13/node = SubResource("VisualShaderNodeFresnel_ksiu1")
+nodes/fragment/13/position = Vector2(-280, 140)
+nodes/fragment/14/node = SubResource("VisualShaderNodeColorConstant_xt5tr")
+nodes/fragment/14/position = Vector2(-140, 360)
+nodes/fragment/15/node = SubResource("VisualShaderNodeFloatOp_avixi")
+nodes/fragment/15/position = Vector2(100, 180)
+nodes/fragment/connections = PackedInt32Array(3, 0, 0, 0, 2, 1, 7, 0, 8, 1, 7, 1, 7, 0, 9, 0, 9, 0, 0, 1, 10, 0, 11, 0, 12, 0, 2, 0, 11, 0, 12, 2, 13, 0, 15, 0, 14, 0, 15, 1, 15, 0, 0, 5)

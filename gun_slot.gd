@@ -10,6 +10,7 @@ const ACCURACY_FLOOR = 25
 const THROW_FORCE = 50
 const THROW_ACCURACY = 69
 const CAST_ACCURACY = 85
+const ADS_CAST_ACCURACY = 92
 
 
 var shoot_cd: Countdown
@@ -80,7 +81,8 @@ func drop_gun(index = core.inventory.active_gun_index):
 
 func cast_spell():
 	var throw_vector = -character.camera.get_global_transform().basis.z.normalized()
-	throw_vector = inaccuratize_vector(throw_vector, CAST_ACCURACY)
+	var acc = ADS_CAST_ACCURACY if core.player.is_ads else CAST_ACCURACY
+	throw_vector = inaccuratize_vector(throw_vector, acc)
 	_add_spell_on_map(throw_vector)
 
 func update_gun_mesh():

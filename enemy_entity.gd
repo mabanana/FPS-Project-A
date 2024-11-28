@@ -54,7 +54,6 @@ func _take_damage(damage_amount: int, damage_scale: float, dealer_rid: int, dama
 		"dealer_rid" : dealer_rid,
 		"target_rid" : rid,
 		"damage_amount" : damage_amount,
-		"position": global_position,
 		"damage_position": damage_position,
 		"damage_scale": damage_scale,
 	}

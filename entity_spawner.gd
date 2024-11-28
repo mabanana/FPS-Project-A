@@ -76,6 +76,8 @@ func _spawn_node(node_scene, target_scene, spawn_context, payload):
 		new_node.rid = payload["rid"]
 		new_node.linear_velocity = payload["linear_velocity"]
 		new_node.caster = payload["caster"]
+		new_node.entity_model = payload["entity_model"]
+		
 	# TODO: create custom add/free that reuses previously added children
 	target_scene.add_child(new_node)
 	

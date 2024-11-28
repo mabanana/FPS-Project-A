@@ -7,6 +7,7 @@ var contexts
 var entity_spawner: EntitySpawner
 var loot_manager: LootManager
 var Hud: HudController
+var hitbox_manager: HitboxManager
 
 @export var pos_update_interval: int
 
@@ -23,9 +24,11 @@ func _ready() -> void:
 	core = CoreModel.new()
 	entity_spawner = EntitySpawner.new(self)
 	loot_manager = LootManager.new()
+	hitbox_manager = HitboxManager.new(self)
 	# Add bindings to all relevant observers
 	entity_spawner.bind(core, core_changed)
 	loot_manager.bind(core, core_changed)
+	hitbox_manager.bind(core, core_changed)
 	Hud = preload("res://hud.tscn").instantiate()
 	add_child(Hud)
 	Hud.bind(core, core_changed)
@@ -43,11 +46,19 @@ func initialize_scene():
 
 func _process(delta):
 	if pos_update_cd.tick(delta) <= 0:
+		_clear_freed()
 		if player_rid:
 			_pos_update(player_rid)
 
 func _on_core_changed(context, payload):
 	pass
+
+func _clear_freed():
+	for entity_rid in entity_hash:
+		if not is_instance_valid(entity_hash[entity_rid]):
+			core.map.entities.erase(entity_rid)
+			entity_hash.erase(entity_rid)
+			prints(entity_rid, "removed from entity hash")
 
 func _pos_update(origin_rid: ):
 	pos_update_cd.reset_cd()

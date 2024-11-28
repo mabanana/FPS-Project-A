@@ -4,12 +4,12 @@ var linear_velocity: Vector3
 var caster: int
 var lifetime: float = 2
 var rid: int
+var entity_model: EntityModel
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	body_entered.connect(on_collided)
-	transform = transform.looking_at(linear_velocity)
-	rotation.x += 90
+	look_at(global_position + linear_velocity)
 	pass # Replace with function body.
 
 
@@ -17,23 +17,29 @@ func _ready():
 func _process(delta):
 	lifetime -= delta
 	if lifetime < 0:
-		print("Hitbox timed out")
+		#print("Hitbox timed out")
 		lifetime_end()
 
 func _physics_process(delta):
 	position += linear_velocity * delta
+	
+	
 
 func on_collided(body):
 	if body.has_method("take_damage"):
 		body.core_changed.emit(CoreServices.Context.hitbox_collided, 
 		{
 			"target_rid": body.rid,
+			"hitbox_entity_model": entity_model,
 			"dealer_rid": caster,
-			"target_position": body.global_position + body.eye_pos,
+			"target_position": body.global_position,
+			"damage_position": global_position,
+			"damage_scale": 0.6,
 		})
-		prints("Hitbox collision detected with", body)
+		#prints("Hitbox collision detected with", body)
 		lifetime_end()
 	
 
 func lifetime_end():
+	#prints(rid, "freed")
 	queue_free()

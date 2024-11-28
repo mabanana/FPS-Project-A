@@ -17,7 +17,7 @@ func _init(entity_spawner: EntitySpawner):
 	for folder in DirAccess.get_directories_at(sounds_dir):
 		var folder_dir_access = DirAccess.open(sounds_dir+folder)
 		for file_name in folder_dir_access.get_files():
-			print("sound file found: ", file_name)
+			#print("sound file found: ", file_name)
 			var split_file_name = file_name.split(".")
 			var sound_name = split_file_name[0]
 			var file_type = split_file_name[len(split_file_name) - 1]

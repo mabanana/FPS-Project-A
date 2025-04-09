@@ -91,15 +91,15 @@ func update_gun_mesh():
 	if gun_model:
 		match gun_model.type:
 			GunMetadataModel.GunType.TEST_GUN_A:
-				mesh_instance.mesh = load("res://Ninja Adventure - Asset Pack/Models/test_smg.obj")
+				mesh_instance.mesh = load("res://Assets/Models/test_smg.obj")
 			GunMetadataModel.GunType.TEST_GUN_B:
-				mesh_instance.mesh = load("res://Ninja Adventure - Asset Pack/Models/test_pistol.obj")
+				mesh_instance.mesh = load("res://Assets/Models/test_pistol.obj")
 			GunMetadataModel.GunType.TEST_GUN_C:
-				mesh_instance.mesh = load("res://Ninja Adventure - Asset Pack/Models/test_shotgun.obj")
+				mesh_instance.mesh = load("res://Assets/Models/test_shotgun.obj")
 			GunMetadataModel.GunType.TEST_GUN_D:
-				mesh_instance.mesh = load("res://Ninja Adventure - Asset Pack/Models/test_sniper.obj")
+				mesh_instance.mesh = load("res://Assets/Models/test_sniper.obj")
 			GunMetadataModel.GunType.RARE_GUN_A:
-				mesh_instance.mesh = load("res://Ninja Adventure - Asset Pack/Models/bullet_sprinkler.obj")
+				mesh_instance.mesh = load("res://Assets/Models/bullet_sprinkler.obj")
 			_:
 				mesh_instance.mesh = null
 	else:

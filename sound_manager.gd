@@ -5,7 +5,7 @@ var core_changed: Signal
 var contexts
 var entity_spawner: EntitySpawner
 var sounds: Dictionary
-var sounds_dir = "res://Ninja Adventure - Asset Pack/Sounds/"
+var sounds_dir = "res://Assets/Sounds/"
 var audio_stream_player: AudioStreamPlayer
 
 func _init(entity_spawner: EntitySpawner):

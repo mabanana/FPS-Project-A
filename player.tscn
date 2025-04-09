@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://player.gd" id="1_uj47b"]
 [ext_resource type="Script" path="res://gun_slot.gd" id="2_mm0q3"]
-[ext_resource type="ArrayMesh" uid="uid://132jxpwv03o3" path="res://Ninja Adventure - Asset Pack/Models/test_shotgun.obj" id="3_0qagc"]
+[ext_resource type="ArrayMesh" uid="uid://132jxpwv03o3" path="res://Assets/Models/test_shotgun.obj" id="3_0qagc"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_leku3"]
 height = 1.8

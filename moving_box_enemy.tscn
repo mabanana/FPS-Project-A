@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://njibrjir8fft"]
 
 [ext_resource type="Script" path="res://moving_box.gd" id="1_evaqw"]
-[ext_resource type="Texture2D" uid="uid://v5rvweainl48" path="res://Ninja Adventure - Asset Pack/Actor/Monsters/Cyclope/SpriteSheet.png" id="2_mqnt5"]
+[ext_resource type="Texture2D" uid="uid://v5rvweainl48" path="res://Assets/Sprites/Monsters/Cyclope/SpriteSheet.png" id="2_mqnt5"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mww7d"]
 albedo_color = Color(1, 0.36, 0.36, 1)

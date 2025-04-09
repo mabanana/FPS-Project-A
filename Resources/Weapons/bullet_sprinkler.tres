@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="WeaponResource" load_steps=3 format=3 uid="uid://dehe7hgb3prfr"]
+
+[ext_resource type="ArrayMesh" uid="uid://6akjhbk8s2wa" path="res://Assets/Models/bullet_sprinkler.obj" id="1_6d5qx"]
+[ext_resource type="Script" path="res://Resources/weapon_resource.gd" id="1_wsxnx"]
+
+[resource]
+script = ExtResource("1_wsxnx")
+name = "\"Bullet Sprinkler\""
+mesh = ExtResource("1_6d5qx")
+damage_floor = 150
+damage_ceiling = 200
+fire_rate = 10.0
+reload_time = 2.0
+accuracy = 90.0
+mag_size = 40
+mass = 7.0
+pellet_count = 10
+ammo_per_shot = 4
+zoom = 2.0

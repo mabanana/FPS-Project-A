@@ -10,9 +10,6 @@ func _ready():
 	color = Color(1, 0.757, 0.369)
 	set_mouse_filter(MouseFilter.MOUSE_FILTER_IGNORE)
 
-func reset_shader():
-	material.set_shader_parameter("Parameter_Time", 0.0)
-
 func _process(delta):
 	shader_time += shader_frequency / shader_max_time * delta
 	if shader_time >= 2.0:

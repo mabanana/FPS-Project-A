@@ -1,9 +1,9 @@
 [gd_scene load_steps=19 format=3 uid="uid://bgp15f5w735mi"]
 
-[ext_resource type="Script" path="res://test_scene.gd" id="1_00gik"]
-[ext_resource type="Shader" path="res://test_shader.gdshader" id="7_7oa2x"]
-[ext_resource type="FastNoiseLite" uid="uid://crqtqh0j2cenj" path="res://test_noise.tres" id="8_6ga63"]
-[ext_resource type="Texture2D" uid="uid://bvx06pup72xam" path="res://Stylized Sky Background (2).png" id="8_v1f1u"]
+[ext_resource type="Script" path="res://GameObjects/test_scene.gd" id="1_00gik"]
+[ext_resource type="Shader" path="res://Resources/test_shader.gdshader" id="7_7oa2x"]
+[ext_resource type="FastNoiseLite" uid="uid://crqtqh0j2cenj" path="res://Resources/test_noise.tres" id="8_6ga63"]
+[ext_resource type="Texture2D" uid="uid://bvx06pup72xam" path="res://Assets/Stylized Sky Background (2).png" id="8_v1f1u"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_3em6h"]
 sky_top_color = Color(0.2275, 0.7735, 0.91, 1)

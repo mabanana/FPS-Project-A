@@ -14,7 +14,7 @@ enum LootClass {
 }
 
 func _init():
-	var loot_class_json = _load_json("res://loot_classes.json")
+	var loot_class_json = _load_json("res://GameSystems/loot_classes.json")
 	for lc in loot_class_json.loot_classes:
 		loot_classes[LootClass[lc.loot_class]] = lc.items
 

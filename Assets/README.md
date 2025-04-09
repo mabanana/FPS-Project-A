@@ -15,4 +15,3 @@ even commercial ones. Attribution is not required but appreciated.
 Patreon: https://www.patreon.com/pixelarchipel 
 Itchio Page: https://pixel-boy.itch.io/
 Pack Page: https://pixel-boy.itch.io/ninja-adventure-asset-pack
-

@@ -1,8 +1,8 @@
 [gd_scene load_steps=9 format=3 uid="uid://b8ic4xd08gpk2"]
 
-[ext_resource type="Shader" uid="uid://b33hrsbtt6m8y" path="res://fireball.tres" id="1_j2m4r"]
-[ext_resource type="Script" path="res://spell_hitbox.gd" id="1_mexvv"]
-[ext_resource type="Shader" uid="uid://crwdnjgpklsxl" path="res://fireball_head_mesh.tres" id="2_av0gk"]
+[ext_resource type="Shader" uid="uid://b33hrsbtt6m8y" path="res://GameObjects/fireball.tres" id="1_j2m4r"]
+[ext_resource type="Script" path="res://GameObjects/spell_hitbox.gd" id="1_mexvv"]
+[ext_resource type="Shader" uid="uid://crwdnjgpklsxl" path="res://GameObjects/fireball_head_mesh.tres" id="2_av0gk"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_80iy3"]
 render_priority = 0

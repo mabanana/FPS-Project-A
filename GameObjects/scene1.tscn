@@ -1,16 +1,16 @@
 [gd_scene load_steps=10 format=3 uid="uid://cbn72isa03aii"]
 
-[ext_resource type="Script" path="res://test_scene.gd" id="1_slrf8"]
-[ext_resource type="Texture2D" uid="uid://bvx06pup72xam" path="res://Stylized Sky Background (2).png" id="2_nfgm5"]
-[ext_resource type="PackedScene" uid="uid://xxktuvij7grb" path="res://end_room.tscn" id="5_d6uo6"]
-[ext_resource type="PackedScene" uid="uid://bnnxpbeimkhrg" path="res://two_door_room.tscn" id="5_yewrg"]
-[ext_resource type="PackedScene" uid="uid://bjkk7c44jgjv5" path="res://base_floor.tscn" id="6_2q5on"]
+[ext_resource type="Script" path="res://GameObjects/test_scene.gd" id="1_jck0p"]
+[ext_resource type="Texture2D" uid="uid://bvx06pup72xam" path="res://Assets/Stylized Sky Background (2).png" id="2_qxy2n"]
+[ext_resource type="PackedScene" uid="uid://bnnxpbeimkhrg" path="res://GameObjects/two_door_room.tscn" id="3_rxmf7"]
+[ext_resource type="PackedScene" uid="uid://xxktuvij7grb" path="res://GameObjects/end_room.tscn" id="4_aocc8"]
+[ext_resource type="PackedScene" uid="uid://bjkk7c44jgjv5" path="res://GameObjects/base_floor.tscn" id="5_2lrlq"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_s2ful"]
 sky_top_color = Color(0.2275, 0.7735, 0.91, 1)
 sky_horizon_color = Color(0.84, 0.68866, 0.4452, 1)
 sky_curve = 0.252269
-sky_cover = ExtResource("2_nfgm5")
+sky_cover = ExtResource("2_qxy2n")
 ground_bottom_color = Color(0.407048, 0.353288, 0.290967, 1)
 ground_horizon_color = Color(0.66, 0.54384, 0.4488, 1)
 
@@ -33,7 +33,7 @@ polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(0, 4, 3), PackedInt32Arr
 edge_max_error = 0.5
 
 [node name="Scene1" type="Node3D"]
-script = ExtResource("1_slrf8")
+script = ExtResource("1_jck0p")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_nscj1")
@@ -57,55 +57,55 @@ sky_mode = 1
 [node name="Map" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_wofbq")
 
-[node name="2DoorRoom" parent="Map" instance=ExtResource("5_yewrg")]
+[node name="2DoorRoom" parent="Map" instance=ExtResource("3_rxmf7")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -120)
 
-[node name="2DoorRoom2" parent="Map" instance=ExtResource("5_yewrg")]
+[node name="2DoorRoom2" parent="Map" instance=ExtResource("3_rxmf7")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -80)
 
-[node name="2DoorRoom3" parent="Map" instance=ExtResource("5_yewrg")]
+[node name="2DoorRoom3" parent="Map" instance=ExtResource("3_rxmf7")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -40)
 
-[node name="EndRoom" parent="Map" instance=ExtResource("5_d6uo6")]
+[node name="EndRoom" parent="Map" instance=ExtResource("4_aocc8")]
 transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, 0, 0, -160)
 
-[node name="Base Floor2" parent="Map" instance=ExtResource("6_2q5on")]
+[node name="Base Floor2" parent="Map" instance=ExtResource("5_2lrlq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, -200)
 
-[node name="Base Floor14" parent="Map" instance=ExtResource("6_2q5on")]
+[node name="Base Floor14" parent="Map" instance=ExtResource("5_2lrlq")]
 
-[node name="Base Floor3" parent="Map" instance=ExtResource("6_2q5on")]
+[node name="Base Floor3" parent="Map" instance=ExtResource("5_2lrlq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, -0.5, -200)
 
-[node name="Base Floor5" parent="Map" instance=ExtResource("6_2q5on")]
+[node name="Base Floor5" parent="Map" instance=ExtResource("5_2lrlq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, -0.5, -160)
 
-[node name="Base Floor6" parent="Map" instance=ExtResource("6_2q5on")]
+[node name="Base Floor6" parent="Map" instance=ExtResource("5_2lrlq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, -0.5, -120)
 
-[node name="Base Floor7" parent="Map" instance=ExtResource("6_2q5on")]
+[node name="Base Floor7" parent="Map" instance=ExtResource("5_2lrlq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, -0.5, -80)
 
-[node name="Base Floor8" parent="Map" instance=ExtResource("6_2q5on")]
+[node name="Base Floor8" parent="Map" instance=ExtResource("5_2lrlq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -0.5, -120)
 
-[node name="Base Floor9" parent="Map" instance=ExtResource("6_2q5on")]
+[node name="Base Floor9" parent="Map" instance=ExtResource("5_2lrlq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -0.5, -80)
 
-[node name="Base Floor4" parent="Map" instance=ExtResource("6_2q5on")]
+[node name="Base Floor4" parent="Map" instance=ExtResource("5_2lrlq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -0.5, -200)
 
-[node name="Base Floor10" parent="Map" instance=ExtResource("6_2q5on")]
+[node name="Base Floor10" parent="Map" instance=ExtResource("5_2lrlq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -0.5, -160)
 
-[node name="Base Floor11" parent="Map" instance=ExtResource("6_2q5on")]
+[node name="Base Floor11" parent="Map" instance=ExtResource("5_2lrlq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, -0.5, -40)
 
-[node name="Base Floor12" parent="Map" instance=ExtResource("6_2q5on")]
+[node name="Base Floor12" parent="Map" instance=ExtResource("5_2lrlq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, -0.5, 0)
 
-[node name="Base Floor13" parent="Map" instance=ExtResource("6_2q5on")]
+[node name="Base Floor13" parent="Map" instance=ExtResource("5_2lrlq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -0.5, -40)
 
-[node name="Base Floor15" parent="Map" instance=ExtResource("6_2q5on")]
+[node name="Base Floor15" parent="Map" instance=ExtResource("5_2lrlq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, -0.5, 0)

@@ -3,7 +3,7 @@ class_name MinimapController
 
 var core
 var core_changed
-@onready var map_dot = preload("res://map_dot.tscn")
+@onready var map_dot = preload("res://UI/map_dot.tscn")
 var map_size
 var contexts
 @export var detect_dist: int

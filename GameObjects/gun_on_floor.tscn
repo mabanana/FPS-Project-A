@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://d1bclad3l8lov"]
 
-[ext_resource type="Script" path="res://Interactable.gd" id="1_p76j6"]
+[ext_resource type="Script" path="res://GameObjects/Interactable.gd" id="1_p76j6"]
 
 [node name="GunOnFloor" type="RigidBody3D"]
 continuous_cd = true

@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://njibrjir8fft"]
 
-[ext_resource type="Script" path="res://moving_box.gd" id="1_evaqw"]
+[ext_resource type="Script" path="res://GameObjects/moving_box.gd" id="1_evaqw"]
 [ext_resource type="Texture2D" uid="uid://v5rvweainl48" path="res://Assets/Sprites/Monsters/Cyclope/SpriteSheet.png" id="2_mqnt5"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mww7d"]

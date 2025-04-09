@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="FPS Project A"
-run/main_scene="res://scene1.tscn"
+run/main_scene="res://GameObjects/scene1.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
+
+[audio]
+
+buses/default_bus_layout="res://Resources/Audio/default_bus_layout.tres"
 
 [display]
 

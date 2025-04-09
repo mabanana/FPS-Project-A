@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://u3ywy74448gn"]
 
-[ext_resource type="Script" path="res://gun_preview_viewport.gd" id="1_126b3"]
-[ext_resource type="ArrayMesh" uid="uid://cgf43augtxcq4" path="res://Ninja Adventure - Asset Pack/Models/tutorial model.obj" id="2_5hrx6"]
+[ext_resource type="Script" path="res://UI/gun_preview_viewport.gd" id="1_126b3"]
+[ext_resource type="ArrayMesh" path="res://Ninja Adventure - Asset Pack/Models/tutorial model.obj" id="2_5hrx6"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_fjgyi"]
 sky_top_color = Color(0.2573, 0.495925, 0.83, 1)

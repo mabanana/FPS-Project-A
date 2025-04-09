@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://cudhavkyfdrqm"]
 
-[ext_resource type="Script" path="res://ray_trail.gd" id="1_0lofg"]
+[ext_resource type="Script" path="res://GameObjects/ray_trail.gd" id="1_0lofg"]
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_jf6ea"]
 particle_flag_align_y = true

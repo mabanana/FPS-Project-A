@@ -1,11 +1,7 @@
-[gd_scene load_steps=13 format=3 uid="uid://bnnxpbeimkhrg"]
+[gd_scene load_steps=8 format=3 uid="uid://xxktuvij7grb"]
 
-[ext_resource type="PackedScene" uid="uid://bjkk7c44jgjv5" path="res://base_floor.tscn" id="1_3f03i"]
-[ext_resource type="Material" uid="uid://cwo5cjo8jqdic" path="res://test_wall_texture.tres" id="1_4hglp"]
-[ext_resource type="Material" uid="uid://7863s5g1aika" path="res://test_flat_tile_material.tres" id="2_8rvfo"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_g2dmo"]
-size = Vector3(1, 2, 2)
+[ext_resource type="Material" uid="uid://cwo5cjo8jqdic" path="res://Resources/test_wall_texture.tres" id="1_kxc4l"]
+[ext_resource type="PackedScene" uid="uid://bjkk7c44jgjv5" path="res://GameObjects/base_floor.tscn" id="1_ohieg"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_enbys"]
 size = Vector3(40, 8, 0.5)
@@ -24,17 +20,7 @@ size = Vector3(3, 0.75, 3)
 [sub_resource type="BoxMesh" id="BoxMesh_1mj8l"]
 size = Vector3(1, 6, 1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_ffrtp"]
-size = Vector3(2, 5, 12)
-
-[sub_resource type="PrismMesh" id="PrismMesh_w5y15"]
-left_to_right = 0.0
-size = Vector3(15, 5, 3)
-
-[sub_resource type="BoxMesh" id="BoxMesh_yjvma"]
-size = Vector3(4, 5, 4)
-
-[node name="2DoorRoom" type="Node3D"]
+[node name="EndRoom" type="Node3D"]
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.248345, 5.90783, 0)
@@ -42,16 +28,8 @@ omni_range = 100.0
 omni_attenuation = 0.1
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
-material_override = ExtResource("1_4hglp")
+material_override = ExtResource("1_kxc4l")
 use_collision = true
-
-[node name="MeshInstance3D" type="CSGMesh3D" parent="CSGCombiner3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.10461, 4.99594, -6.57207)
-mesh = SubResource("BoxMesh_g2dmo")
-
-[node name="MeshInstance3D10" type="CSGMesh3D" parent="CSGCombiner3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.10461, 0.995942, 5.42793)
-mesh = SubResource("BoxMesh_g2dmo")
 
 [node name="MeshInstance3D2" type="CSGMesh3D" parent="CSGCombiner3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 19.75)
@@ -79,16 +57,6 @@ transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 19.75,
 operation = 2
 mesh = SubResource("BoxMesh_l6kw8")
 
-[node name="CSGMesh3D3" type="CSGMesh3D" parent="CSGCombiner3D"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -19.75, 3, 0)
-operation = 2
-mesh = SubResource("CylinderMesh_ncvp7")
-
-[node name="CSGMesh3D4" type="CSGMesh3D" parent="CSGCombiner3D"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -19.75, 1.5, 0)
-operation = 2
-mesh = SubResource("BoxMesh_l6kw8")
-
 [node name="MeshInstance3D6" type="CSGMesh3D" parent="CSGCombiner3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 3, -12)
 mesh = SubResource("BoxMesh_1mj8l")
@@ -106,29 +74,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 3, -12)
 mesh = SubResource("BoxMesh_1mj8l")
 
 [node name="CSGCombiner3D2" type="CSGCombiner3D" parent="."]
-material_override = ExtResource("2_8rvfo")
 use_collision = true
 
-[node name="Base Floor" parent="CSGCombiner3D2" instance=ExtResource("1_3f03i")]
-
-[node name="MeshInstance3D" type="CSGMesh3D" parent="CSGCombiner3D2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 5.97162)
-mesh = SubResource("BoxMesh_ffrtp")
-
-[node name="MeshInstance3D2" type="CSGMesh3D" parent="CSGCombiner3D2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -6.02838)
-mesh = SubResource("BoxMesh_ffrtp")
-
-[node name="CSGMesh3D" type="CSGMesh3D" parent="CSGCombiner3D2"]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -2.5, 2, 0)
-mesh = SubResource("PrismMesh_w5y15")
-
-[node name="CSGMesh3D2" type="CSGMesh3D" parent="CSGCombiner3D2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 2, -9.5)
-mesh = SubResource("BoxMesh_yjvma")
+[node name="Base Floor" parent="CSGCombiner3D2" instance=ExtResource("1_ohieg")]
 
 [node name="Marker3D9" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.454451, 5.13873, -2.12915)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.454, 0, -2.129)
+
+[node name="Marker3D10" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.454, 0, 3.68713)
+
+[node name="Marker3D11" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.03962, 0, 3.68713)
+
+[node name="Marker3D12" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.03962, 0, -4.32957)
 
 [node name="Marker3D" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 0)

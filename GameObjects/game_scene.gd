@@ -29,7 +29,7 @@ func _ready() -> void:
 	entity_spawner.bind(core, core_changed)
 	loot_manager.bind(core, core_changed)
 	hitbox_manager.bind(core, core_changed)
-	Hud = preload("res://hud.tscn").instantiate()
+	Hud = preload("res://UI/hud.tscn").instantiate()
 	add_child(Hud)
 	Hud.bind(core, core_changed)
 	core_changed.connect(_on_core_changed)

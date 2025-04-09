@@ -6,7 +6,16 @@ threshold = -5.4
 sidechain = &"Notifications"
 
 [sub_resource type="AudioEffectReverb" id="AudioEffectReverb_5vvkr"]
+resource_local_to_scene = false
 resource_name = "Reverb"
+predelay_msec = 150.0
+predelay_feedback = 0.4
+room_size = 0.8
+damping = 0.5
+spread = 1.0
+hipass = 0.0
+dry = 1.0
+wet = 0.5
 
 [resource]
 bus/0/effect/0/effect = SubResource("AudioEffectCompressor_ojtjc")

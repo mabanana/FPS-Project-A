@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://gui_drag_space.gd" id="2_c3q03"]
 [ext_resource type="Shader" path="res://selection_space_shader.gdshader" id="2_reoib"]
 [ext_resource type="Script" path="res://scroll_vbox_controller.gd" id="2_xdmpv"]
-[ext_resource type="Texture2D" uid="uid://d2ojqjerpiwf6" path="res://Assets/Items/Weapons/Bow/Sprite.png" id="3_gv8b5"]
+[ext_resource type="Texture2D" uid="uid://d2ojqjerpiwf6" path="res://Assets/Sprites/Items/Weapons/Bow/Sprite.png" id="3_gv8b5"]
 [ext_resource type="Texture2D" uid="uid://vkamqn6t8m1k" path="res://Assets/Sprites/Characters/Boy/Faceset.png" id="5_5b8f5"]
 [ext_resource type="PackedScene" uid="uid://u3ywy74448gn" path="res://gun_preview_viewport.tscn" id="8_my3mk"]
 

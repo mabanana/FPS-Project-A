@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="WeaponResource" load_steps=3 format=3 uid="uid://dehe7hgb3prfr"]
 
 [ext_resource type="ArrayMesh" uid="uid://6akjhbk8s2wa" path="res://Assets/Models/bullet_sprinkler.obj" id="1_6d5qx"]
-[ext_resource type="Script" path="res://Resources/weapon_resource.gd" id="1_wsxnx"]
+[ext_resource type="Script" path="res://Resources/ResourceScripts/weapon_resource.gd" id="1_wsxnx"]
 
 [resource]
 script = ExtResource("1_wsxnx")

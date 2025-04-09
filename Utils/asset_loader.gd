@@ -2,7 +2,6 @@ class_name AssetLoader
 # TODO Consider combining functionality with node instancer
 
 var scenes: Dictionary
-
 var scene_paths: Dictionary
 
 func _init():

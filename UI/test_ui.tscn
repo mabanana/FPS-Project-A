@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://UI/grid_slot.gd" id="3_qr4gy"]
 [ext_resource type="Texture2D" uid="uid://chvqvqwtqmypy" path="res://Assets/Sprites/Animals/Chicken/FacesetBrown.png" id="4_wbp5y"]
 [ext_resource type="Script" path="res://UI/grid_slot_item.gd" id="5_igbga"]
-[ext_resource type="Material" uid="uid://do3c2ru1xe6t4" path="res://Resources/GridSelectionMaterial.tres" id="6_expr6"]
+[ext_resource type="Material" uid="uid://do3c2ru1xe6t4" path="res://UI/GridSelectionMaterial.tres" id="6_expr6"]
 [ext_resource type="Script" path="res://UI/grid_slot_selection_rect.gd" id="7_bn1bh"]
 
 [node name="TestUI" type="CanvasLayer"]

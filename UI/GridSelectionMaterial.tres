@@ -4,6 +4,7 @@
 
 [resource]
 shader = ExtResource("1_s8ar7")
+shader_parameter/Parameter_Time = 0.0
 shader_parameter/Line_Smoothness = 0.045
 shader_parameter/Line_Width = 0.12
 shader_parameter/Brightness = 3.0

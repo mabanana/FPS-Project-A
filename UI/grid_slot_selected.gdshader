@@ -1,6 +1,7 @@
 shader_type canvas_item;
 render_mode blend_premul_alpha;
 
+uniform float Parameter_Time : hint_range(0, 2) = 0.0;
 uniform float Line_Smoothness : hint_range(0, 0.1) = 0.045;
 uniform float Line_Width : hint_range(0, 0.2) = 0.120;
 uniform float Brightness = 3.0;
@@ -40,7 +41,7 @@ void fragment() {
 		remapped_position = Position_Min + output_range * Position;
 	}
 
-	float remapped_time = TIME * Speed + remapped_position;
+	float remapped_time = Parameter_Time * Speed + remapped_position;
 	remapped_time = fract(remapped_time);
 	{
 		float output_range = 2.0 - (-2.0);

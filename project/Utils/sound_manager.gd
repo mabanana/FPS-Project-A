@@ -61,9 +61,12 @@ func _spawn_audio_player(sound_name: String, db_offset: float, bus = "Master", p
 		entity_spawner.scene.add_child(audio_player)
 	else:
 		audio_player = audio_stream_player
+	
 	audio_player.volume_db = db_offset
 	audio_player.stream = load(sounds[sound_name])
 	audio_player.set_bus(bus)
+	
+	if OS.has_feature("web"): audio_player.set_playback_type(AudioServer.PlaybackType.PLAYBACK_TYPE_SAMPLE)
 	# TODO: make pitch range calculated value based on fire rate
 	audio_player.pitch_scale = randf_range(pitch_range.x, pitch_range.y)
 	audio_player.play()

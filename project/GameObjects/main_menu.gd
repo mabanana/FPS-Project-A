@@ -13,6 +13,8 @@ func _process(delta):
 	pass
 
 func start_game():
+	get_tree().change_scene_to_file("res://GameObjects/scene1.tscn")
+	return
 	scene = load("res://GameObjects/scene1.tscn").instantiate()
 	add_child(scene)
 	start_button.hide()

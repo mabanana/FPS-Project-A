@@ -37,9 +37,7 @@ func add_web_button():
 				button.visible = Input.mouse_mode != Input.MOUSE_MODE_CAPTURED
 			)
 	button.pressed.connect(func():
-		core_changed.emit(contexts.mouse_capture_toggled, {
-					"prev_mode" : Input.mouse_mode,
-					})
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 		button.hide()
 		)
 	Hud.add_child(button)

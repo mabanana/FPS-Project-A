@@ -25,11 +25,15 @@ func initialize_test_scene_map() -> void:
 		var button = Button.new()
 		button.anchor_top = 0.5
 		button.set_anchors_preset(Control.PRESET_FULL_RECT)
-		button.text = "Start"
+		button.text = "WEB_CLIENT: Click anywhere to allow the game to accept mouse inputs."
+		core_changed.connect(func(context, payload):
+				if context == contexts.mouse_capture_toggled:
+					button.visible = Input.mouse_mode != Input.MOUSE_MODE_CAPTURED
+				)
 		button.pressed.connect(func():
 			core_changed.emit(contexts.mouse_capture_toggled, {
 						"prev_mode" : Input.mouse_mode,
 						})
-			button.queue_free()
+			hide()
 			)
 		Hud.add_child(button)

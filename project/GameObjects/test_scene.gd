@@ -34,6 +34,6 @@ func initialize_test_scene_map() -> void:
 			core_changed.emit(contexts.mouse_capture_toggled, {
 						"prev_mode" : Input.mouse_mode,
 						})
-			hide()
+			button.hide()
 			)
 		Hud.add_child(button)

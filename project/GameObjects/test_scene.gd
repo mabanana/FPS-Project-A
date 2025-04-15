@@ -21,19 +21,23 @@ func initialize_test_scene_map() -> void:
 		for marker in child.get_children():
 			if marker is Marker3D:
 				_add_entity_to_map(EntityMetadataModel.EntityType.MOVING_BOX, marker.global_position)
+
 	if OS.has_feature("web"):
-		var button = Button.new()
-		button.anchor_top = 0.5
-		button.set_anchors_preset(Control.PRESET_FULL_RECT)
-		button.text = "WEB_CLIENT: Click anywhere to allow the game to accept mouse inputs."
-		core_changed.connect(func(context, payload):
-				if context == contexts.mouse_capture_toggled:
-					button.visible = Input.mouse_mode != Input.MOUSE_MODE_CAPTURED
-				)
-		button.pressed.connect(func():
-			core_changed.emit(contexts.mouse_capture_toggled, {
-						"prev_mode" : Input.mouse_mode,
-						})
-			button.hide()
+		add_web_button()
+
+func add_web_button():
+	var button = Button.new()
+	button.anchor_top = 0.5
+	button.set_anchors_preset(Control.PRESET_FULL_RECT)
+	button.text = "WEB_CLIENT: Click anywhere to allow the game to accept mouse inputs."
+	core_changed.connect(func(context, payload):
+			if context == contexts.mouse_capture_toggled:
+				button.visible = Input.mouse_mode != Input.MOUSE_MODE_CAPTURED
 			)
-		Hud.add_child(button)
+	button.pressed.connect(func():
+		core_changed.emit(contexts.mouse_capture_toggled, {
+					"prev_mode" : Input.mouse_mode,
+					})
+		button.hide()
+		)
+	Hud.add_child(button)

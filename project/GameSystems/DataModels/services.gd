@@ -4,6 +4,8 @@ var id_counter
 var gui_hover
 var gui_drag
 
+var web_debug_mode
+
 enum Context {
 	none,
 	gun_drop_started,

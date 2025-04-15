@@ -3,7 +3,7 @@ class_name TestScene
 
 func initialize_scene():
 	initialize_test_scene_map()
-
+	core.services.web_debug_mode = false
 # Temporary function that initializes the hard coded nodes into test scene.
 func initialize_test_scene_map() -> void:
 	# Initialize Inventory Model
@@ -22,10 +22,10 @@ func initialize_test_scene_map() -> void:
 			if marker is Marker3D:
 				_add_entity_to_map(EntityMetadataModel.EntityType.MOVING_BOX, marker.global_position)
 
-	if OS.has_feature("web"):
+	if OS.has_feature("web") or core.services.web_debug_mode:
 		add_web_button()
 	else:
-		$AudioStreamPlayer.queue_free()
+		$AudioStreams.queue_free()
 	
 	core_changed.emit(contexts.game_loaded, null)
 

@@ -46,6 +46,9 @@ func _on_core_changed(context, payload):
 		
 # TODO: use finite number of audio_players instead of instantiating new ones
 func _spawn_audio_player(sound_name: String, db_offset: float, bus = "Master", pitch_range: Vector2 = Vector2(0.95, 1.05), position: Vector3 = Vector3.ZERO, is_3d = false):
+	if OS.has_feature("web") or core.services.web_debug_mode:
+		web_audio(sound_name, pitch_range, position)
+		return
 	var audio_player
 	if is_3d:
 		audio_player = AudioStreamPlayer3D.new()
@@ -71,5 +74,16 @@ func _spawn_audio_player(sound_name: String, db_offset: float, bus = "Master", p
 
 	# TODO: make pitch range calculated value based on fire rate
 	audio_player.pitch_scale = randf_range(pitch_range.x, pitch_range.y)
+	audio_player.play()
+
+func web_audio(sound_name, pitch_range: Vector2 = Vector2(0.95, 1.05), position: Vector3 = Vector3.ZERO):
+	var audio_players = entity_spawner.scene.find_child("AudioStreams")
+	var audio_player = audio_players.find_child(sound_name)
+	
+	if audio_player is AudioStreamPlayer3D:
+		audio_player.position = position
+	
+	audio_player.pitch_scale = randf_range(pitch_range.x, pitch_range.y)
+	print("SoundManager: playing %s for web" % [sound_name])
 	audio_player.play()
 	

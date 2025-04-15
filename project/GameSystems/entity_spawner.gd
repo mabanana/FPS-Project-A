@@ -1,3 +1,4 @@
+extends Node
 class_name EntitySpawner
 # EntitySpawner is a singleton class listens to all core change signals when entities are added/removed from MapModel.entities dictionary, and then adds/removes entity node to/from the respective scene.
 

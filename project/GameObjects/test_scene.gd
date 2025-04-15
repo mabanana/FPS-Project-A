@@ -21,3 +21,15 @@ func initialize_test_scene_map() -> void:
 		for marker in child.get_children():
 			if marker is Marker3D:
 				_add_entity_to_map(EntityMetadataModel.EntityType.MOVING_BOX, marker.global_position)
+	if OS.has_feature("web"):
+		var button = Button.new()
+		button.anchor_top = 0.5
+		button.set_anchors_preset(Control.PRESET_FULL_RECT)
+		button.text = "Start"
+		button.pressed.connect(func():
+			core_changed.emit(contexts.mouse_capture_toggled, {
+						"prev_mode" : Input.mouse_mode,
+						})
+			button.queue_free()
+			)
+		Hud.add_child(button)

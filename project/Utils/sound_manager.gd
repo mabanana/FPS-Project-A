@@ -49,6 +49,7 @@ func _spawn_audio_player(sound_name: String, db_offset: float, bus = "Master", p
 	var audio_player
 	if is_3d:
 		audio_player = AudioStreamPlayer3D.new()
+		audio_player.autoplay = true
 		audio_player.position = position
 		audio_player.max_db = -6
 		audio_player.set_attenuation_model(AudioStreamPlayer3D.ATTENUATION_LOGARITHMIC)
@@ -58,6 +59,7 @@ func _spawn_audio_player(sound_name: String, db_offset: float, bus = "Master", p
 		entity_spawner.scene.add_child(audio_player)
 	elif bus == "BGM":
 		audio_player = AudioStreamPlayer.new()
+		audio_player.autoplay = true
 		audio_player.finished.connect(audio_player.play)
 		entity_spawner.scene.add_child(audio_player)
 	else:

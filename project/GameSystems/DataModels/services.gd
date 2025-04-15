@@ -37,6 +37,7 @@ enum Context {
 	spell_entity_added,
 	hitbox_collided,
 	hitbox_ended,
+	game_loaded,
 }
 
 func _init() -> void:

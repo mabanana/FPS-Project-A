@@ -24,6 +24,8 @@ func initialize_test_scene_map() -> void:
 
 	if OS.has_feature("web"):
 		add_web_button()
+	
+	core_changed.emit(contexts.game_loaded, null)
 
 func add_web_button():
 	var button = Button.new()

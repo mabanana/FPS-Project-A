@@ -40,6 +40,8 @@ func _on_core_changed(context, payload):
 		_spawn_audio_player("Magic1", 10, "Notification" ,Vector2(1.25, 1.35), payload["position"], true)
 	elif context == contexts.spell_entity_added:
 		_spawn_audio_player("Fireball", 10, "Master" ,Vector2(0.95, 1.0), payload["position"], true)
+	elif context == contexts.game_loaded:
+		_spawn_audio_player("Main", -15, "BGM")
 		
 # TODO: use finite number of audio_players instead of instantiating new ones
 func _spawn_audio_player(sound_name: String, db_offset: float, bus = "Master", pitch_range: Vector2 = Vector2(0.95, 1.05), position: Vector3 = Vector3.ZERO, is_3d = false):
@@ -48,16 +50,20 @@ func _spawn_audio_player(sound_name: String, db_offset: float, bus = "Master", p
 		audio_player = AudioStreamPlayer3D.new()
 		audio_player.position = position
 		audio_player.max_db = -6
-		audio_player.set_bus(bus)
 		audio_player.set_attenuation_model(AudioStreamPlayer3D.ATTENUATION_LOGARITHMIC)
 		audio_player.finished.connect(func(): 
 			print("audio player freed")
 			audio_player.queue_free())
 		entity_spawner.scene.add_child(audio_player)
+	elif bus == "BGM":
+		audio_player = AudioStreamPlayer.new()
+		audio_player.finished.connect(audio_player.play)
+		entity_spawner.scene.add_child(audio_player)
 	else:
 		audio_player = audio_stream_player
 	audio_player.volume_db = db_offset
 	audio_player.stream = load(sounds[sound_name])
+	audio_player.set_bus(bus)
 	# TODO: make pitch range calculated value based on fire rate
 	audio_player.pitch_scale = randf_range(pitch_range.x, pitch_range.y)
 	audio_player.play()

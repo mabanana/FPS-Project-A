@@ -42,5 +42,5 @@ func add_web_button():
 					})
 		button.hide()
 		)
-	button.visible = Input.mouse_mode != Input.MOUSE_MODE_CAPTURED
 	Hud.add_child(button)
+	button.visible = Input.mouse_mode != Input.MOUSE_MODE_CAPTURED

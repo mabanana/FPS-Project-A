@@ -22,11 +22,11 @@ func _init():
 func get_scene(entity_type: EntityMetadataModel.EntityType):
 	if !entity_type in scenes:
 		prints(EntityMetadataModel.EntityType.find_key(entity_type) ,"load successful" if load_scene(entity_type) else "load unsuccessful")
-	else:
-		push_error("Scene not found")
 	return scenes[entity_type]
 
 func load_scene(entity_type):
 	if entity_type in scene_paths:
 		scenes[entity_type] = load(scene_paths[entity_type])
 		return true
+	else:
+		push_error("Scene not found")

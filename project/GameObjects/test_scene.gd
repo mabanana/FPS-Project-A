@@ -31,7 +31,7 @@ func add_web_button():
 	var button = Button.new()
 	button.anchor_top = 0.5
 	button.set_anchors_preset(Control.PRESET_FULL_RECT)
-	button.text = "WEB_CLIENT: Click anywhere to allow the game to accept mouse inputs."
+	button.text = "WEB_CLIENT: Click anywhere to allow the game to accept mouse inputs. You may need to press esc and click a few times for it to work."
 	core_changed.connect(func(context, payload):
 			if context == contexts.mouse_capture_toggled:
 				button.visible = Input.mouse_mode != Input.MOUSE_MODE_CAPTURED
@@ -42,4 +42,5 @@ func add_web_button():
 					})
 		button.hide()
 		)
+	button.visible = Input.mouse_mode != Input.MOUSE_MODE_CAPTURED
 	Hud.add_child(button)

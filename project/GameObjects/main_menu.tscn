@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3 uid="uid://b0hf13bf051hq"]
+
+[ext_resource type="Script" path="res://GameObjects/main_menu.gd" id="1_x4sh2"]
+
+[node name="MainMenu" type="Node2D" node_paths=PackedStringArray("start_button")]
+script = ExtResource("1_x4sh2")
+start_button = NodePath("CanvasLayer/Button")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Button" type="Button" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -54.5
+offset_top = -15.5
+offset_right = 54.5
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Start Game!!!"

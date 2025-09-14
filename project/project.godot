@@ -20,6 +20,10 @@ config/icon="res://icon.svg"
 buses/default_bus_layout="res://Resources/Audio/default_bus_layout.tres"
 general/default_playback_type.web=0
 
+[autoload]
+
+Signals="*res://Globals/signals.gd"
+
 [display]
 
 window/stretch/mode="canvas_items"

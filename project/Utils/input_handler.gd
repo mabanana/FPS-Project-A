@@ -2,10 +2,6 @@ class_name InputHandler
 
 var input_map
 
-var core: CoreModel
-var core_changed: Signal
-var contexts
-
 static var DEFAULT_INPUT_MAP := {
 	MouseButton.MOUSE_BUTTON_LEFT : PlayerActions.FIRE,
 	MouseButton.MOUSE_BUTTON_RIGHT : PlayerActions.ADS,
@@ -64,56 +60,48 @@ enum PlayerActions {
  
 func _init():
 	input_map = DEFAULT_INPUT_MAP
+	Signals.mouse_capture_toggled.connect(_on_mouse_capture_toggled)
 	
 func handle_input(event: InputEvent) -> void:
 	# TODO: add input uncaptured state for pause screens and inventories
 	if event is InputEventMouseButton and event.button_index in input_map and Input.mouse_mode == Input.MouseMode.MOUSE_MODE_CAPTURED:
-		var context
+		var sig
 		if event.is_pressed() and !event.is_echo():
-			context = contexts.event_input_pressed
+			sig = Signals.event_input_pressed
 		elif event.is_released():
-			context = contexts.event_input_released
+			sig = Signals.event_input_released
 		else:
 			print("ERROR: event mouse button that is neither pressed nor released detected")
 			return
-		core_changed.emit(context, {
+		sig.emit({
 				"action": input_map[event.button_index], 
 				"button_index" : event.button_index
 				})
 	elif event is InputEventKey and event.keycode in input_map:
-		var context
+		var sig
 		if event.is_pressed() and !event.is_echo():
-			context = contexts.event_input_pressed
+			sig = Signals.event_input_pressed
 		elif event.is_echo():
 			# print("echo press event")
 			return
 		elif event.is_released():
-			context = contexts.event_input_released
+			sig = Signals.event_input_released
 		else:
 			print("ERROR: event key press that is neither pressed nor released detected")
 			return
-		core_changed.emit(context, {
+		sig.emit({
 			"action": input_map[event.keycode], 
 			"key_code" : event.keycode
 			})
 	elif event is InputEventMouseMotion:
-		core_changed.emit(contexts.event_mouse_moved, {
+		Signals.event_mouse_moved.emit({
 			"relative": event.relative
 			})
 	else:
 		prints("InputHandler: unhandled input", event.as_text())
 
-
-func bind(core: CoreModel, core_changed: Signal):
-	self.core = core
-	self.core_changed = core_changed
-	contexts = core.services.Context
-	
-	core_changed.connect(_on_core_changed)
-
-func _on_core_changed(context, payload):
-	if context == contexts.mouse_capture_toggled:
-		if payload["prev_mode"] == Input.MOUSE_MODE_CAPTURED:
-			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		else:
-			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+func _on_mouse_capture_toggled(payload=null):
+	if payload["prev_mode"] == Input.MOUSE_MODE_CAPTURED:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	else:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

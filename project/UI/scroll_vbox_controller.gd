@@ -1,10 +1,6 @@
 class_name ScrollVBoxController
 extends ScrollContainer
 
-var core: CoreModel
-var core_changed: Signal
-var contexts
-
 var inventory_size: int
 @export var test_tex : Texture2D
 
@@ -20,8 +16,22 @@ func _init():
 	custom_minimum_size = Vector2(256, 64)
 	add_child(grid_container)
 
+func _ready():
+	if !Core or !Core.loaded:
+		await Signals.core_loaded
+		pass
+	selection = Core.inventory.active_gun_index
+	inventory_size = Core.player.inventory_size
+	_update()
+	Signals.gun_dropped.connect(_update)
+	Signals.gun_picked_up.connect(_update)
+	Signals.gun_swap_started.connect(_update) 
+	Signals.inventory_accessed.connect(_update)
+	Signals.core_changed.connect(_on_core_changed)
+	Signals.drag_ended.connect(_on_drag_ended)
+
 func swap_data(item1, item2):
-	var guns = core.inventory.guns
+	var guns = Core.inventory.guns
 	var index1 = item1.index
 	var index2 = item2.index
 	if index2 < 0:
@@ -42,30 +52,13 @@ func swap_data(item1, item2):
 	_update()
 
 func change_active_gun(index):
-	core.inventory.active_gun_index = index
-	core_changed.emit(contexts.gun_swap_started, null)
+	Core.inventory.active_gun_index = index
+	Signals.gun_swap_started.emit(null)
 
-func bind(core: CoreModel, core_changed: Signal):
-	self.core = core
-	self.core_changed = core_changed
-	contexts = core.services.Context
-	
-	core_changed.connect(_on_core_changed)
-	
-	selection = core.inventory.active_gun_index
-	inventory_size = core.player.inventory_size
-	_update()
-
-func _on_core_changed(context, payload):
-	selection = core.inventory.active_gun_index
-	if context in [
-		contexts.gun_dropped,
-		contexts.gun_picked_up,
-		contexts.gun_swap_started, 
-		contexts.inventory_accessed,
-		]:
-		_update()
-	if context == contexts.drag_ended:
+func _on_core_changed(payload=null):
+	selection = Core.inventory.active_gun_index
+		
+func _on_drag_ended(payload = null):
 		_update()
 		if payload["gui_hover"] is GridSlot and payload["gui_drag"]:
 			swap_data(payload["gui_drag"],payload["gui_hover"])
@@ -79,7 +72,7 @@ func _update():
 			selection_rect = GridSelectRect.new()
 			slot.add_child(selection_rect)
 			slot.custom_minimum_size = Vector2(70,64)
-		if i < len(core.inventory.guns):
+		if i < len(Core.inventory.guns):
 			slot.add_item(test_tex)
 			slot.index = i
 		slot.controller = self

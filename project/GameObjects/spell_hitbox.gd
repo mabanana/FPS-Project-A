@@ -12,7 +12,6 @@ func _ready():
 	look_at(global_position + linear_velocity)
 	pass # Replace with function body.
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	lifetime -= delta
@@ -24,10 +23,9 @@ func _physics_process(delta):
 	position += linear_velocity * delta
 	
 	
-
 func on_collided(body):
 	if body.has_method("take_damage"):
-		body.core_changed.emit(CoreServices.Context.hitbox_collided, 
+		Signals.hitbox_collided.emit( 
 		{
 			"target_rid": body.rid,
 			"hitbox_entity_model": entity_model,

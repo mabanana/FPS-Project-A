@@ -1,9 +1,6 @@
 extends Node3D
 class_name GameScene
 
-var core: CoreModel
-signal core_changed(context, payload)
-var contexts
 var entity_spawner: EntitySpawner
 var loot_manager: LootManager
 var Hud: HudController
@@ -20,25 +17,17 @@ func _ready() -> void:
 	# Load all gun metadata
 	GunMetadataModel.init_gun_metadata_map()
 	EntityMetadataModel.init_entity_metadata_map()
-	# Instantiate core
-	core = CoreModel.new()
+	# Instantiate Helper objects
 	entity_spawner = EntitySpawner.new(self)
 	loot_manager = LootManager.new()
 	hitbox_manager = HitboxManager.new(self)
-	# Add bindings to all relevant observers
-	entity_spawner.bind(core, core_changed)
-	loot_manager.bind(core, core_changed)
-	hitbox_manager.bind(core, core_changed)
 	Hud = preload("res://UI/hud.tscn").instantiate()
 	add_child(Hud)
-	Hud.bind(core, core_changed)
-	core_changed.connect(_on_core_changed)
-	contexts = core.services.Context
 	# Set up initial state
 	entity_hash = {}
 	pos_update_cd = Countdown.new(pos_update_interval)	
 	# Emit initial state to all observers
-	core_changed.emit(contexts.none, null)
+	Signals.core_changed.emit(null)
 	initialize_scene()
 
 func initialize_scene():
@@ -50,13 +39,10 @@ func _process(delta):
 		if player_rid:
 			_pos_update(player_rid)
 
-func _on_core_changed(context, payload):
-	pass
-
 func _clear_freed():
 	for entity_rid in entity_hash:
 		if not is_instance_valid(entity_hash[entity_rid]):
-			core.map.entities.erase(entity_rid)
+			Core.map.entities.erase(entity_rid)
 			entity_hash.erase(entity_rid)
 			prints(entity_rid, "removed from entity hash")
 
@@ -65,11 +51,11 @@ func _pos_update(origin_rid: ):
 	
 	var origin_key = player_rid
 	# Update player location
-	core.map.entities[player_rid].position = entity_hash[player_rid].position
-	core.map.entities[player_rid].rotation = entity_hash[player_rid].rotation	
+	Core.map.entities[player_rid].position = entity_hash[player_rid].position
+	Core.map.entities[player_rid].rotation = entity_hash[player_rid].rotation	
 	
 	# calculate relative positions for minimap based on player
-	var entities = core.map.entities
+	var entities = Core.map.entities
 	var positions: Array[Vector3] = []
 	var eye_pos = entity_hash[origin_key].position + entity_hash[origin_key].eye_pos
 	for key in entities.keys():
@@ -78,34 +64,38 @@ func _pos_update(origin_rid: ):
 			relative_pos = relative_pos.rotated(Vector3.UP, -entities[origin_key].rotation.y)
 			relative_pos.y *= -1
 			positions.append(relative_pos)
-	core_changed.emit(contexts.map_updated, {"positions" : positions, "player_pos" : entities[origin_key].position, "player_rid" : player_rid, "player_eye_pos" : eye_pos})
+	Signals.map_updated.emit({
+		"positions" : positions, 
+		"player_pos" : entities[origin_key].position, 
+		"player_rid" : player_rid, "player_eye_pos" : eye_pos
+		})
 
 func _add_entity_to_map(entity_type: EntityMetadataModel.EntityType, position: Vector3):
-	var rid = core.services.generate_rid()
-	core.map.entities[rid] = EntityModel.new_entity(entity_type)
-	core.map.entities[rid].position = position
+	var rid = Core.services.generate_rid()
+	Core.map.entities[rid] = EntityModel.new_entity(entity_type)
+	Core.map.entities[rid].position = position
 	if EntityMetadataModel.entity_metadata_map[entity_type].entity_type == EntityModel.EntityType.enemy:
 		var payload = {
 			"position" : position,
 			"rid" : rid,
-			"entity_model" : core.map.entities[rid],
+			"entity_model" : Core.map.entities[rid],
 		}
-		core_changed.emit(contexts.enemy_spawned, payload)
+		Signals.enemy_spawned.emit(payload)
 	elif entity_type == EntityMetadataModel.EntityType.GUN_ON_FLOOR:
 		var payload = {
 			"position" : position,
 			"rid" : rid,
-			"entity_model" : core.map.entities[rid],
+			"entity_model" : Core.map.entities[rid],
 			"gun_model" : GunModel.new_with_full_ammo(1, GunMetadataModel.GunType.TEST_GUN_D),
 			"linear_velocity" : 0,
 			"angular_velocity" : 0,
 		}
-		core_changed.emit(contexts.gun_dropped, payload)
+		Signals.gun_dropped.emit(payload)
 	elif entity_type == EntityMetadataModel.EntityType.PLAYER:
 		var payload = {
 			"position" : position,
 			"rid" : rid,
-			"entity_model" : core.map.entities[rid],
+			"entity_model" : Core.map.entities[rid],
 		}
 		player_rid = rid
-		core_changed.emit(contexts.player_spawned, payload)
+		Signals.player_spawned.emit(payload)

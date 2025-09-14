@@ -15,39 +15,30 @@ var rid: int
 var vision_range: float
 var movement_speed : float
 
-var core: CoreModel
-var core_changed: Signal
-var contexts
-
-func bind(core, core_changed):
-	self.core = core
-	self.core_changed = core_changed
-	
-	core_changed.connect(_on_core_changed)
-	contexts = core.services.Context
+func _ready():
+	Signals.damage_dealt.connect(_on_damage_dealt)
 
 func take_damage(damage_amount: int, damage_scale: float, dealer_rid: int, damage_position: Vector3):
 	_take_damage(damage_amount, damage_scale, dealer_rid, damage_position)
 	
-func _on_core_changed(context: CoreServices.Context, payload):
-	if context == contexts.damage_dealt and payload["target_rid"] == rid and alive:
+func _on_damage_dealt(payload = null):
+	if payload["target_rid"] == rid and alive:
 		var hp_change = -payload["damage_amount"]
 		_add_damage_number_to_map(hp_change, payload["damage_scale"], payload["dealer_rid"], payload["damage_position"])
 		_change_hp(hp_change, payload["dealer_rid"])
-		
 
 func _add_damage_number_to_map(hp_change: int, damage_scale: float, dealer_rid: int, damage_position: Vector3):
-	var direction_to_dealer = position.direction_to(core.map.entities[dealer_rid].position)
+	var direction_to_dealer = position.direction_to(Core.map.entities[dealer_rid].position)
 	var node_position = (damage_position) + (direction_to_dealer * POSITION_FORESHORTEN)
 	var payload = {
 		"hp_change" : abs(hp_change),
 		"damage_scale" : damage_scale,
 		"position" : node_position,
 		"entity_model" : EntityModel.new_entity(EntityMetadataModel.EntityType.DAMAGE_NUMBER),
-		"rid" : core.services.generate_rid()
+		"rid" : Core.services.generate_rid()
 		}
-	core.map.entities[payload["rid"]] = payload["entity_model"]
-	core_changed.emit(contexts.damage_taken, payload)
+	Core.map.entities[payload["rid"]] = payload["entity_model"]
+	Signals.damage_taken.emit(payload)
 
 func _take_damage(damage_amount: int, damage_scale: float, dealer_rid: int, damage_position: Vector3):
 	var payload = {
@@ -57,22 +48,22 @@ func _take_damage(damage_amount: int, damage_scale: float, dealer_rid: int, dama
 		"damage_position": damage_position,
 		"damage_scale": damage_scale,
 	}
-	payload = PerkController.apply_perks(contexts.damage_dealt, payload, core, core_changed)
-	core_changed.emit(contexts.damage_dealt, payload)
+	payload = PerkController.apply_perks(Signals.damage_dealt, payload)
+	Signals.damage_dealt.emit(payload)
 
 func _change_hp(hp_change, dealer_rid):
-	core.map.entities[rid].hp += hp_change
+	Core.map.entities[rid].hp += hp_change
 	var payload = {
 			"dealer_rid" : dealer_rid,
-			"target_name" : core.map.entities[rid].name,
+			"target_name" : Core.map.entities[rid].name,
 			"target_rid" : rid,
 			"hp_change" : hp_change,
-			"loot_class" : core.map.entities[rid].loot_class,
+			"loot_class" : Core.map.entities[rid].loot_class,
 			"target_position": global_position + eye_pos
 	}
-	if core.map.entities[rid].hp <= 0:
+	if Core.map.entities[rid].hp <= 0:
 		alive = false
-		payload = PerkController.apply_perks(contexts.entity_died, payload, core, core_changed)
-		core_changed.emit(contexts.entity_died, payload)
+		payload = PerkController.apply_perks(Signals.entity_died, payload)
+		Signals.entity_died.emit(payload)
 	else:
-		core_changed.emit(contexts.health_changed, payload)
+		Signals.health_changed.emit(payload)

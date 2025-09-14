@@ -28,17 +28,18 @@ var object_in_view
 var movement_speed: float
 var input_dir: Vector2
 var trigger_down : bool
-@export var fov_multiplier: float
+@export var fov_multiplier: float = 1.0
 @export var fov_modifier: float
 
 var jump_cd: Countdown
 var sprint_cd: Countdown
 
-var core: CoreModel
-var core_changed: Signal
-
-var contexts
 var input_handler: InputHandler
+
+func _init():
+	# TODO make input handler child of game manager instead of player
+	input_handler = InputHandler.new()
+	fov_multiplier = 1.0
 
 func _ready():
 	jump_cd = Countdown.new(JUMP_BUFFER)
@@ -48,6 +49,12 @@ func _ready():
 	head_joint = %HeadJoint
 	eye_pos = head_joint.position
 	gun_slot.character = self
+	Signals.gun_dropped.connect(_on_gun_dropped)
+	Signals.event_mouse_moved.connect(_on_event_mouse_moved)
+	Signals.event_input_pressed.connect(_on_event_input_pressed)
+	Signals.event_input_released.connect(_on_event_input_released)
+	
+	
 
 # TODO: Move all gun_slot logic away from input
 	# e.g. hold trigger through reload moves state back to triggering 
@@ -65,7 +72,7 @@ func _input(event: InputEvent):
 func _physics_process(delta):
 	if not is_on_floor():
 		velocity += get_gravity() * delta
-	elif core.player.is_jump:
+	elif Core.player.is_jump:
 		velocity.y += JUMP_VELOCITY
 		set_jump(false)
 	
@@ -100,7 +107,8 @@ func _process(delta):
 	
 	if jump_cd.tick(delta) <= 0:
 		set_jump(false)
-	camera.fov = move_toward(camera.fov, fov_modifier + DEFAULT_CAMERA_ZOOM * fov_multiplier, 10 / fov_multiplier)
+	if abs(camera.fov - (fov_modifier + DEFAULT_CAMERA_ZOOM * fov_multiplier)) < 10.0 / fov_multiplier:
+		camera.fov = move_toward(camera.fov, fov_modifier + DEFAULT_CAMERA_ZOOM * fov_multiplier, 10.0 / fov_multiplier)
 
 func get_object_in_view():
 	var query = gun_slot.cast_ray_towards_mouse()
@@ -108,145 +116,131 @@ func get_object_in_view():
 	if result.has("collider"):
 		return result["collider"]
 
-# Bindings
+func _on_gun_dropped(payload = null):
+	set_action_state(PlayerModel.ActionState.idling)
 
-func bind(core: CoreModel, core_changed: Signal):
-	self.core = core
-	self.core_changed = core_changed
+func _on_event_mouse_moved(payload = null):
+	var relative = payload["relative"]
+	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		_rotate_camera(relative.x, relative.y, 0)
 
-	core_changed.connect(_on_core_changed)
-	
-	_on_bind()
-
-func _on_bind():
-	contexts = core.services.Context
-	# TODO make input handler child of game manager instead of player
-	input_handler = InputHandler.new()
-	input_handler.bind(core, core_changed)
-	gun_slot.bind(core, core_changed)
-
-func _on_core_changed(context, payload):
-	if context == contexts.gun_dropped:
-		set_action_state(PlayerModel.ActionState.idling)
-	elif context == contexts.event_mouse_moved:
-		var relative = payload["relative"]
-		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-			_rotate_camera(relative.x, relative.y, 0)
-	elif context == contexts.event_input_pressed:
-		var action_pressed = payload["action"]
-		match action_pressed:
-			InputHandler.PlayerActions.FIRE:
-				if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-					trigger_down = true
-					if !is_as(PlayerModel.ActionState.reloading) and !is_as(PlayerModel.ActionState.throwing):
-						set_action_state(PlayerModel.ActionState.triggering)
-			InputHandler.PlayerActions.NEXT_WEAPON:
-				set_action_state(PlayerModel.ActionState.idling)
-				set_active_gun_index(core.inventory.active_gun_index + 1, true)
-			InputHandler.PlayerActions.PREV_WEAPON:
-				set_action_state(PlayerModel.ActionState.idling)
-				set_active_gun_index(core.inventory.active_gun_index - 1, true)
-			InputHandler.PlayerActions.MOVE_FORWARD:
-				print("move forward")
-			InputHandler.PlayerActions.MOVE_BACKWARD:
-				print("move backward")
-			InputHandler.PlayerActions.MOVE_LEFT:
-				print("move left")
-			InputHandler.PlayerActions.MOVE_RIGHT:
-				print("move right")
-			InputHandler.PlayerActions.JUMP:
-				set_jump(true)
-			InputHandler.PlayerActions.SPRINT:
-				if !core.player.is_ads and is_ms(PlayerModel.MovementState.walking):
-					set_movement_state(PlayerModel.MovementState.sprinting)
-			InputHandler.PlayerActions.CROUCH:
-				print("crouch")
-			InputHandler.PlayerActions.RELOAD:
-				if gun_slot.active_gun:
-					if core.inventory.active_gun.mag_curr < core.inventory.active_gun.metadata.mag_size:
-						set_action_state(PlayerModel.ActionState.reloading)
-					else:
-						print("Mag already full")
+func _on_event_input_pressed(payload = null):
+	var action_pressed = payload["action"]
+	match action_pressed:
+		InputHandler.PlayerActions.FIRE:
+			if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+				trigger_down = true
+				if !is_as(PlayerModel.ActionState.reloading) and !is_as(PlayerModel.ActionState.throwing):
+					set_action_state(PlayerModel.ActionState.triggering)
+		InputHandler.PlayerActions.NEXT_WEAPON:
+			set_action_state(PlayerModel.ActionState.idling)
+			set_active_gun_index(Core.inventory.active_gun_index + 1, true)
+		InputHandler.PlayerActions.PREV_WEAPON:
+			set_action_state(PlayerModel.ActionState.idling)
+			set_active_gun_index(Core.inventory.active_gun_index - 1, true)
+		InputHandler.PlayerActions.MOVE_FORWARD:
+			print("move forward")
+		InputHandler.PlayerActions.MOVE_BACKWARD:
+			print("move backward")
+		InputHandler.PlayerActions.MOVE_LEFT:
+			print("move left")
+		InputHandler.PlayerActions.MOVE_RIGHT:
+			print("move right")
+		InputHandler.PlayerActions.JUMP:
+			set_jump(true)
+		InputHandler.PlayerActions.SPRINT:
+			if !Core.player.is_ads and is_ms(PlayerModel.MovementState.walking):
+				set_movement_state(PlayerModel.MovementState.sprinting)
+		InputHandler.PlayerActions.CROUCH:
+			print("crouch")
+		InputHandler.PlayerActions.RELOAD:
+			if gun_slot.active_gun:
+				if Core.inventory.active_gun.mag_curr < Core.inventory.active_gun.metadata.mag_size:
+					set_action_state(PlayerModel.ActionState.reloading)
 				else:
-					print("Can't reload without a gun in hand.")
-			InputHandler.PlayerActions.ADS:
-				set_ads(true)
-			InputHandler.PlayerActions.INTERACT:
-				# TODO: interact through signal emit instead of direct reference of object
-				if object_in_view and object_in_view.has_method("on_interact"):
-					core_changed.emit(contexts.gun_pickup_started, 
-					{"gun_model": object_in_view.gun_model, "rid": rid, "target_rid": object_in_view.rid})
-					var linear_velocity = GunSlotController.inaccuratize_vector(Vector3.UP, 60) * 5
-					var angular_velocity = linear_velocity.cross(Vector3.UP).normalized() * 5
-					object_in_view.linear_velocity = linear_velocity
-					object_in_view.angular_velocity = angular_velocity
-				else:
-					print("Nothing to interact with...")
-			InputHandler.PlayerActions.MELEE:
-				print("melee")
-			InputHandler.PlayerActions.SELECT_SlOT_1:
-				set_active_gun_index(0)
-			InputHandler.PlayerActions.SELECT_SlOT_2:
-				set_active_gun_index(1)
-			InputHandler.PlayerActions.SELECT_SlOT_3:
-				set_active_gun_index(2)
-			InputHandler.PlayerActions.SELECT_SlOT_4:
-				set_active_gun_index(3)
-			InputHandler.PlayerActions.ESC_MENU:
-				# TODO: implement pause functionality
-				core_changed.emit(contexts.mouse_capture_toggled, {
-					"prev_mode" : Input.mouse_mode,
-					})
-			InputHandler.PlayerActions.GAME_MENU:
-				print("open game menu")
-			InputHandler.PlayerActions.DROP_GUN:
-				set_action_state(PlayerModel.ActionState.throwing)
-				core_changed.emit(contexts.gun_drop_started, {"rid": rid})
-			InputHandler.PlayerActions.ACTION_F:
-				core_changed.emit(contexts.spell_cast, {"rid": rid})
-			_:
-				pass
-	elif context == contexts.event_input_released:
-		var action_released = payload["action"]
-		match action_released:
-			InputHandler.PlayerActions.FIRE:
-				if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-					trigger_down = false
-					if is_as(PlayerModel.ActionState.triggering):
-						set_action_state(PlayerModel.ActionState.idling)
-			InputHandler.PlayerActions.MOVE_FORWARD:
-				print("stop move forward")
-			InputHandler.PlayerActions.MOVE_BACKWARD:
-				print("stop move backward")
-			InputHandler.PlayerActions.MOVE_LEFT:
-				print("stop move left")
-			InputHandler.PlayerActions.MOVE_RIGHT:
-				print("stop move right")
-			InputHandler.PlayerActions.JUMP:
-				print("jump released")
-			InputHandler.PlayerActions.SPRINT:
-				print("sprint released")
-			InputHandler.PlayerActions.CROUCH:
-				print("crouch released")
-			InputHandler.PlayerActions.RELOAD:
-				print("reload released")
-			InputHandler.PlayerActions.ADS:
-				set_ads(false)
-			InputHandler.PlayerActions.INTERACT:
-				print("interact released")
-			InputHandler.PlayerActions.MELEE:
-				print("melee released")
-			InputHandler.PlayerActions.DROP_GUN:
-				print("drop gun released")
-			_:
-				pass
+					print("Mag already full")
+			else:
+				print("Can't reload without a gun in hand.")
+		InputHandler.PlayerActions.ADS:
+			set_ads(true)
+		InputHandler.PlayerActions.INTERACT:
+			# TODO: interact through signal emit instead of direct reference of object
+			if object_in_view and object_in_view.has_method("on_interact"):
+				Signals.gun_pickup_started.emit( 
+				{"gun_model": object_in_view.gun_model, "rid": rid, "target_rid": object_in_view.rid})
+				var linear_velocity = GunSlotController.inaccuratize_vector(Vector3.UP, 60) * 5
+				var angular_velocity = linear_velocity.cross(Vector3.UP).normalized() * 5
+				object_in_view.linear_velocity = linear_velocity
+				object_in_view.angular_velocity = angular_velocity
+			else:
+				print("Nothing to interact with...")
+		InputHandler.PlayerActions.MELEE:
+			print("melee")
+		InputHandler.PlayerActions.SELECT_SlOT_1:
+			set_active_gun_index(0)
+		InputHandler.PlayerActions.SELECT_SlOT_2:
+			set_active_gun_index(1)
+		InputHandler.PlayerActions.SELECT_SlOT_3:
+			set_active_gun_index(2)
+		InputHandler.PlayerActions.SELECT_SlOT_4:
+			set_active_gun_index(3)
+		InputHandler.PlayerActions.ESC_MENU:
+			# TODO: implement pause functionality
+			Signals.mouse_capture_toggled.emit(
+				{
+				"prev_mode" : Input.mouse_mode,
+				})
+		InputHandler.PlayerActions.GAME_MENU:
+			print("open game menu")
+		InputHandler.PlayerActions.DROP_GUN:
+			set_action_state(PlayerModel.ActionState.throwing)
+			Signals.gun_drop_started.emit({"rid": rid})
+		InputHandler.PlayerActions.ACTION_F:
+			Signals.spell_cast.emit({"rid": rid})
+		_:
+			pass
+
+func _on_event_input_released(payload = null):
+	var action_released = payload["action"]
+	match action_released:
+		InputHandler.PlayerActions.FIRE:
+			if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+				trigger_down = false
+				if is_as(PlayerModel.ActionState.triggering):
+					set_action_state(PlayerModel.ActionState.idling)
+		InputHandler.PlayerActions.MOVE_FORWARD:
+			print("stop move forward")
+		InputHandler.PlayerActions.MOVE_BACKWARD:
+			print("stop move backward")
+		InputHandler.PlayerActions.MOVE_LEFT:
+			print("stop move left")
+		InputHandler.PlayerActions.MOVE_RIGHT:
+			print("stop move right")
+		InputHandler.PlayerActions.JUMP:
+			print("jump released")
+		InputHandler.PlayerActions.SPRINT:
+			print("sprint released")
+		InputHandler.PlayerActions.CROUCH:
+			print("crouch released")
+		InputHandler.PlayerActions.RELOAD:
+			print("reload released")
+		InputHandler.PlayerActions.ADS:
+			set_ads(false)
+		InputHandler.PlayerActions.INTERACT:
+			print("interact released")
+		InputHandler.PlayerActions.MELEE:
+			print("melee released")
+		InputHandler.PlayerActions.DROP_GUN:
+			print("drop gun released")
+		_:
+			pass
 
 
 func set_ads(boo: bool):
-	if core.player.is_ads == boo:
+	if Core.player.is_ads == boo:
 		return
 	if !(is_as(PlayerModel.ActionState.triggering) or is_as(PlayerModel.ActionState.idling)):
-		core.player.is_ads = false
+		Core.player.is_ads = false
 	print("Aiming down sights set to " + ("true" if boo else "false"))
 	
 	if boo:
@@ -254,66 +248,66 @@ func set_ads(boo: bool):
 	else:
 		gun_slot.set_camera_zoom(0, false)
 	
-	core.player.is_ads = boo
-	core_changed.emit(contexts.none, null)
+	Core.player.is_ads = boo
+	Signals.core_changed.emit(null)
 	
 func set_jump(boo: bool):
-	if core.player.is_jump == boo:
+	if Core.player.is_jump == boo:
 		return
-	core.player.is_jump = boo
+	Core.player.is_jump = boo
 	if boo:
 		jump_cd.reset_cd()
-	core_changed.emit(contexts.none, null)
+	Signals.core_changed.emit(null)
 
 func _set_target(rid):
-	core.player.target_rid = rid
-	core_changed.emit(contexts.none, null)
+	Core.player.target_rid = rid
+	Signals.core_changed.emit(null)
 	
 func _set_interact_target(rid):
-	core.player.interact_rid = rid
-	core_changed.emit(contexts.none, null)
+	Core.player.interact_rid = rid
+	Signals.core_changed.emit(null)
 
 func set_active_gun_index(index: int, cycle = false):
-	if index > max_gun_slots - 1 or index > len(core.inventory.guns) - 1:
+	if index > max_gun_slots - 1 or index > len(Core.inventory.guns) - 1:
 		if cycle:
 			index = 0
 		else:
 			return
-	if core.inventory.active_gun_index == index:
+	if Core.inventory.active_gun_index == index:
 		return
 	elif index < 0:
 		if cycle:
-			index = min(len(core.inventory.guns) - 1, max_gun_slots - 1)
+			index = min(len(Core.inventory.guns) - 1, max_gun_slots - 1)
 		else:
 			return
-	core.inventory.active_gun_index = index
+	Core.inventory.active_gun_index = index
 	set_ads(false)
-	core_changed.emit(contexts.gun_swap_started, null)
+	Signals.gun_swap_started.emit(null)
 
 func set_action_state(state: PlayerModel.ActionState):
-	if core.player.action_state == state:
+	if Core.player.action_state == state:
 		return
-	var prev_state = core.player.action_state
-	core.player.action_state = state
+	var prev_state = Core.player.action_state
+	Core.player.action_state = state
 	_on_action_change(state, prev_state)
 	if state == PlayerModel.ActionState.reloading:
-		core_changed.emit(contexts.reload_started, null)
+		Signals.reload_started.emit(null)
 	else:
-		core_changed.emit(contexts.none, null)
+		Signals.core_changed.emit(null)
 
 func set_movement_state(state: PlayerModel.MovementState):
-	if core.player.movement_state == state:
+	if Core.player.movement_state == state:
 		return
-	var prev_state = core.player.movement_state
-	core.player.movement_state = state
+	var prev_state = Core.player.movement_state
+	Core.player.movement_state = state
 	_on_movement_change(state,  prev_state)
-	core_changed.emit(contexts.none, null)
+	Signals.core_changed.emit(null)
 
 func is_ms(state: PlayerModel.MovementState):
-	return core.player.movement_state == state
+	return Core.player.movement_state == state
 
 func is_as(state: PlayerModel.ActionState):
-	return core.player.action_state == state
+	return Core.player.action_state == state
 
 func _on_action_change(next_state: PlayerModel.ActionState, prev_state: PlayerModel.ActionState):
 	prints("Action state changed to " + str(next_state))

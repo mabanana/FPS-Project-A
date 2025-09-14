@@ -1,13 +1,10 @@
 extends Control
 class_name MinimapController
 
-var core
-var core_changed
 @onready var map_dot = preload("res://UI/map_dot.tscn")
-var map_size
-var contexts
 @export var detect_dist: int
 
+var map_size
 var enemy_color = Color.CRIMSON
 var mod_max: float = 1
 var mod_min: float = 0.4
@@ -21,6 +18,7 @@ func _ready():
 	delta_mod_a = (mod_max - mod_min) / blink_interval * 5
 	map_size = 200
 	$Panel.custom_minimum_size = Vector2(map_size, map_size)
+	Signals.map_updated.connect(_on_map_updated)
 	
 func _process(delta):
 	if fading:
@@ -46,21 +44,9 @@ func _update(positions):
 			new_map_dot.position += pos_2d * map_scale
 			new_map_dot.color = enemy_color
 			$Panel.add_child(new_map_dot)
-			
-func bind(core: CoreModel, core_changed: Signal):
-	self.core = core
-	self.core_changed = core_changed
-	
-	core_changed.connect(_on_core_changed)
-	_on_bind()
-	
-func _on_bind():
-	contexts = core.services.Context
 
-	
-func _on_core_changed(context, payload):
-	if context == contexts.map_updated:
-		_update(payload["positions"])
+func _on_map_updated(payload = null):
+	_update(payload["positions"])
 
 func _set_dot_mod():
 	for child in $Panel.get_children():

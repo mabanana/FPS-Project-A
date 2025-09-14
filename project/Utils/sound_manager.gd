@@ -1,9 +1,5 @@
-extends Node
 class_name SoundManager
 
-var core: CoreModel
-var core_changed: Signal
-var contexts
 var entity_spawner: EntitySpawner
 var sounds: Dictionary
 var sounds_dir = "res://Assets/Sounds/"
@@ -25,28 +21,27 @@ func _init(entity_spawner: EntitySpawner):
 			if file_type in ["wav", "ogg", "mp3"]:
 				sounds[sound_name] = sounds_dir + folder + "/" + file_name
 
-func bind(core: CoreModel, core_changed):
-	self.core = core
-	self.core_changed = core_changed
-	contexts = core.services.Context
-	
-	core_changed.connect(_on_core_changed)
+	Signals.gun_shot.connect(_on_gun_shot)
+	Signals.entity_died.connect(_on_entity_died)
+	Signals.gun_dropped.connect(_on_gun_dropped)
+	Signals.spell_entity_added.connect(_on_spell_entity_added)
+	Signals.game_loaded.connect(_on_game_loaded)
 
-func _on_core_changed(context, payload):
-	if context == contexts.gun_shot:
-		_spawn_audio_player("Explosion", -30, "Master", Vector2(0.8,0.9))
-	elif context == contexts.entity_died and payload["dealer_rid"] == entity_spawner.scene.player_rid:
+func _on_gun_shot(payload=null):
+	_spawn_audio_player("Explosion", -30, "Master", Vector2(0.8,0.9))
+func _on_entity_died(payload=null):
+	if payload["dealer_rid"] == entity_spawner.scene.player_rid:
 		_spawn_audio_player("Hit2", -10, "Master", Vector2(0.95, 1.05), payload["target_position"], true)
-	elif context == contexts.gun_dropped:
-		_spawn_audio_player("Magic1", 10, "Notification" ,Vector2(1.25, 1.35), payload["position"], true)
-	elif context == contexts.spell_entity_added:
-		_spawn_audio_player("Fireball", 10, "Master" ,Vector2(0.95, 1.0), payload["position"], true)
-	elif context == contexts.game_loaded:
-		_spawn_audio_player("Main", -15, "BGM")
+func _on_gun_dropped(payload = null):
+	_spawn_audio_player("Magic1", 10, "Notification" ,Vector2(1.25, 1.35), payload["position"], true)
+func _on_spell_entity_added(payload = null):
+	_spawn_audio_player("Fireball", 10, "Master" ,Vector2(0.95, 1.0), payload["position"], true)
+func _on_game_loaded(payload = null):
+	_spawn_audio_player("Main", -15, "BGM")
 		
 # TODO: use finite number of audio_players instead of instantiating new ones
 func _spawn_audio_player(sound_name: String, db_offset: float, bus = "Master", pitch_range: Vector2 = Vector2(0.95, 1.05), position: Vector3 = Vector3.ZERO, is_3d = false):
-	if OS.has_feature("web") or core.services.web_debug_mode:
+	if OS.has_feature("web") or Core.services.web_debug_mode:
 		web_audio(sound_name, pitch_range, position)
 		return
 	var audio_player

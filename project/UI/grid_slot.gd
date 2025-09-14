@@ -11,7 +11,6 @@ func _init():
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
 	
-	
 	item = GridSlotItem.new()
 	hotkey_label = Label.new()
 	
@@ -27,22 +26,22 @@ func _init():
 func _ready():
 	if index >= 0:
 		hotkey_label.text = str(index+1)
-		var name = controller.core.inventory.guns[index].metadata.name
+		var name = Core.inventory.guns[index].metadata.name
 		hotkey_label.text += " " + " ".join(name.split(" ").slice(1, len(name.split(" "))))
 		hotkey_label.add_theme_font_size_override("font_size", 10)
 
 func _on_mouse_entered():
-	controller.core.services.gui_hover = self
+	Core.services.gui_hover = self
 	if !is_pressed:
 		modulate.a = 0.6
 	
 func _on_mouse_exited():
-	controller.core.services.gui_hover = null
+	Core.services.gui_hover = null
 	if !is_pressed:
 		modulate.a = 1
 
 func _on_mouse_pressed():
-	controller.core.services.gui_hover = self
+	Core.services.gui_hover = self
 	modulate.a = 0.3
 	is_pressed = true
 

@@ -1,23 +1,11 @@
 class_name HitboxManager
 
 var scene: GameScene
-var core: CoreModel
-var core_changed: Signal
-var contexts
 
 func _init(scene):
 	self.scene = scene
 
-func bind(core, core_changed):
-	self.core = core
-	self.core_changed = core_changed
-	
-	core_changed.connect(_on_core_changed)
-	contexts = core.services.Context
-
-
-func _on_core_changed(context, payload):
-	if context == contexts.hitbox_collided:
+func _on_hitbox_collided(payload = null):
 		var hitbox_entity_type = payload["hitbox_entity_model"].entity_type
 		match hitbox_entity_type:
 			EntityMetadataModel.EntityType.FIRE_BALL:
@@ -41,6 +29,6 @@ func _deal_damage_to_entity(damage_amount: int, damage_scale: float, dealer_rid:
 		"damage_position": damage_position,
 		"damage_scale": damage_scale,
 	}
-	payload = PerkController.apply_perks(contexts.damage_dealt, payload, core, core_changed)
-	core_changed.emit(contexts.damage_dealt, payload)
+	payload = PerkController.apply_perks(Signals.damage_dealt, payload)
+	Signals.damage_dealt.emit(payload)
 	print("HitboxManager: damage dealt emitted")

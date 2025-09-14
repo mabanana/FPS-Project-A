@@ -8,8 +8,7 @@ func _ready():
 	current_state = EnemyState.idling
 	nav_ai = AiNavigator.new($NavigationAgent3D)
 	sight = AiSightController.new(self, Vector3(0, 1.5, 0), vision_range)
-	nav_ai.bind(core, core_changed)
-	sight.bind(core, core_changed)
+	Signals.player_spotted.connect(_on_player_spotted)
 
 func _process(delta):
 	if current_state == EnemyState.chasing and !$AnimationPlayer.is_playing():
@@ -30,8 +29,7 @@ func _physics_process(delta):
 		
 	move_and_slide()
 
-func _on_core_changed(context: CoreServices.Context, payload):
+func _on_player_spotted(payload = null):
 	# Temporary state logic
-	super._on_core_changed(context, payload)
-	if context == contexts.player_spotted and payload["observer_rid"] == rid:
+	if payload["observer_rid"] == rid:
 		current_state = EnemyState.chasing

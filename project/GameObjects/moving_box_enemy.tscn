@@ -83,5 +83,5 @@ vframes = 4
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_pgt1t")
+&"": SubResource("AnimationLibrary_pgt1t")
 }

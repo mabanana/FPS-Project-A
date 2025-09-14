@@ -8,9 +8,6 @@ var controller: ScrollVBoxController
 var is_pressed: bool
 
 func _init():
-	mouse_entered.connect(_on_mouse_entered)
-	mouse_exited.connect(_on_mouse_exited)
-	
 	item = GridSlotItem.new()
 	hotkey_label = Label.new()
 	
@@ -22,6 +19,9 @@ func _init():
 	add_child(hotkey_label)
 	
 	custom_minimum_size = Vector2(64,64)
+	
+	mouse_entered.connect(_on_mouse_entered)
+	mouse_exited.connect(_on_mouse_exited)
 	
 func _ready():
 	if index >= 0:

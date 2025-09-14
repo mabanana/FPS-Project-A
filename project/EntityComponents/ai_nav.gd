@@ -6,8 +6,6 @@ var next_pos
 
 func _init(nav_agent_node: NavigationAgent3D):
 	nav_agent = nav_agent_node
-
-func _ready():
 	Signals.map_updated.connect(_on_map_updated)
 
 func _on_map_updated(payload=null):

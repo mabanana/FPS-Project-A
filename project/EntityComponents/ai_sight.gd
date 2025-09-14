@@ -10,8 +10,6 @@ func _init(character, eye_pos, vision_range):
 	self.character = character
 	self.eye_pos = eye_pos
 	self.vision_range = vision_range
-
-func _ready():
 	Signals.map_updated.connect(_on_map_updated)
 
 func _on_map_updated(payload=null):

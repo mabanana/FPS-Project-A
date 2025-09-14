@@ -1,4 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://c72mtr6rt7pfg"]
+[gd_scene load_steps=4 format=3 uid="uid://c72mtr6rt7pfg"]
+
+[ext_resource type="Script" uid="uid://d24ytgy8c6287" path="res://GameObjects/bullet_particle.gd" id="1_aqsxt"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8j18t"]
 transparency = 1
@@ -17,3 +19,4 @@ spread = 60.0
 gravity = Vector3(0, -1, 0)
 initial_velocity_max = 5.0
 radial_accel_max = 20.0
+script = ExtResource("1_aqsxt")

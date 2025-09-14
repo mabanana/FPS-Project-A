@@ -22,6 +22,8 @@ func _ready():
 		pass
 	selection = Core.inventory.active_gun_index
 	inventory_size = Core.player.inventory_size
+	selection_rect = GridSelectRect.new()
+	add_child(selection_rect)
 	_update()
 	Signals.gun_dropped.connect(_update)
 	Signals.gun_picked_up.connect(_update)
@@ -63,14 +65,13 @@ func _on_drag_ended(payload = null):
 		if payload["gui_hover"] is GridSlot and payload["gui_drag"]:
 			swap_data(payload["gui_drag"],payload["gui_hover"])
 
-func _update():
+func _update(payload=null):
 	for child in grid_container.get_children():
 		child.queue_free()
 	for i in inventory_size:
 		var slot = GridSlot.new()
 		if i == selection:
-			selection_rect = GridSelectRect.new()
-			slot.add_child(selection_rect)
+			selection_rect.reparent(slot)
 			slot.custom_minimum_size = Vector2(70,64)
 		if i < len(Core.inventory.guns):
 			slot.add_item(test_tex)

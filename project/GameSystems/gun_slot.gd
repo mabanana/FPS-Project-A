@@ -125,9 +125,9 @@ func cast_ray_towards_mouse(accuracy: int = MAX_ACCURACY, ray_length: int = RAY_
 
 func set_camera_zoom(gun_zoom: float, boo: bool):
 	if boo:
-		character.fov_multiplier = 1 / gun_zoom
+		character.fov_multiplier = 1.0 / gun_zoom
 	else:
-		character.fov_multiplier = 1
+		character.fov_multiplier = 1.0
 
 func finish_reload():
 	reset_gun_slot()

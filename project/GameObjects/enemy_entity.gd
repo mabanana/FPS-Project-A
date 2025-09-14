@@ -15,7 +15,7 @@ var rid: int
 var vision_range: float
 var movement_speed : float
 
-func _ready():
+func _init():
 	Signals.damage_dealt.connect(_on_damage_dealt)
 
 func take_damage(damage_amount: int, damage_scale: float, dealer_rid: int, damage_position: Vector3):

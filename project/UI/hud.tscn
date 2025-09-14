@@ -292,7 +292,7 @@ texture = ExtResource("3_gv8b5")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="WeaponSprite"]
 libraries = {
-"": SubResource("AnimationLibrary_2atdu")
+&"": SubResource("AnimationLibrary_2atdu")
 }
 autoplay = "Idle"
 

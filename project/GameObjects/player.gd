@@ -107,8 +107,7 @@ func _process(delta):
 	
 	if jump_cd.tick(delta) <= 0:
 		set_jump(false)
-	if abs(camera.fov - (fov_modifier + DEFAULT_CAMERA_ZOOM * fov_multiplier)) < 10.0 / fov_multiplier:
-		camera.fov = move_toward(camera.fov, fov_modifier + DEFAULT_CAMERA_ZOOM * fov_multiplier, 10.0 / fov_multiplier)
+	camera.fov = move_toward(camera.fov, fov_modifier + DEFAULT_CAMERA_ZOOM * fov_multiplier, 10.0 / fov_multiplier)
 
 func get_object_in_view():
 	var query = gun_slot.cast_ray_towards_mouse()

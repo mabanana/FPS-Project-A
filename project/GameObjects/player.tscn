@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://ceu5ajrnb7o3k"]
 
-[ext_resource type="Script" path="res://GameObjects/player.gd" id="1_uj47b"]
-[ext_resource type="Script" path="res://GameSystems/gun_slot.gd" id="2_mm0q3"]
+[ext_resource type="Script" uid="uid://cmve1xm0n46pl" path="res://GameObjects/player.gd" id="1_uj47b"]
+[ext_resource type="Script" uid="uid://ci36vjo3axy1i" path="res://GameSystems/gun_slot.gd" id="2_mm0q3"]
 [ext_resource type="ArrayMesh" uid="uid://132jxpwv03o3" path="res://Assets/Models/test_shotgun.obj" id="3_0qagc"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_leku3"]
@@ -97,9 +97,9 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_80y3y"]
 _data = {
-"RESET": SubResource("Animation_dxecw"),
-"gun_idle": SubResource("Animation_1abai"),
-"sprint_fov": SubResource("Animation_bts6k")
+&"RESET": SubResource("Animation_dxecw"),
+&"gun_idle": SubResource("Animation_1abai"),
+&"sprint_fov": SubResource("Animation_bts6k")
 }
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("camera", "gun_slot", "anim")]

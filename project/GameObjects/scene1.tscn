@@ -1,6 +1,6 @@
 [gd_scene load_steps=15 format=3 uid="uid://cbn72isa03aii"]
 
-[ext_resource type="Script" path="res://GameObjects/test_scene.gd" id="1_jck0p"]
+[ext_resource type="Script" uid="uid://2m4jyavbq7u3" path="res://GameObjects/test_scene.gd" id="1_jck0p"]
 [ext_resource type="Texture2D" uid="uid://bvx06pup72xam" path="res://Assets/Stylized Sky Background (2).png" id="2_qxy2n"]
 [ext_resource type="PackedScene" uid="uid://bnnxpbeimkhrg" path="res://GameObjects/two_door_room.tscn" id="3_rxmf7"]
 [ext_resource type="PackedScene" uid="uid://xxktuvij7grb" path="res://GameObjects/end_room.tscn" id="4_aocc8"]

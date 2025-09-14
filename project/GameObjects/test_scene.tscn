@@ -1,7 +1,7 @@
 [gd_scene load_steps=19 format=3 uid="uid://bgp15f5w735mi"]
 
-[ext_resource type="Script" path="res://GameObjects/test_scene.gd" id="1_00gik"]
-[ext_resource type="Shader" path="res://Resources/test_shader.gdshader" id="7_7oa2x"]
+[ext_resource type="Script" uid="uid://2m4jyavbq7u3" path="res://GameObjects/test_scene.gd" id="1_00gik"]
+[ext_resource type="Shader" uid="uid://bmlnarnhm4tnq" path="res://Resources/test_shader.gdshader" id="7_7oa2x"]
 [ext_resource type="FastNoiseLite" uid="uid://crqtqh0j2cenj" path="res://Resources/test_noise.tres" id="8_6ga63"]
 [ext_resource type="Texture2D" uid="uid://bvx06pup72xam" path="res://Assets/Stylized Sky Background (2).png" id="8_v1f1u"]
 
@@ -46,9 +46,9 @@ noise = ExtResource("8_6ga63")
 render_priority = 0
 shader = ExtResource("7_7oa2x")
 shader_parameter/height_scale = 0.5
-shader_parameter/albedo = Vector3(0.49, 0.23, 0.08)
 shader_parameter/noise = SubResource("NoiseTexture2D_cjkkw")
 shader_parameter/normalmap = SubResource("NoiseTexture2D_xk6tv")
+shader_parameter/albedo = Vector3(0.49, 0.23, 0.08)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_00lpn"]
 material = SubResource("ShaderMaterial_upbek")

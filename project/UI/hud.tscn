@@ -1,10 +1,10 @@
 [gd_scene load_steps=14 format=3 uid="uid://cix1j6ynfe7pn"]
 
-[ext_resource type="Script" path="res://UI/hud.gd" id="1_y46dv"]
-[ext_resource type="Script" path="res://UI/minimap.gd" id="2_7l5sd"]
-[ext_resource type="Script" path="res://UI/gui_drag_space.gd" id="2_c3q03"]
-[ext_resource type="Shader" path="res://UI/selection_space_shader.gdshader" id="2_reoib"]
-[ext_resource type="Script" path="res://UI/scroll_vbox_controller.gd" id="2_xdmpv"]
+[ext_resource type="Script" uid="uid://dbtw174kbhkqr" path="res://UI/hud.gd" id="1_y46dv"]
+[ext_resource type="Script" uid="uid://dxtge3v8g5gcj" path="res://UI/minimap.gd" id="2_7l5sd"]
+[ext_resource type="Script" uid="uid://bxqqdovysdhwj" path="res://UI/gui_drag_space.gd" id="2_c3q03"]
+[ext_resource type="Shader" uid="uid://ckrwg2b2tbb1t" path="res://UI/selection_space_shader.gdshader" id="2_reoib"]
+[ext_resource type="Script" uid="uid://cq2br03yxmjql" path="res://UI/scroll_vbox_controller.gd" id="2_xdmpv"]
 [ext_resource type="Texture2D" uid="uid://d2ojqjerpiwf6" path="res://Assets/Sprites/Items/Weapons/Bow/Sprite.png" id="3_gv8b5"]
 [ext_resource type="Texture2D" uid="uid://vkamqn6t8m1k" path="res://Assets/Sprites/Characters/Boy/Faceset.png" id="5_5b8f5"]
 [ext_resource type="PackedScene" uid="uid://u3ywy74448gn" path="res://UI/gun_preview_viewport.tscn" id="8_my3mk"]
@@ -53,8 +53,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_2atdu"]
 _data = {
-"Idle": SubResource("Animation_40vnb"),
-"RESET": SubResource("Animation_v4qme")
+&"Idle": SubResource("Animation_40vnb"),
+&"RESET": SubResource("Animation_v4qme")
 }
 
 [node name="Hud" type="Control"]

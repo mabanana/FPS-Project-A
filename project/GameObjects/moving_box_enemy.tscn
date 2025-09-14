@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://njibrjir8fft"]
 
-[ext_resource type="Script" path="res://GameObjects/moving_box.gd" id="1_evaqw"]
+[ext_resource type="Script" uid="uid://bynrjwjii07ut" path="res://GameObjects/moving_box.gd" id="1_evaqw"]
 [ext_resource type="Texture2D" uid="uid://v5rvweainl48" path="res://Assets/Sprites/Monsters/Cyclope/SpriteSheet.png" id="2_mqnt5"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mww7d"]
@@ -53,8 +53,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_pgt1t"]
 _data = {
-"Idle": SubResource("Animation_57p5n"),
-"RESET": SubResource("Animation_vviis")
+&"Idle": SubResource("Animation_57p5n"),
+&"RESET": SubResource("Animation_vviis")
 }
 
 [node name="MovingBox" type="CharacterBody3D"]

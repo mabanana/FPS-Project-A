@@ -1,6 +1,6 @@
 class_name MapModel
 
-var entities: Dictionary
+var entities: Dictionary[int, EntityModel]
 
 func _init() -> void:
 	entities = {}

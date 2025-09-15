@@ -24,8 +24,9 @@ func _stop():
 func _trigger_spawn():
 	if not active:
 		return
-	if (not spawn_rid in Core.map.entities 
-	or Core.map.entities[spawn_rid].is_queued_for_deletion()):
+	if (!spawn_rid
+	or !Core.map.entities.has(spawn_rid)
+	or !Core.map.entities[spawn_rid].is_queued_for_deletion()):
 		spawn_rid = scene._add_entity_to_map(
 			EntityMetadataModel.EntityType.MOVING_BOX, 
 			position)

@@ -23,9 +23,11 @@ size = Vector3(1, 6, 1)
 [node name="EndRoom" type="Node3D"]
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.248345, 5.90783, 0)
-omni_range = 100.0
-omni_attenuation = 0.1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.248345, 14.8704, 0)
+light_energy = 7.667
+light_bake_mode = 1
+omni_range = 23.652
+omni_attenuation = 0.678
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
 material_override = ExtResource("1_kxc4l")

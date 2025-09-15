@@ -1,6 +1,8 @@
 extends GameScene
 class_name TestScene
 
+var enemy_spawners = {}
+
 func initialize_scene():
 	if !Core or !Core.loaded:
 		await Signals.core_loaded
@@ -23,7 +25,15 @@ func initialize_test_scene_map() -> void:
 	for child in $Map.get_children():
 		for marker in child.get_children():
 			if marker is Marker3D:
-				_add_entity_to_map(EntityMetadataModel.EntityType.MOVING_BOX, marker.global_position)
+				var spawn_delay = 10.0
+				var spawner = EnemySpawner.new(
+					self, marker.global_position, spawn_delay
+				)
+				get_tree().create_timer(randf_range(0, spawn_delay)).timeout.connect(
+					func():
+						spawner.start()
+						)
+				enemy_spawners[Core.services.generate_rid()] = spawner
 
 	if OS.has_feature("web") or Core.services.web_debug_mode:
 		add_web_button()

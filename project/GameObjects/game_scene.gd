@@ -99,3 +99,4 @@ func _add_entity_to_map(entity_type: EntityMetadataModel.EntityType, position: V
 		}
 		player_rid = rid
 		Signals.player_spawned.emit(payload)
+	return rid

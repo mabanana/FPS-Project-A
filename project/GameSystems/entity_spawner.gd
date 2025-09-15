@@ -14,6 +14,7 @@ func _init(scene):
 	asset_loader = AssetLoader.new()
 	sound_manager = SoundManager.new(self)
 	Signals.gun_dropped.connect(_on_gun_dropped)
+	Signals.gun_spawned.connect(_on_gun_dropped)
 	Signals.bullet_hole_added.connect(_on_bullet_hole_added)
 	Signals.enemy_spawned.connect(_on_enemy_spawned)
 	Signals.damage_taken.connect(_on_damage_taken)

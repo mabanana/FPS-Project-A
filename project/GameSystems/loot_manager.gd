@@ -16,32 +16,36 @@ func _init():
 	Signals.entity_died.connect(_on_entity_died)
 
 func drop_loot(loot_class: LootClass, target_name: String, target_position: Vector3):
-	if loot_class:
-		var loot_table = get_loot_table(loot_class)
-		var loot = Randomizer.roll_loot(loot_table)
-		if loot["type"] == "LootClass":
-			drop_loot(LootClass[loot["name"]], target_name, target_position)
-			return
-		prints("Loot Dropped by", target_name, loot["name"])
-		if loot["type"] == "Gun":
-			var entity =  EntityModel.new_entity(EntityMetadataModel.EntityType.GUN_ON_FLOOR)
-			var gun_type = GunMetadataModel.GunType[loot["name"]]
-			var gun_rid = Core.services.generate_rid()
-			var gun_model = GunModel.new_with_full_ammo(gun_rid, gun_type)
-			var linear_velocity = GunSlotController.inaccuratize_vector(Vector3.UP, 60) * LOOT_VELOCITY
-			var angular_velocity = linear_velocity.cross(Vector3.UP).normalized() * LOOT_VELOCITY
-			
-			var payload = {
-				"rid" : Core.services.generate_rid(),
-				"linear_velocity" : linear_velocity,
-				"angular_velocity" : angular_velocity,
-				"position" : target_position,
-				"gun_model" : gun_model,
-				"entity_model" : entity,
-			}
-			Signals.gun_dropped.emit(payload)
-	else:
+	if not loot_class:
 		print("no loot from this one.")
+	var loot_table = get_loot_table(loot_class)
+	var loot = Randomizer.roll_loot(loot_table)
+	if loot["type"] == "LootClass":
+		drop_loot(LootClass[loot["name"]], target_name, target_position)
+		return
+	prints("Loot Dropped by", target_name, loot["name"])
+	if loot["type"] == "Gun":
+		var entity =  EntityModel.new_entity(
+			EntityMetadataModel.EntityType.GUN_ON_FLOOR)
+		var gun_type = GunMetadataModel.GunType[loot["name"]]
+		var gun_rid = Core.services.generate_rid()
+		var gun_model = GunModel.new_with_full_ammo(gun_rid, gun_type)
+		var linear_velocity = GunSlotController.inaccuratize_vector(
+			Vector3.UP, 60) * LOOT_VELOCITY
+		var angular_velocity = linear_velocity.cross(
+			Vector3.UP).normalized() * LOOT_VELOCITY
+		var rid = Core.services.generate_rid()
+		var payload = {
+			"rid" : rid,
+			"linear_velocity" : linear_velocity,
+			"angular_velocity" : angular_velocity,
+			"position" : target_position,
+			"gun_model" : gun_model,
+			"entity_model" : entity,
+		}
+		Core.map.entities[rid] = entity
+		Core.map.entities[rid].position = target_position
+		Signals.gun_spawned.emit(payload)
 
 
 func get_loot_table(loot_class: LootClass):

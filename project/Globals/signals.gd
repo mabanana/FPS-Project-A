@@ -7,6 +7,7 @@ signal gun_dropped
 signal gun_picked_up
 signal gun_swap_started
 signal gun_swapped
+signal gun_spawned
 signal gun_shot
 signal bullet_hole_added
 signal bullet_particle_added

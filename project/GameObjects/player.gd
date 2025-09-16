@@ -28,7 +28,7 @@ var object_in_view
 var movement_speed: float
 var input_dir: Vector2
 var trigger_down : bool
-@export var fov_multiplier: float = 1.0
+@export var fov_multiplier: float
 @export var fov_modifier: float
 
 var jump_cd: Countdown
@@ -39,7 +39,7 @@ var input_handler: InputHandler
 func _init():
 	# TODO make input handler child of game manager instead of player
 	input_handler = InputHandler.new()
-	fov_multiplier = 1.0
+	
 
 func _ready():
 	jump_cd = Countdown.new(JUMP_BUFFER)
@@ -53,7 +53,8 @@ func _ready():
 	Signals.event_mouse_moved.connect(_on_event_mouse_moved)
 	Signals.event_input_pressed.connect(_on_event_input_pressed)
 	Signals.event_input_released.connect(_on_event_input_released)
-	
+	fov_multiplier = 1.0
+	fov_modifier = 0.0
 	
 
 # TODO: Move all gun_slot logic away from input
@@ -103,11 +104,11 @@ func _process(delta):
 		_set_interact_target(object_in_view.rid)
 	else:
 		_set_interact_target(-1)
-	
-	
+		
 	if jump_cd.tick(delta) <= 0:
 		set_jump(false)
-	camera.fov = move_toward(camera.fov, fov_modifier + DEFAULT_CAMERA_ZOOM * fov_multiplier, 10.0 / fov_multiplier)
+
+	camera.fov = move_toward(camera.fov, fov_modifier + (DEFAULT_CAMERA_ZOOM * fov_multiplier), 10.0 / fov_multiplier)
 
 func get_object_in_view():
 	var query = gun_slot.cast_ray_towards_mouse()
@@ -245,7 +246,7 @@ func set_ads(boo: bool):
 	if boo:
 		gun_slot.set_camera_zoom(gun_slot.active_gun.metadata.zoom, true)
 	else:
-		gun_slot.set_camera_zoom(0, false)
+		gun_slot.set_camera_zoom(1, false)
 	
 	Core.player.is_ads = boo
 	Signals.core_changed.emit(null)

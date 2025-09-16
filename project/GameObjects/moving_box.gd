@@ -3,29 +3,29 @@ class_name MovingBox
 
 var nav_ai: AiNavigator
 var sight: AiSightController
+var turn_dir: int
 
 func _ready():
 	current_state = EnemyState.idling
 	nav_ai = AiNavigator.new($NavigationAgent3D)
 	sight = AiSightController.new(self, Vector3(0, 1.5, 0), vision_range)
 	Signals.player_spotted.connect(_on_player_spotted)
-
-func _process(delta):
-	if current_state == EnemyState.chasing and !$AnimationPlayer.is_playing():
-		$AnimationPlayer.play("Idle")
+	turn_dir = 1 if randi_range(0,1) else -1
 
 func _physics_process(delta):
 	if nav_ai.target_position and current_state == EnemyState.chasing:
 		dir = global_position.direction_to(nav_ai.next_pos)
+		if sight.ray_result and sight.ray_result["collider"] and not sight.ray_result["collider"] is PlayerEntity:
+			dir = dir.rotated(Vector3.UP, 45 * turn_dir)
+			
 		velocity.x = dir.x * movement_speed
 		velocity.z = dir.z * movement_speed
 		if nav_ai.nav_agent.is_navigation_finished:
 			nav_ai.target_position = null
 	else:
-		velocity.x = move_toward(velocity.x, 0, movement_speed / 2)
-		velocity.z = move_toward(velocity.z, 0, movement_speed / 2)
+		velocity = Vector3.ZERO
 	if !is_on_floor():
-		velocity.y = get_gravity().y
+		velocity.y += get_gravity().y
 		
 	move_and_slide()
 
@@ -33,3 +33,4 @@ func _on_player_spotted(payload = null):
 	# Temporary state logic
 	if payload["observer_rid"] == rid:
 		current_state = EnemyState.chasing
+		$AnimationPlayer.play("Idle")

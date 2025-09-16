@@ -16,6 +16,7 @@ material = SubResource("StandardMaterial3D_mww7d")
 size = Vector3(0.7, 2, 0.7)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ye45r"]
+custom_solver_bias = 0.2
 height = 1.8
 
 [sub_resource type="Animation" id="Animation_57p5n"]

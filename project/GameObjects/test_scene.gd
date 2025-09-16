@@ -34,7 +34,12 @@ func initialize_test_scene_map() -> void:
 						spawner.start()
 						)
 				enemy_spawners[Core.services.generate_rid()] = spawner
-
+	for i in range(3):
+		for j in range(5):
+			_add_entity_to_map(
+				EntityMetadataModel.EntityType.MOVING_BOX,
+				Vector3(10 - 1 * i,0,30 - 1 * j))
+	
 	if OS.has_feature("web") or Core.services.web_debug_mode:
 		add_web_button()
 	else:
@@ -48,8 +53,8 @@ func add_web_button():
 	button.set_anchors_preset(Control.PRESET_FULL_RECT)
 	button.text = "WEB_CLIENT: Click anywhere to allow the game to accept mouse inputs. You may need to press esc and click a few times for it to work."
 	Signals.mouse_capture_toggled.connect(func(payload = null):
-			button.visible = Input.mouse_mode != Input.MOUSE_MODE_CAPTURED
-			)
+		button.visible = Input.mouse_mode != Input.MOUSE_MODE_CAPTURED
+		)
 	button.pressed.connect(func():
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 		button.hide()

@@ -1,9 +1,8 @@
-[gd_scene load_steps=14 format=3 uid="uid://cbn72isa03aii"]
+[gd_scene load_steps=13 format=3 uid="uid://cbn72isa03aii"]
 
 [ext_resource type="Script" uid="uid://2m4jyavbq7u3" path="res://GameObjects/test_scene.gd" id="1_jck0p"]
 [ext_resource type="Texture2D" uid="uid://bvx06pup72xam" path="res://Assets/Stylized Sky Background (2).png" id="2_qxy2n"]
 [ext_resource type="PackedScene" uid="uid://xxktuvij7grb" path="res://GameObjects/end_room.tscn" id="4_aocc8"]
-[ext_resource type="PackedScene" uid="uid://bjkk7c44jgjv5" path="res://GameObjects/base_floor.tscn" id="5_2lrlq"]
 [ext_resource type="AudioStream" uid="uid://cgd5emay3vaa" path="res://Assets/Sounds/Music/Main.ogg" id="6_omehs"]
 [ext_resource type="AudioStream" uid="uid://d0e2c2cahv0rb" path="res://Assets/Sounds/Game/Explosion.wav" id="7_ltoxk"]
 [ext_resource type="AudioStream" uid="uid://c48dj0avfh2hb" path="res://Assets/Sounds/Game/Hit2.wav" id="8_75fin"]
@@ -32,7 +31,7 @@ fog_light_color = Color(0.7055, 0.753225, 0.83, 1)
 fog_sky_affect = 0.595
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_wofbq"]
-vertices = PackedVector3Array(-13, 1, -9.75, -12.75, 1, -9.75, -12.75, 1, -10, -18.75, 1, -8.75, -13, 1, -8.75, -10.5, 1, -18.75, -18.75, 1, -18.75, -11, 1, -10, -10.75, 1, -9.5, -10.75, 1, -8, -11, 1, -8, -11, 1, -7.75, -12.75, 1, -7.75, -12.75, 1, -8, -13, 1, -8, -13, 1, 8.25, -12.75, 1, 8.25, -12.75, 1, 8, -11, 1, 8, -11, 1, 8.25, -10.75, 1, 8.25, 11, 1, 8.25, 11.25, 1, 8.25, 11.25, 1, 8, 13, 1, 8, 13, 1, 8.25, 13.25, 1, 8.25, 13.25, 1, -8, 13, 1, -8, 13, 1, -7.75, 11.25, 1, -7.75, 11.25, 1, -8, 11, 1, -8, -1, 1, 19, -0.750002, 1, 19.5, 0.999998, 1, 19.5, 1.25, 1, 19, -18.75, 1, 9, -13, 1, 9, 13.25, 1, 9, 19, 1, 9, 19, 1, -8.75, 13.25, 1, -8.75, -10.75, 1, 9.75, -10.5, 1, 19, 10.75, 1, 19, 11, 1, 9.75, 11, 1, -9.5, 10.75, 1, -18.75, 13, 1, -10, 13, 1, -9.75, 13.25, 1, -9.75, 19, 1, -18.75, 11.25, 1, -10, -12.75, 1, 10.25, -12.75, 1, 10, -13, 1, 10, -18.75, 1, 19, -11, 1, 10.25, 13.25, 1, 10, 13, 1, 10, 13, 1, 10.25, 19, 1, 19, 11.25, 1, 10.25)
+vertices = PackedVector3Array(-13, 0.5, -9.75, -12.75, 0.5, -9.75, -12.75, 0.5, -10, -18.75, 0.5, -8.75, -13, 0.5, -8.75, -10.5, 0.5, -18.75, -18.75, 0.5, -18.75, -11, 0.5, -10, -10.75, 0.5, -9.5, -10.75, 0.5, -8, -11, 0.5, -8, -11, 0.5, -7.75, -12.75, 0.5, -7.75, -12.75, 0.5, -8, -13, 0.5, -8, -13, 0.5, 8.25, -12.75, 0.5, 8.25, -12.75, 0.5, 8, -11, 0.5, 8, -11, 0.5, 8.25, -10.75, 0.5, 8.25, 11, 0.5, 8.25, 11.25, 0.5, 8.25, 11.25, 0.5, 8, 13, 0.5, 8, 13, 0.5, 8.25, 13.25, 0.5, 8.25, 13.25, 0.5, -8, 13, 0.5, -8, 13, 0.5, -7.75, 11.25, 0.5, -7.75, 11.25, 0.5, -8, 11, 0.5, -8, -1, 0.5, 19, -0.750002, 0.5, 19.5, 0.999998, 0.5, 19.5, 1.25, 0.5, 19, -18.75, 0.5, 9, -13, 0.5, 9, 13.25, 0.5, 9, 19, 0.5, 9, 19, 0.5, -8.75, 13.25, 0.5, -8.75, -10.75, 0.5, 9.75, -10.5, 0.5, 19, 10.75, 0.5, 19, 11, 0.5, 9.75, 11, 0.5, -9.5, 10.75, 0.5, -18.75, 13, 0.5, -10, 13, 0.5, -9.75, 13.25, 0.5, -9.75, 19, 0.5, -18.75, 11.25, 0.5, -10, -12.75, 0.5, 10.25, -12.75, 0.5, 10, -13, 0.5, 10, -18.75, 0.5, 19, -11, 0.5, 10.25, 13.25, 0.5, 10, 13, 0.5, 10, 13, 0.5, 10.25, 19, 0.5, 19, 11.25, 0.5, 10.25)
 polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(0, 4, 3), PackedInt32Array(0, 3, 2), PackedInt32Array(2, 3, 6), PackedInt32Array(2, 6, 5), PackedInt32Array(5, 8, 7), PackedInt32Array(5, 7, 2), PackedInt32Array(11, 10, 9), PackedInt32Array(14, 13, 12), PackedInt32Array(17, 16, 15), PackedInt32Array(20, 19, 18), PackedInt32Array(23, 22, 21), PackedInt32Array(26, 25, 24), PackedInt32Array(29, 28, 27), PackedInt32Array(32, 31, 30), PackedInt32Array(35, 34, 33), PackedInt32Array(35, 33, 36), PackedInt32Array(36, 33, 20), PackedInt32Array(3, 4, 14), PackedInt32Array(15, 38, 37), PackedInt32Array(40, 39, 26), PackedInt32Array(27, 42, 41), PackedInt32Array(15, 37, 17), PackedInt32Array(17, 37, 12), PackedInt32Array(12, 37, 14), PackedInt32Array(14, 37, 3), PackedInt32Array(18, 11, 9), PackedInt32Array(27, 41, 29), PackedInt32Array(29, 41, 24), PackedInt32Array(24, 41, 26), PackedInt32Array(26, 41, 40), PackedInt32Array(18, 9, 20), PackedInt32Array(20, 9, 36), PackedInt32Array(36, 9, 21), PackedInt32Array(21, 9, 32), PackedInt32Array(43, 20, 44), PackedInt32Array(44, 20, 33), PackedInt32Array(46, 45, 21), PackedInt32Array(21, 45, 36), PackedInt32Array(8, 5, 9), PackedInt32Array(9, 5, 48), PackedInt32Array(9, 48, 47), PackedInt32Array(9, 47, 32), PackedInt32Array(24, 23, 29), PackedInt32Array(29, 23, 30), PackedInt32Array(23, 21, 30), PackedInt32Array(30, 21, 32), PackedInt32Array(18, 17, 11), PackedInt32Array(11, 17, 12), PackedInt32Array(51, 50, 49), PackedInt32Array(41, 42, 51), PackedInt32Array(51, 49, 41), PackedInt32Array(41, 49, 52), PackedInt32Array(52, 49, 48), PackedInt32Array(53, 47, 48), PackedInt32Array(49, 53, 48), PackedInt32Array(56, 55, 54), PackedInt32Array(37, 38, 56), PackedInt32Array(56, 54, 37), PackedInt32Array(37, 54, 57), PackedInt32Array(57, 54, 44), PackedInt32Array(58, 43, 44), PackedInt32Array(54, 58, 44), PackedInt32Array(61, 60, 59), PackedInt32Array(59, 39, 40), PackedInt32Array(59, 40, 61), PackedInt32Array(61, 40, 62), PackedInt32Array(61, 62, 45), PackedInt32Array(45, 46, 63), PackedInt32Array(45, 63, 61)]
 edge_max_error = 0.5
 
@@ -59,13 +58,11 @@ directional_shadow_mode = 0
 sky_mode = 1
 
 [node name="Map" type="NavigationRegion3D" parent="."]
+transform = Transform3D(2, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0)
 navigation_mesh = SubResource("NavigationMesh_wofbq")
 
 [node name="EndRoom" parent="Map" instance=ExtResource("4_aocc8")]
-transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, 0, 0, 0)
-
-[node name="Base Floor" parent="Map" instance=ExtResource("5_2lrlq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+transform = Transform3D(7.54979e-08, 0, -1, 0, 1, 0, 1, 0, 7.54979e-08, 0, 0, 0)
 
 [node name="AudioStreams" type="Node3D" parent="."]
 

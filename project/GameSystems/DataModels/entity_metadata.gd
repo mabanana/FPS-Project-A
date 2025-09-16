@@ -46,7 +46,7 @@ func _init(
 			self.name = "Player"
 			self.entity_type = EntityModel.EntityType.player
 			self.hp = 100
-			self.movement_speed = 5
+			self.movement_speed = 10
 		EntityType.TARGET_DUMMY:
 			self.name = "Target Dummy"
 			self.entity_type = EntityModel.EntityType.enemy

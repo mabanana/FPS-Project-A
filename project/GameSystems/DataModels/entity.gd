@@ -21,6 +21,7 @@ var position: Vector3
 var rotation: Vector3
 var type: EntityType
 var entity_type: EntityMetadataModel.EntityType
+var alive: bool = true
 var name:
 	get:
 		return EntityMetadataModel.entity_metadata_map[entity_type].name

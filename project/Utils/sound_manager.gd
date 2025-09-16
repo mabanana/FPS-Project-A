@@ -23,10 +23,13 @@ func _init(entity_spawner: EntitySpawner):
 
 	Signals.gun_shot.connect(_on_gun_shot)
 	Signals.entity_died.connect(_on_entity_died)
-	Signals.gun_dropped.connect(_on_gun_dropped)
+	Signals.gun_spawned.connect(_on_gun_dropped)
 	Signals.spell_entity_added.connect(_on_spell_entity_added)
 	Signals.game_loaded.connect(_on_game_loaded)
+	Signals.item_dropped.connect(_on_item_dropped)
 
+func _on_item_dropped(payload=null):
+	_spawn_audio_player("Magic1", 10, "Notification", Vector2(0.9, 1)*payload["roll"] / 100, payload["position"], true)
 func _on_gun_shot(payload=null):
 	_spawn_audio_player("Explosion", -30, "Master", Vector2(0.8,0.9))
 func _on_entity_died(payload=null):
@@ -37,7 +40,7 @@ func _on_gun_dropped(payload = null):
 func _on_spell_entity_added(payload = null):
 	_spawn_audio_player("Fireball", 10, "Master" ,Vector2(0.95, 1.0), payload["position"], true)
 func _on_game_loaded(payload = null):
-	_spawn_audio_player("Main", -15, "BGM")
+	_spawn_audio_player("Main", -15, "BGM", Vector2.ONE)
 		
 # TODO: use finite number of audio_players instead of instantiating new ones
 func _spawn_audio_player(sound_name: String, db_offset: float, bus = "Master", pitch_range: Vector2 = Vector2(0.95, 1.05), position: Vector3 = Vector3.ZERO, is_3d = false):

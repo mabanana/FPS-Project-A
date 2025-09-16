@@ -24,8 +24,11 @@ func _init(scene):
 	Signals.spell_entity_added.connect(_on_spell_entity_added)
 	Signals.gun_picked_up.connect(_on_gun_picked_up)
 	Signals.entity_died.connect(_on_entity_died)
+	Signals.item_dropped.connect(_on_item_dropped)
 # Does not make edits to Core directly, and only edits Scene on core_changed
 
+func _on_item_dropped(payload=null):
+	_spawn_node(_get_entity_scene(payload["entity_model"]), scene, Signals.item_dropped, payload)
 func _on_gun_dropped(payload=null):
 	_spawn_node(_get_entity_scene(payload["entity_model"]), scene, Signals.gun_dropped, payload)
 func _on_bullet_hole_added(payload=null):
@@ -65,6 +68,16 @@ func _spawn_node(node_scene, target_scene, spawn_context, payload = null):
 	elif spawn_context == Signals.damage_taken:
 		new_node.damage_number = payload["hp_change"]
 		new_node.damage_scale = payload["damage_scale"]
+	elif spawn_context == Signals.damage_taken:
+		new_node.damage_number = payload["hp_change"]
+		new_node.damage_scale = payload["damage_scale"]
+	elif spawn_context == Signals.item_dropped:
+		new_node.damage_number = payload["amount"]
+		new_node.damage_scale = float(payload["roll"]) / 100.0
+		if payload["loot"]["type"] == "AMMO_DROP":
+			new_node.type = DamageNumber.Type.AMMO
+		elif payload["loot"]["type"] == "GOLD_DROP":
+			new_node.type = DamageNumber.Type.GOLD
 	elif spawn_context == Signals.bullet_particle_added:
 		new_node.rotation = payload["facing"]
 		new_node.emitting = true

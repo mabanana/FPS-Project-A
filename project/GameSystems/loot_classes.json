@@ -4,9 +4,18 @@
 			"loot_class": "TEST_SCENE_1_DROP",
 			"items": [
 				{
-					"name": "GOLD_DROP",
-					"type": "Entity",
-					"weight": 5
+					"name": "BIG_PILE_OF_GOLD",
+					"type": "GOLD_DROP",
+					"weight": 5,
+					"max": 50,
+					"min": 10
+				},
+				{
+					"name": "AMMO",
+					"type": "AMMO_DROP",
+					"weight": 5,
+					"max": 50,
+					"min": 10
 				},
 				{
 					"name": "RARE_GUN_A",

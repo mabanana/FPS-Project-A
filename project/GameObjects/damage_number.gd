@@ -13,6 +13,13 @@ class_name DamageNumber
 var rand_position: Vector3
 var damage_number: int
 var damage_scale: float
+var type: Type = Type.DAMAGE
+
+enum Type {
+	DAMAGE,
+	AMMO,
+	GOLD,
+}
 
 func stringify(number):
 	if number >= 10000000000:
@@ -28,7 +35,14 @@ func _ready():
 	if not damage_number:
 		damage_number = 0
 	label.text = stringify(damage_number)
-	label.set_modulate(modulate.lerp(Color.CRIMSON, damage_scale))
+	if type == Type.AMMO:
+		label.text += " AMMO"
+		label.set_modulate(modulate.lerp(Color.WEB_GREEN, damage_scale))
+	elif type == Type.GOLD:
+		label.text += " GOLD"
+		label.set_modulate(modulate.lerp(Color.YELLOW, damage_scale))
+	else:
+		label.set_modulate(modulate.lerp(Color.CRIMSON, damage_scale))
 	label.set_billboard_mode(1)
 	label.fixed_size = false
 	label.shaded = false

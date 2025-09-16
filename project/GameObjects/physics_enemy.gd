@@ -49,5 +49,3 @@ func avoid_obstacles(payload=null):
 		if abs(turn_amount) > 180:
 			velocity = Vector3.ZERO
 			return
-	
-		

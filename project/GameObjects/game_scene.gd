@@ -64,6 +64,7 @@ func _pos_update(origin_rid: ):
 			relative_pos = relative_pos.rotated(Vector3.UP, -entities[origin_key].rotation.y)
 			relative_pos.y *= -1
 			positions.append(relative_pos)
+	Core.map.player_pos = entities[origin_key].position
 	Signals.map_updated.emit({
 		"positions" : positions, 
 		"player_pos" : entities[origin_key].position, 

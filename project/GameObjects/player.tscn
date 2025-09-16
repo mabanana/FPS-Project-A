@@ -107,7 +107,6 @@ script = ExtResource("1_uj47b")
 camera = NodePath("HeadJoint/Camera3D")
 gun_slot = NodePath("HeadJoint/GunSlot")
 anim = NodePath("AnimationPlayer")
-fov_multiplier = 0.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.896112, 0)

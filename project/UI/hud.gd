@@ -11,6 +11,7 @@ func _ready():
 	Signals.mouse_capture_toggled.connect(_on_mouse_capture_toggled)
 	Signals.gun_swapped.connect(_on_gun_swapped)
 	Signals.event_input_pressed.connect(_on_event_input_pressed)
+	process_mode = Node.PROCESS_MODE_ALWAYS
 
 func update():
 	# Update Weapon HUD

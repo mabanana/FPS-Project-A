@@ -1,4 +1,4 @@
-class_name InputHandler
+extends Node
 
 var input_map
 
@@ -60,7 +60,6 @@ enum PlayerActions {
  
 func _init():
 	input_map = DEFAULT_INPUT_MAP
-	Signals.mouse_capture_toggled.connect(_on_mouse_capture_toggled)
 	
 func handle_input(event: InputEvent) -> void:
 	# TODO: add input uncaptured state for pause screens and inventories
@@ -74,9 +73,9 @@ func handle_input(event: InputEvent) -> void:
 			print("ERROR: event mouse button that is neither pressed nor released detected")
 			return
 		sig.emit({
-				"action": input_map[event.button_index], 
-				"button_index" : event.button_index
-				})
+			"action": input_map[event.button_index],
+			"button_index" : event.button_index
+			})
 	elif event is InputEventKey and event.keycode in input_map:
 		var sig
 		if event.is_pressed() and !event.is_echo():
@@ -90,7 +89,7 @@ func handle_input(event: InputEvent) -> void:
 			print("ERROR: event key press that is neither pressed nor released detected")
 			return
 		sig.emit({
-			"action": input_map[event.keycode], 
+			"action": input_map[event.keycode],
 			"key_code" : event.keycode
 			})
 	elif event is InputEventMouseMotion:
@@ -99,9 +98,3 @@ func handle_input(event: InputEvent) -> void:
 			})
 	else:
 		prints("InputHandler: unhandled input", event.as_text())
-
-func _on_mouse_capture_toggled(payload=null):
-	if payload["prev_mode"] == Input.MOUSE_MODE_CAPTURED:
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	else:
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

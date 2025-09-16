@@ -32,14 +32,7 @@ var trigger_down : bool
 @export var fov_modifier: float
 
 var jump_cd: Countdown
-var sprint_cd: Countdown
-
-var input_handler: InputHandler
-
-func _init():
-	# TODO make input handler child of game manager instead of player
-	input_handler = InputHandler.new()
-	
+var sprint_cd: Countdown	
 
 func _ready():
 	jump_cd = Countdown.new(JUMP_BUFFER)
@@ -66,7 +59,6 @@ func _rotate_camera(x, y, z):
 	rotate_object_local(Vector3.UP, -x * MOUSE_SENSITIVITY)
 
 func _input(event: InputEvent):
-	input_handler.handle_input(event)
 	input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 
 # Default Godot Template movement

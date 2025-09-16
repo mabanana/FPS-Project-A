@@ -15,6 +15,8 @@ func _init(character, eye_pos, vision_range):
 
 func _on_map_updated(payload=null):
 	player_pos = payload["player_eye_pos"]
+	if can_see_player:
+		return
 	if player_pos.distance_to(character.position + eye_pos) <= vision_range:
 		ray_result = cast_ray_towards_target(player_pos, vision_range)
 		if ray_result and (ray_result["collider"] is PlayerEntity

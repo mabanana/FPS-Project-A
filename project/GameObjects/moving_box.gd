@@ -15,7 +15,8 @@ func _ready():
 func _physics_process(delta):
 	if nav_ai.target_position and current_state == EnemyState.chasing:
 		dir = global_position.direction_to(nav_ai.next_pos)
-		if sight.ray_result and sight.ray_result["collider"] and not sight.ray_result["collider"] is PlayerEntity:
+		var res = sight.cast_ray_towards_target(sight.player_pos, 3)
+		if res and res["collider"] and not res["collider"] is PlayerEntity:
 			dir = dir.rotated(Vector3.UP, 45 * turn_dir)
 			
 		velocity.x = dir.x * movement_speed

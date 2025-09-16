@@ -4,6 +4,8 @@ var scene: GameScene
 
 func _init(scene):
 	self.scene = scene
+	Signals.hitbox_collided.connect(_on_hitbox_collided)
+	Signals.damage_dealt.connect(_deal_damage_to_entity)
 
 func _on_hitbox_collided(payload = null):
 		var hitbox_entity_type = payload["hitbox_entity_model"].entity_type

@@ -10,6 +10,7 @@ enum EntityType {
 	MOVING_BOX,
 	RAY_TRAIL,
 	FIRE_BALL,
+	PHYSICS_ENEMY,
 }
 
 var name: String
@@ -55,6 +56,13 @@ func _init(
 			self.vision_range = 0
 		EntityType.MOVING_BOX:
 			self.name = "Moving Box"
+			self.entity_type = EntityModel.EntityType.enemy
+			self.hp = 100
+			self.movement_speed = 5
+			self.vision_range = 20
+			self.loot_class = LootManager.LootClass.TEST_SCENE_1_DROP
+		EntityType.PHYSICS_ENEMY:
+			self.name = "Physics Enemy"
 			self.entity_type = EntityModel.EntityType.enemy
 			self.hp = 100
 			self.movement_speed = 5

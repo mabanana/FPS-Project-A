@@ -17,6 +17,7 @@ func _init():
 	EntityMetadataModel.EntityType.TARGET_DUMMY: "res://GameObjects/target_dummy.tscn",
 	EntityMetadataModel.EntityType.MOVING_BOX: "res://GameObjects/moving_box_enemy.tscn",
 	EntityMetadataModel.EntityType.FIRE_BALL: "res://GameObjects/fireball_mesh.tscn",
+	EntityMetadataModel.EntityType.PHYSICS_ENEMY: "res://GameObjects/physics_enemy.tscn",
 	}
 	
 func get_scene(entity_type: EntityMetadataModel.EntityType):

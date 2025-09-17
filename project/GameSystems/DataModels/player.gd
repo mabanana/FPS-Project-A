@@ -22,6 +22,20 @@ enum MovementState {
 	walking,
 	sprinting
 }
+enum Stat {
+	HEALTH,
+	WEAPON_DAMAGE,
+	SPELL_DAMAGE,
+	ACCURACY,
+	FIRE_RATE,
+	RELOAD_SPEED,
+	MAGAZINE_SIZE,
+	PELLET_COUNT,
+	AMMO_PER_SHOT,
+}
+
+var stat_add_dict: Dictionary[Stat, float] = {}
+var stat_mult_dict: Dictionary[Stat, float] = {}
 
 var perks = {
 	PerkController.Perk.double_damage : true,

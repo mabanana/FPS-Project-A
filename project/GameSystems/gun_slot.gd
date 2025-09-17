@@ -41,32 +41,65 @@ func _process(delta):
 		Signals.reload_ended.emit(null)
 
 func reload():
-	if not active_gun or active_gun.metadata.mag_size == active_gun.mag_curr:
+	var mag_size = apply_stat_mods(active_gun.metadata.mag_size,
+	PlayerModel.Stat.MAGAZINE_SIZE)
+	if not active_gun or active_gun.mag_curr >= mag_size:
 		return
-	reload_cd.reset_cd(UNIT * active_gun.metadata.reload_time)
+	var reload_mod = apply_stat_mods(active_gun.metadata.reload_time,
+	PlayerModel.Stat.RELOAD_SPEED) - active_gun.metadata.reload_time
+	var reload_time = active_gun.metadata.reload_time - reload_mod
+	reload_cd.reset_cd(UNIT * reload_time)
 
 func shoot():
-	shoot_cd.reset_cd(UNIT / active_gun.metadata.fire_rate)
-	for i in range(Core.inventory.active_gun.metadata.pellet_count):
-		var acc: float
-		var cast_vector: Vector3
+	var fire_rate = apply_stat_mods(active_gun.metadata.fire_rate,
+	PlayerModel.Stat.FIRE_RATE)
+	shoot_cd.reset_cd(UNIT / fire_rate)
+	var pellet_count = apply_stat_mods(
+		Core.inventory.active_gun.metadata.pellet_count,
+		PlayerModel.Stat.PELLET_COUNT)
+	
+	for i in range(pellet_count):
+		var base_acc: float
 		if Core.player.is_ads:
-			acc = MAX_ACCURACY - (MAX_ACCURACY - active_gun.metadata.accuracy) / active_gun.metadata.zoom
+			base_acc = MAX_ACCURACY - (MAX_ACCURACY - active_gun.metadata.accuracy) / active_gun.metadata.zoom
 		else:
-			acc = active_gun.metadata.accuracy
+			base_acc = active_gun.metadata.accuracy
+		var acc_mod = apply_stat_mods((MAX_ACCURACY - base_acc), PlayerModel.Stat.ACCURACY) - (MAX_ACCURACY - base_acc)
+		var acc = clamp(
+			base_acc + acc_mod,
+			0,
+			100)
+		
 		var query: PhysicsRayQueryParameters3D = cast_ray_towards_mouse(acc)
 		_add_ray_trail(global_position, query.to - global_position)
 		query.set_exclude([character.get_rid()])
 		var result = get_world_3d().direct_space_state.intersect_ray(query)
 		if result:
 			if result.collider.has_method("take_damage"):
-				var damage_number = randf_range(active_gun.metadata.damage_floor, active_gun.metadata.damage_ceiling)
-				var damage_scale = float(damage_number - active_gun.metadata.damage_floor) / (active_gun.metadata.damage_ceiling - active_gun.metadata.damage_floor)
-				result.collider.take_damage(damage_number, damage_scale, character.rid, result.position)
+				var base_damage = randf_range(
+					active_gun.metadata.damage_floor,
+					active_gun.metadata.damage_ceiling
+					)
+				var dmg = apply_stat_mods(
+					base_damage, PlayerModel.Stat.WEAPON_DAMAGE)
+				var max_dmg = apply_stat_mods(
+					active_gun.metadata.damage_ceiling,
+					PlayerModel.Stat.WEAPON_DAMAGE)
+				var min_dmg = apply_stat_mods(
+					active_gun.metadata.damage_floor,
+					PlayerModel.Stat.WEAPON_DAMAGE)
+				var damage_scale = float(dmg - min_dmg) / (max_dmg - min_dmg)
+				
+				result.collider.take_damage(
+					dmg, damage_scale, character.rid, result.position)
 			elif !(result.collider is RigidBody3D):
 				_add_bullet_hole(result.position)
 			_add_bullet_particle(result.position, -character.camera.get_global_transform().basis.z.normalized())
-	_update_mag(active_gun.mag_curr - active_gun.metadata.ammo_per_shot)
+	
+	var aps_mod = apply_stat_mods(active_gun.metadata.ammo_per_shot,
+	PlayerModel.Stat.AMMO_PER_SHOT) - active_gun.metadata.ammo_per_shot
+	var aps = active_gun.metadata.ammo_per_shot - aps_mod
+	_update_mag(active_gun.mag_curr - aps)
 	Signals.gun_shot.emit({"position": position})
 
 func pickup_gun(gun_model: GunModel, gun_id: int):
@@ -180,9 +213,7 @@ func _on_gun_pickup_started(payload = null):
 		else:
 			print("Inventory full")
 
-
 # Actions
-
 func _add_gun_to_inventory(gun_model: GunModel) -> void:
 	Core.inventory.guns.append(gun_model)
 	if len(Core.inventory.guns) == 1:
@@ -275,3 +306,13 @@ func _add_bullet_particle(node_position, facing):
 
 func _finish_cd():
 	Signals.core_changed.emit(null)
+
+func apply_stat_mods(base_value, stat: PlayerModel.Stat):
+	var add = 0
+	var mult = 1.0
+	if Core.player.stat_add_dict.has(stat):
+		add += Core.player.stat_add_dict[stat]
+	if Core.player.stat_mult_dict.has(stat):
+		mult += Core.player.stat_mult_dict[stat] 
+	var value = (base_value * mult) + add
+	return value

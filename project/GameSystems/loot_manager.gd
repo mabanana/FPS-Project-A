@@ -47,10 +47,10 @@ func drop_loot(loot_class: LootClass, target_name: String, target_position: Vect
 	var direction_to_dealer = target_position.direction_to(Core.map.player_pos)
 	var node_position = (target_position) + (direction_to_dealer * 3)
 	var entity_model = EntityModel.new_entity(
-			EntityMetadataModel.EntityType.DAMAGE_NUMBER)
+		EntityMetadataModel.EntityType.DAMAGE_NUMBER)
 	Signals.item_dropped.emit(
 		{
-			"loot": loot, 
+			"loot": loot,
 			"amount": roll,
 			"roll": roll * 100 / int(loot["max"]),
 			"position": target_position,
@@ -68,7 +68,7 @@ func get_loot_table(loot_class: LootClass):
 	
 func drop_gun_loot(loot, target_position):
 	var entity =  EntityModel.new_entity(
-			EntityMetadataModel.EntityType.GUN_ON_FLOOR)
+		EntityMetadataModel.EntityType.GUN_ON_FLOOR)
 	var gun_type = GunMetadataModel.GunType[loot["name"]]
 	var gun_rid = Core.services.generate_rid()
 	var gun_model = GunModel.new_with_full_ammo(gun_rid, gun_type)

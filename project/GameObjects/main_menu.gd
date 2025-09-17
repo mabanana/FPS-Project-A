@@ -8,6 +8,8 @@ func _ready():
 	start_button.pressed.connect(start_game)
 	Signals.event_input_pressed.connect(pause_game)
 	Signals.mouse_capture_toggled.connect(_on_mouse_capture_toggled)
+	if not OS.has_feature("web") and not Core.services.web_debug_mode:
+		start_game()
 
 func start_game():
 	scene = load("res://GameObjects/scene1.tscn").instantiate()

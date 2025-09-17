@@ -51,8 +51,8 @@ func reload():
 	reload_cd.reset_cd(UNIT * reload_time)
 
 func shoot():
-	var fire_rate = apply_stat_mods(active_gun.metadata.fire_rate,
-	PlayerModel.Stat.FIRE_RATE)
+	var fire_rate = clamp(apply_stat_mods(active_gun.metadata.fire_rate,
+	PlayerModel.Stat.FIRE_RATE), 0.1, 60)
 	shoot_cd.reset_cd(UNIT / fire_rate)
 	var pellet_count = apply_stat_mods(
 		Core.inventory.active_gun.metadata.pellet_count,
@@ -98,7 +98,7 @@ func shoot():
 	
 	var aps_mod = apply_stat_mods(active_gun.metadata.ammo_per_shot,
 	PlayerModel.Stat.AMMO_PER_SHOT) - active_gun.metadata.ammo_per_shot
-	var aps = active_gun.metadata.ammo_per_shot - aps_mod
+	var aps = max(1, active_gun.metadata.ammo_per_shot - aps_mod)
 	_update_mag(active_gun.mag_curr - aps)
 	Signals.gun_shot.emit({"position": position})
 

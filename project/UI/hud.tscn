@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://cix1j6ynfe7pn"]
+[gd_scene load_steps=15 format=3 uid="uid://cix1j6ynfe7pn"]
 
 [ext_resource type="Script" uid="uid://dbtw174kbhkqr" path="res://UI/hud.gd" id="1_y46dv"]
 [ext_resource type="Script" uid="uid://dxtge3v8g5gcj" path="res://UI/minimap.gd" id="2_7l5sd"]
 [ext_resource type="Script" uid="uid://bxqqdovysdhwj" path="res://UI/gui_drag_space.gd" id="2_c3q03"]
+[ext_resource type="PackedScene" uid="uid://dwgd6ce808ffx" path="res://UI/stat_menu.tscn" id="2_pf7ph"]
 [ext_resource type="Shader" uid="uid://ckrwg2b2tbb1t" path="res://UI/selection_space_shader.gdshader" id="2_reoib"]
 [ext_resource type="Script" uid="uid://cq2br03yxmjql" path="res://UI/scroll_vbox_controller.gd" id="2_xdmpv"]
 [ext_resource type="Texture2D" uid="uid://d2ojqjerpiwf6" path="res://Assets/Sprites/Items/Weapons/Bow/Sprite.png" id="3_gv8b5"]
@@ -65,6 +66,16 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_y46dv")
+
+[node name="StatMenu" parent="." instance=ExtResource("2_pf7ph")]
+top_level = true
+custom_minimum_size = Vector2(600, 400)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
 
 [node name="DragSpace" type="ColorRect" parent="."]
 unique_name_in_owner = true

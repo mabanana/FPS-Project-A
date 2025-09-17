@@ -3,14 +3,17 @@
 [ext_resource type="Script" uid="uid://k24dafp7hys6" path="res://GameObjects/bullet_hole.gd" id="1_qd1bf"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yiegv"]
+resource_local_to_scene = true
 transparency = 1
 albedo_color = Color(0.513726, 0.203922, 0.501961, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_11k8l"]
+resource_local_to_scene = true
 material = SubResource("StandardMaterial3D_yiegv")
 
 [node name="BulletHole" type="Node3D"]
 script = ExtResource("1_qd1bf")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+cast_shadow = 0
 mesh = SubResource("BoxMesh_11k8l")

@@ -19,7 +19,7 @@ material = SubResource("StandardMaterial3D_8j18t")
 size = Vector2(0.1, 0.1)
 
 [node name="BulletParticle" type="CPUParticles3D"]
-transform = Transform3D(-4.37114e-08, -1, 0, 0.165805, -7.24757e-09, -0.986159, 0.986159, -4.31064e-08, 0.165805, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 amount = 1
 lifetime = 0.25
 fixed_fps = 15

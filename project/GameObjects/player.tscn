@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://ceu5ajrnb7o3k"]
+[gd_scene load_steps=11 format=3 uid="uid://ceu5ajrnb7o3k"]
 
 [ext_resource type="Script" uid="uid://cmve1xm0n46pl" path="res://GameObjects/player.gd" id="1_uj47b"]
 [ext_resource type="Script" uid="uid://ci36vjo3axy1i" path="res://GameSystems/gun_slot.gd" id="2_mm0q3"]
 [ext_resource type="ArrayMesh" uid="uid://132jxpwv03o3" path="res://Assets/Models/test_shotgun.obj" id="3_0qagc"]
+[ext_resource type="PackedScene" uid="uid://c72mtr6rt7pfg" path="res://GameObjects/bullet_particle.tscn" id="4_xpqup"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_leku3"]
 height = 1.8
@@ -143,3 +144,6 @@ unique_name_in_owner = true
 transform = Transform3D(0.966899, 0, 0.255159, 0, 1, 0, -0.255159, 0, 0.966899, 0.5168, 0.0352248, -0.693077)
 mesh = ExtResource("3_0qagc")
 skeleton = NodePath("../../..")
+
+[node name="BulletParticle" parent="HeadJoint/GunSlot/GunMesh" instance=ExtResource("4_xpqup")]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)

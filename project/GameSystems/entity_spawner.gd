@@ -19,7 +19,6 @@ func _init(scene):
 	Signals.enemy_spawned.connect(_on_enemy_spawned)
 	Signals.damage_taken.connect(_on_damage_taken)
 	Signals.player_spawned.connect(_on_player_spawned)
-	Signals.bullet_particle_added.connect(_on_bullet_particle_added)
 	Signals.ray_trail_added.connect(_on_ray_trail_added)
 	Signals.spell_entity_added.connect(_on_spell_entity_added)
 	Signals.gun_picked_up.connect(_on_gun_picked_up)
@@ -39,8 +38,6 @@ func _on_damage_taken(payload=null):
 	_spawn_node(_get_entity_scene(payload["entity_model"]), scene, Signals.damage_taken, payload)
 func _on_player_spawned(payload=null):
 	_spawn_node(_get_entity_scene(payload["entity_model"]), scene, Signals.player_spawned, payload)
-func _on_bullet_particle_added(payload=null):
-	_spawn_node(_get_entity_scene(payload["entity_model"]), scene, Signals.bullet_particle_added, payload)
 func _on_ray_trail_added(payload=null):
 	_spawn_node(_get_entity_scene(payload["entity_model"]), scene, Signals.ray_trail_added, payload)
 func _on_spell_entity_added(payload=null):
@@ -78,10 +75,6 @@ func _spawn_node(node_scene, target_scene, spawn_context, payload = null):
 			new_node.type = DamageNumber.Type.AMMO
 		elif payload["loot"]["type"] == "GOLD_DROP":
 			new_node.type = DamageNumber.Type.GOLD
-	elif spawn_context == Signals.bullet_particle_added:
-		new_node.rotation = payload["facing"]
-		new_node.emitting = true
-		new_node.one_shot = true
 	elif spawn_context == Signals.ray_trail_added:
 		new_node.direction = payload["direction"].normalized()
 		new_node.speed = 120

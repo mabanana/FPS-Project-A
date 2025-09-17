@@ -16,9 +16,10 @@ func _init():
 	Signals.entity_died.connect(_on_entity_died)
 
 func drop_loot(loot_class: LootClass, target_name: String, target_position: Vector3):
-	if not loot_class:
-		print("no loot from this one.")
 	var loot_table = get_loot_table(loot_class)
+	if not loot_table:
+		print("no loot from this one.")
+		return
 	var loot = Randomizer.roll_loot(loot_table)
 	match loot["type"]:
 		"LootClass":
@@ -59,6 +60,8 @@ func drop_loot(loot_class: LootClass, target_name: String, target_position: Vect
 
 func get_loot_table(loot_class: LootClass):
 	var loot_table = {}
+	if not loot_classes.has(loot_class):
+		return null
 	for item in loot_classes[loot_class]:
 		loot_table[item] = item["weight"]
 	return loot_table

@@ -37,9 +37,9 @@ func _deal_damage_to_entity(damage_amount: int, damage_scale: float, dealer_rid:
 	print("HitboxManager: damage dealt emitted")
 
 func _on_damage_dealt(payload = null):
-	var target_node = scene.entity_hash[payload["target_rid"]]
-	if not target_node or target_node.is_queued_for_deletion():
+	if not scene.entity_hash.has(payload["target_rid"]) or scene.entity_hash[payload["target_rid"]].is_queued_for_deletion():
 		return
+	var target_node = scene.entity_hash[payload["target_rid"]]
 	var hp_change = -payload["damage_amount"]
 	_add_damage_number_to_map(hp_change, payload["damage_scale"], payload["dealer_rid"], payload["damage_position"], target_node.position)
 	_change_hp(hp_change, payload["dealer_rid"], payload["target_rid"])

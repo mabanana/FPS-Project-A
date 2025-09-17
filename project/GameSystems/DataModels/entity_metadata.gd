@@ -6,9 +6,7 @@ enum EntityType {
 	PLAYER,
 	TARGET_DUMMY,
 	DAMAGE_NUMBER,
-	BULLET_PARTICLE,
 	MOVING_BOX,
-	RAY_TRAIL,
 	FIRE_BALL,
 	PHYSICS_ENEMY,
 }
@@ -39,10 +37,6 @@ func _init(
 			self.name = "Bullet Hole"
 			self.entity_type = EntityModel.EntityType.removed
 			self.hp = 0
-		EntityType.BULLET_PARTICLE:
-			self.name = "Bullet Particle"
-			self.entity_type = EntityModel.EntityType.removed
-			self.hp = 0
 		EntityType.PLAYER:
 			self.name = "Player"
 			self.entity_type = EntityModel.EntityType.player
@@ -69,10 +63,6 @@ func _init(
 			self.vision_range = 20
 			self.loot_class = LootManager.LootClass.TEST_SCENE_1_DROP
 		EntityType.DAMAGE_NUMBER:
-			self.name = "Damage Number"
-			self.entity_type = EntityModel.EntityType.removed
-			self.hp = 0
-		EntityType.RAY_TRAIL:
 			self.name = "Damage Number"
 			self.entity_type = EntityModel.EntityType.removed
 			self.hp = 0

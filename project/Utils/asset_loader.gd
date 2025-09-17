@@ -10,9 +10,6 @@ func _init():
 	EntityMetadataModel.EntityType.GUN_ON_FLOOR: "res://GameObjects/gun_on_floor.tscn",
 	EntityMetadataModel.EntityType.BULLET_HOLE: "res://GameObjects/bullet_hole.tscn",
 	EntityMetadataModel.EntityType.DAMAGE_NUMBER: "res://GameObjects/damage_number.tscn",
-	EntityMetadataModel.EntityType.BULLET_PARTICLE: "res://GameObjects/bullet_particle.tscn",
-	# TODO: Use particle trail instead of mesh
-	EntityMetadataModel.EntityType.RAY_TRAIL: "res://GameObjects/ray_trail_mesh.tscn",
 	EntityMetadataModel.EntityType.PLAYER: "res://GameObjects/player.tscn",
 	EntityMetadataModel.EntityType.TARGET_DUMMY: "res://GameObjects/target_dummy.tscn",
 	EntityMetadataModel.EntityType.MOVING_BOX: "res://GameObjects/moving_box_enemy.tscn",

@@ -71,7 +71,7 @@ func shoot():
 			100)
 		
 		var query: PhysicsRayQueryParameters3D = cast_ray_towards_mouse(acc)
-		_add_ray_trail(global_position, query.to - global_position)
+		_add_bullet_trail(global_position, query.to - global_position)
 		query.set_exclude([character.get_rid()])
 		var result = get_world_3d().direct_space_state.intersect_ray(query)
 		if result:
@@ -284,24 +284,18 @@ func _add_bullet_hole(node_position: Vector3):
 	Core.map.entities[payload["rid"]] = payload["entity_model"]
 	Signals.bullet_hole_added.emit(payload)
 	
-func _add_ray_trail(node_position: Vector3, trail_direction: Vector3):
+func _add_bullet_trail(node_position: Vector3, trail_direction: Vector3):
 	var payload = {
-		"rid" : Core.services.generate_rid(),
-		"entity_model" : EntityModel.new_entity(EntityMetadataModel.EntityType.RAY_TRAIL),
 		"position" : node_position,
 		"direction" : trail_direction,
 	}
-	Core.map.entities[payload["rid"]] = payload["entity_model"]
-	Signals.ray_trail_added.emit(payload)
+	Signals.bullet_trail_added.emit(payload)
 
 func _add_bullet_particle(node_position, facing):
 	var payload = {
-		"rid" : Core.services.generate_rid(),
-		"entity_model" : EntityModel.new_entity(EntityMetadataModel.EntityType.BULLET_PARTICLE),
 		"position" : node_position,
 		"facing" : facing,
 	}
-	Core.map.entities[payload["rid"]] = payload["entity_model"]
 	Signals.bullet_particle_added.emit(payload)
 
 func _finish_cd():

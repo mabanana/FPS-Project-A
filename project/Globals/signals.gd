@@ -25,7 +25,7 @@ signal player_spotted
 signal event_input_pressed
 signal event_mouse_moved
 signal event_input_released
-signal ray_trail_added
+signal bullet_trail_added
 signal inventory_accessed
 signal drag_ended
 signal drag_started
@@ -63,7 +63,7 @@ func _ready():
 	event_input_pressed.connect(emit_core_changed)
 	event_mouse_moved.connect(emit_core_changed)
 	event_input_released.connect(emit_core_changed)
-	ray_trail_added.connect(emit_core_changed)
+	bullet_trail_added.connect(emit_core_changed)
 	inventory_accessed.connect(emit_core_changed)
 	drag_ended.connect(emit_core_changed)
 	drag_started.connect(emit_core_changed)

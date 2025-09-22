@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cbn72isa03aii"]
+[gd_scene load_steps=14 format=3 uid="uid://cbn72isa03aii"]
 
 [ext_resource type="Script" uid="uid://2m4jyavbq7u3" path="res://GameObjects/test_scene.gd" id="1_jck0p"]
 [ext_resource type="Texture2D" uid="uid://bvx06pup72xam" path="res://Assets/Stylized Sky Background (2).png" id="2_qxy2n"]
@@ -7,6 +7,7 @@
 [ext_resource type="AudioStream" uid="uid://d0e2c2cahv0rb" path="res://Assets/Sounds/Game/Explosion.wav" id="7_ltoxk"]
 [ext_resource type="AudioStream" uid="uid://c48dj0avfh2hb" path="res://Assets/Sounds/Game/Hit2.wav" id="8_75fin"]
 [ext_resource type="AudioStream" uid="uid://cmr7rech8b24a" path="res://Assets/Sounds/Game/Magic1.wav" id="9_c8pht"]
+[ext_resource type="PackedScene" uid="uid://vydmhggxcm8p" path="res://GameObjects/fire_rain.tscn" id="9_xannq"]
 [ext_resource type="AudioStream" uid="uid://ca8caw4imrxdw" path="res://Assets/Sounds/Game/Fireball.wav" id="10_2hii3"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_s2ful"]
@@ -87,3 +88,16 @@ volume_db = 10.0
 [node name="Fireball" type="AudioStreamPlayer3D" parent="AudioStreams"]
 stream = ExtResource("10_2hii3")
 volume_db = 10.0
+
+[node name="FireRain" parent="." instance=ExtResource("9_xannq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.24799, 12.079, 16.1594)
+bolts = Dictionary[Node3D, int]({
+Object(Node3D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":0,"auto_translate_mode":0,"editor_description":"","transform":Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0),"rotation_edit_mode":0,"rotation_order":2,"top_level":false,"visible":true,"visibility_parent":NodePath(""),"script":null)
+: -1,
+Object(Node3D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":0,"auto_translate_mode":0,"editor_description":"","transform":Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0),"rotation_edit_mode":0,"rotation_order":2,"top_level":false,"visible":true,"visibility_parent":NodePath(""),"script":null)
+: -1,
+Object(Node3D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":0,"auto_translate_mode":0,"editor_description":"","transform":Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0),"rotation_edit_mode":0,"rotation_order":2,"top_level":false,"visible":true,"visibility_parent":NodePath(""),"script":null)
+: -1,
+Object(Node3D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":0,"auto_translate_mode":0,"editor_description":"","transform":Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0),"rotation_edit_mode":0,"rotation_order":2,"top_level":false,"visible":true,"visibility_parent":NodePath(""),"script":null)
+: -1
+})

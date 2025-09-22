@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://vydmhggxcm8p"]
+
+[ext_resource type="Script" uid="uid://dmpa5dsi3b8gm" path="res://GameObjects/fire_rain.gd" id="1_kb50a"]
+
+[node name="FireRain" type="Node3D"]
+script = ExtResource("1_kb50a")

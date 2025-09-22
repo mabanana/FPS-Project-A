@@ -240,23 +240,27 @@ func _set_active_gun(index: int) -> void:
 	Signals.core_changed.emit(null)
 
 func _drop_gun_on_map(active_gun: GunModel, throw_vector) -> void:
+	var entity = EntityModel.new_entity(
+		EntityMetadataModel.EntityType.GUN_ON_FLOOR)
 	var payload = {
-		"rid" : Core.services.generate_rid(),
+		"rid" : entity.rid,
 		"position" : character.position + character.eye_pos + throw_vector,
 		"gun_model" : active_gun,
 		"linear_velocity" : throw_vector * THROW_FORCE / active_gun.metadata.mass,
 		"angular_velocity" : throw_vector.cross(Vector3.UP) * THROW_FORCE / active_gun.metadata.mass,
-		"entity_model" : EntityModel.new_entity(EntityMetadataModel.EntityType.GUN_ON_FLOOR)
+		"entity_model" : entity
 	}
 	Core.map.entities[payload["rid"]] = payload["entity_model"]
 	Signals.gun_dropped.emit(payload)
 
 func _add_spell_on_map(throw_vector):
+	var entity = EntityModel.new_entity(
+		EntityMetadataModel.EntityType.FIRE_BALL)
 	var payload = {
-		"rid" : Core.services.generate_rid(),
+		"rid" : entity.rid,
 		"position" : character.position + character.eye_pos + throw_vector,
 		"linear_velocity" : throw_vector * THROW_FORCE,
-		"entity_model" : EntityModel.new_entity(EntityMetadataModel.EntityType.FIRE_BALL),
+		"entity_model" : entity,
 		"caster": character.rid,
 	}
 	Core.map.entities[payload["rid"]] = payload["entity_model"]
@@ -276,9 +280,11 @@ func _set_ammo(new_ammo: int) -> void:
 	Signals.core_changed.emit(null)
 
 func _add_bullet_hole(node_position: Vector3):
+	var entity = EntityModel.new_entity(
+		EntityMetadataModel.EntityType.BULLET_HOLE)
 	var payload = {
-		"rid" : Core.services.generate_rid(),
-		"entity_model" : EntityModel.new_entity(EntityMetadataModel.EntityType.BULLET_HOLE),
+		"rid" : entity.rid,
+		"entity_model" : entity,
 		"position" : node_position
 	}
 	Core.map.entities[payload["rid"]] = payload["entity_model"]

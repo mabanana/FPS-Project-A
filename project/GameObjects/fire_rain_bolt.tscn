@@ -1,0 +1,34 @@
+[gd_scene load_steps=7 format=3 uid="uid://dsagojy74166c"]
+
+[ext_resource type="Shader" uid="uid://b33hrsbtt6m8y" path="res://GameObjects/fireball.tres" id="1_e7cqs"]
+[ext_resource type="Shader" uid="uid://crwdnjgpklsxl" path="res://GameObjects/fireball_head_mesh.tres" id="2_8hrj3"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hm1he"]
+render_priority = 0
+shader = ExtResource("1_e7cqs")
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_7b45f"]
+material = SubResource("ShaderMaterial_hm1he")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hgx3j"]
+render_priority = 0
+shader = ExtResource("2_8hrj3")
+shader_parameter/Color = Color(0.81, 0.259, 0.121, 1)
+shader_parameter/FresPow = 5.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_uowyq"]
+material = SubResource("ShaderMaterial_hgx3j")
+radius = 0.4
+
+[node name="FireRainBolt" type="Node3D"]
+
+[node name="FireEffect" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 8.74228e-08, -3.82137e-15, 0, -4.37114e-08, -1, -8.74228e-08, -1, 4.37114e-08, -0.00299148, -0.148067, 0.433746)
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_7b45f")
+skeleton = NodePath("../..")
+
+[node name="InnerBall" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 8.74228e-08, -3.82137e-15, 0, -4.37114e-08, -1, -8.74228e-08, -1, 4.37114e-08, 0.00299145, -0.14284, -0.14284)
+mesh = SubResource("SphereMesh_uowyq")
+skeleton = NodePath("../FireEffect")

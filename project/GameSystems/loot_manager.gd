@@ -55,7 +55,7 @@ func drop_loot(loot_class: LootClass, target_name: String, target_position: Vect
 			"roll": roll * 100 / int(loot["max"]),
 			"position": target_position,
 			"entity_model" : entity_model,
-			"rid" : Core.services.generate_rid()
+			"rid" : entity_model.rid
 		})
 
 func get_loot_table(loot_class: LootClass):
@@ -67,16 +67,16 @@ func get_loot_table(loot_class: LootClass):
 	return loot_table
 	
 func drop_gun_loot(loot, target_position):
-	var entity =  EntityModel.new_entity(
+	var entity = EntityModel.new_entity(
 		EntityMetadataModel.EntityType.GUN_ON_FLOOR)
 	var gun_type = GunMetadataModel.GunType[loot["name"]]
-	var gun_rid = Core.services.generate_rid()
-	var gun_model = GunModel.new_with_full_ammo(gun_rid, gun_type)
+	var gun_model = GunModel.new_with_full_ammo(gun_type)
+	var gun_rid = gun_model.rid
 	var linear_velocity = GunSlotController.inaccuratize_vector(
 		Vector3.UP, 60) * LOOT_VELOCITY
 	var angular_velocity = linear_velocity.cross(
 		Vector3.UP).normalized() * LOOT_VELOCITY
-	var rid = Core.services.generate_rid()
+	var rid = entity.rid
 	var payload = {
 		"rid" : rid,
 		"linear_velocity" : linear_velocity,

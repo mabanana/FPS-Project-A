@@ -47,12 +47,14 @@ func _on_damage_dealt(payload = null):
 func _add_damage_number_to_map(hp_change: int, damage_scale: float, dealer_rid: int, damage_position: Vector3, target_position):
 	var direction_to_dealer = target_position.direction_to(Core.map.entities[dealer_rid].position)
 	var node_position = (damage_position) + (direction_to_dealer * POSITION_FORESHORTEN)
+	var entity = EntityModel.new_entity(
+		EntityMetadataModel.EntityType.DAMAGE_NUMBER)
 	var payload = {
 		"hp_change" : abs(hp_change),
 		"damage_scale" : damage_scale,
 		"position" : node_position,
-		"entity_model" : EntityModel.new_entity(EntityMetadataModel.EntityType.DAMAGE_NUMBER),
-		"rid" : Core.services.generate_rid()
+		"entity_model" : entity,
+		"rid" : entity.rid
 		}
 	Core.map.entities[payload["rid"]] = payload["entity_model"]
 	Signals.damage_taken.emit(payload)

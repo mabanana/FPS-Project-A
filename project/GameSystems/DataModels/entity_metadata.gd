@@ -17,6 +17,7 @@ var hp: int
 var movement_speed: float
 var vision_range: float
 var loot_class: LootManager.LootClass
+var eye_pos: Vector3
 
 static var entity_metadata_map := {}
 
@@ -52,12 +53,14 @@ func _init(
 			self.name = "Moving Box"
 			self.entity_type = EntityModel.EntityType.enemy
 			self.hp = 100
+			self.eye_pos = Vector3(0, 1.2, 0)
 			self.movement_speed = 5
 			self.vision_range = 20
 			self.loot_class = LootManager.LootClass.TEST_SCENE_1_DROP
 		EntityType.PHYSICS_ENEMY:
 			self.name = "Physics Enemy"
 			self.entity_type = EntityModel.EntityType.enemy
+			self.eye_pos = Vector3(0, 1.2, 0)
 			self.hp = 100
 			self.movement_speed = 5
 			self.vision_range = 20

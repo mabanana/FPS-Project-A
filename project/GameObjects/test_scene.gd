@@ -12,14 +12,16 @@ func initialize_scene():
 # Temporary function that initializes the hard coded nodes into test scene.
 func initialize_test_scene_map() -> void:
 	# Initialize Inventory Model
-	Core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunMetadataModel.GunType.TEST_GUN_A))
-	Core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunMetadataModel.GunType.TEST_GUN_B))
-	Core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunMetadataModel.GunType.TEST_GUN_C))
-	Core.inventory.guns.append(GunModel.new_with_full_ammo(1, GunMetadataModel.GunType.TEST_GUN_D))
+	Core.inventory.guns.append(GunModel.new_with_full_ammo(GunMetadataModel.GunType.TEST_GUN_A))
+	Core.inventory.guns.append(GunModel.new_with_full_ammo(GunMetadataModel.GunType.TEST_GUN_B))
+	Core.inventory.guns.append(GunModel.new_with_full_ammo(GunMetadataModel.GunType.TEST_GUN_C))
+	Core.inventory.guns.append(GunModel.new_with_full_ammo(GunMetadataModel.GunType.TEST_GUN_D))
 	Signals.inventory_accessed.emit(null)
 	
 	# Initialize Map Model
-	_add_entity_to_map(EntityMetadataModel.EntityType.PLAYER, Vector3(0,0,0))
+	Core.map.player_rid = _add_entity_to_map(
+		EntityMetadataModel.EntityType.PLAYER, Vector3(0,0,0))
+	
 	_add_entity_to_map(EntityMetadataModel.EntityType.TARGET_DUMMY, Vector3(-10,0,10))
 
 	for child in $Map.get_children():

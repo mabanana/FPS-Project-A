@@ -9,8 +9,8 @@ func _init(rid: int, type: GunMetadataModel.GunType, mag_curr: int) -> void:
 	self.type = type
 	self.mag_curr = mag_curr
 
-static func new_with_full_ammo(rid: int, type: GunMetadataModel.GunType) -> GunModel:
-	return GunModel.new(rid, type, GunMetadataModel.gun_metadata_map[type].mag_size)
+static func new_with_full_ammo(type: GunMetadataModel.GunType) -> GunModel:
+	return GunModel.new(Core.services.generate_rid(), type, GunMetadataModel.gun_metadata_map[type].mag_size)
 
 var metadata: GunMetadataModel:
 	get:

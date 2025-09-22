@@ -52,13 +52,16 @@ func _pos_update(origin_rid: ):
 	var origin_key = player_rid
 	# Update player location
 	Core.map.entities[player_rid].position = entity_hash[player_rid].position
-	Core.map.entities[player_rid].rotation = entity_hash[player_rid].rotation	
+	Core.map.entities[player_rid].rotation = entity_hash[player_rid].rotation
 	
 	# calculate relative positions for minimap based on player
 	var entities = Core.map.entities
 	var positions: Array[Vector3] = []
 	var eye_pos = entity_hash[origin_key].position + entity_hash[origin_key].eye_pos
 	for key in entities.keys():
+		entities[key].position = entity_hash[key].position
+		entities[key].rotation = entity_hash[key].rotation
+		entities[key].transform = entity_hash[key].transform
 		if entities[key].type == EntityModel.EntityType.enemy:
 			var relative_pos = entity_hash[key].position - entity_hash[origin_key].position
 			relative_pos = relative_pos.rotated(Vector3.UP, -entities[origin_key].rotation.y)
@@ -72,8 +75,9 @@ func _pos_update(origin_rid: ):
 		})
 
 func _add_entity_to_map(entity_type: EntityMetadataModel.EntityType, position: Vector3):
-	var rid = Core.services.generate_rid()
-	Core.map.entities[rid] = EntityModel.new_entity(entity_type)
+	var entity = EntityModel.new_entity(entity_type)
+	var rid = entity.rid
+	Core.map.entities[rid] = entity
 	Core.map.entities[rid].position = position
 	if EntityMetadataModel.entity_metadata_map[entity_type].entity_type == EntityModel.EntityType.enemy:
 		var payload = {
@@ -87,7 +91,7 @@ func _add_entity_to_map(entity_type: EntityMetadataModel.EntityType, position: V
 			"position" : position,
 			"rid" : rid,
 			"entity_model" : Core.map.entities[rid],
-			"gun_model" : GunModel.new_with_full_ammo(1, GunMetadataModel.GunType.TEST_GUN_D),
+			"gun_model" : GunModel.new_with_full_ammo(GunMetadataModel.GunType.TEST_GUN_D),
 			"linear_velocity" : 0,
 			"angular_velocity" : 0,
 		}

@@ -25,9 +25,12 @@ func _physics_process(delta):
 			nav_ai.target_position = null
 	else:
 		velocity = Vector3.ZERO
+	
+	if velocity:
+		rotate_y(dir.signed_angle_to((basis*Vector3.FORWARD), Vector3.UP))
+	
 	if !is_on_floor():
 		velocity.y += get_gravity().y
-		
 	move_and_slide()
 
 func _on_player_spotted(payload = null):

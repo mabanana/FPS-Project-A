@@ -192,7 +192,8 @@ func _on_drag_ended(payload = null):
 		var gun_index = payload["gui_drag"].index
 		drop_gun(gun_index)
 func _on_spell_cast(payload = null):
-	cast_spell()
+	if payload["spell_type"] and payload["spell_type"] == "fireball":
+		cast_spell()
 func _on_core_changed(payload = null):
 	if Core.player.action_state == PlayerModel.ActionState.triggering and shoot_cd.tick(0) <= 0:
 		if active_gun.mag_curr > 0:

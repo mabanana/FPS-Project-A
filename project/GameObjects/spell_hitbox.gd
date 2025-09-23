@@ -5,6 +5,7 @@ var caster: int
 var lifetime: float = 2
 var rid: int
 var entity_model: EntityModel
+var lifetime_ended := false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -39,5 +40,8 @@ func on_collided(body):
 	
 
 func lifetime_end():
+	if lifetime_ended:
+		return
+	lifetime_ended = true
 	#prints(rid, "freed")
-	queue_free()
+	Signals.entity_freed.emit({"target_rid": rid})

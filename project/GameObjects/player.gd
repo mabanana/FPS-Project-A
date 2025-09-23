@@ -188,7 +188,7 @@ func _on_event_input_pressed(payload = null):
 			set_action_state(PlayerModel.ActionState.throwing)
 			Signals.gun_drop_started.emit({"rid": rid})
 		InputHandler.PlayerActions.ACTION_F:
-			Signals.spell_cast.emit({"rid": rid})
+			Signals.spell_cast.emit({"rid": rid, "spell_type": "fireball"})
 		_:
 			pass
 

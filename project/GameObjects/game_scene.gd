@@ -9,7 +9,7 @@ var hitbox_manager: HitboxManager
 @export var pos_update_interval: int
 
 # Hashmap { rid : object_ref }
-var entity_hash: Dictionary
+var entity_hash: Dictionary[int, Node]
 var pos_update_cd: Countdown
 var player_rid: int
 
@@ -24,7 +24,8 @@ func _ready() -> void:
 	Hud = preload("res://UI/hud.tscn").instantiate()
 	add_child(Hud)
 	# Set up initial state
-	entity_hash = {}
+	entity_hash= {}
+	Core.map.nodes = entity_hash
 	pos_update_cd = Countdown.new(pos_update_interval)	
 	# Emit initial state to all observers
 	Signals.core_changed.emit(null)
@@ -46,7 +47,7 @@ func _clear_freed():
 			entity_hash.erase(entity_rid)
 			prints(entity_rid, "removed from entity hash")
 
-func _pos_update(origin_rid: ):
+func _pos_update(origin_rid):
 	pos_update_cd.reset_cd()
 	
 	var origin_key = player_rid

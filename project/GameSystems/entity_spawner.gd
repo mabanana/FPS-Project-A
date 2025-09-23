@@ -23,8 +23,10 @@ func _init(scene):
 	Signals.gun_picked_up.connect(_on_gun_picked_up)
 	Signals.entity_died.connect(_on_entity_died)
 	Signals.item_dropped.connect(_on_item_dropped)
+	Signals.entity_freed.connect(_on_entity_freed)
 # Does not make edits to Core directly, and only edits Scene on core_changed
-
+func _on_entity_freed(payload=null):
+	_remove_node(scene.entity_hash[payload["target_rid"]])
 func _on_item_dropped(payload=null):
 	_spawn_node(_get_entity_scene(payload["entity_model"]), scene, Signals.item_dropped, payload)
 func _on_gun_dropped(payload=null):
@@ -83,6 +85,10 @@ func _spawn_node(node_scene, target_scene, spawn_context, payload = null):
 	
 	if payload["entity_model"].type == EntityModel.EntityType.removed:
 		Core.map.entities.erase(payload["rid"])
+	elif payload["entity_model"].type == EntityModel.EntityType.hitbox:
+		new_node.rid = payload["rid"]
+		scene.entity_hash[payload["rid"]] = new_node
+		Signals.spell_node_spawned.emit({"rid" : payload["rid"]})
 	else:
 		new_node.rid = payload["rid"]
 		scene.entity_hash[payload["rid"]] = new_node

@@ -1,9 +1,17 @@
 name: "godot-ci export"
-on: push
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
 
 # NOTE: If your `project.godot` is at the repository root, set `PROJECT_PATH` below to ".".
 
+# GITHUB_TOKEN needs write access to push the build to the gh-pages branch.
+permissions:
+  contents: write
+
 env:
+  # Keep this in step with config/features in project/project.godot.
   GODOT_VERSION: 4.4
   EXPORT_NAME: index
   PROJECT_PATH: project
@@ -16,7 +24,7 @@ jobs:
       image: barichello/godot-ci:4.4
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           lfs: true
       - name: Setup
@@ -30,7 +38,7 @@ jobs:
           cd $PROJECT_PATH
           godot --headless --verbose --export-release "Web" "$EXPORT_DIR/web/index.html"
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: web
           path: build/web

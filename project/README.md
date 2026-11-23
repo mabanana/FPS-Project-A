@@ -1,6 +1,6 @@
 # FPS Project A (Template)
 
-A looter-shooter game, built using the **Godot 4.3 game engine**, inspired by the Borderlands series with Procedurally generated weapons, gear, and loot with unique stats and effects.
+A looter-shooter game, built using the **Godot 4.4 game engine**, inspired by the Borderlands series with Procedurally generated weapons, gear, and loot with unique stats and effects.
 
 ## Table of Contents
 - [Requirements](#requirements)
@@ -8,10 +8,10 @@ A looter-shooter game, built using the **Godot 4.3 game engine**, inspired by th
 - [Design Pattern](#design-pattern)
 
 ## Requirements
-- **Godot Engine 4.3** (Download from [official website](https://godotengine.org/download))
+- **Godot Engine 4.4** (Download from [official website](https://godotengine.org/download))
 
 ## Setup
-- Install Godot Engine 4.3
+- Install Godot Engine 4.4
 - Clone the repository
 - Open Godot and import the project
 
